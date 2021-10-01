@@ -8,7 +8,6 @@ class ModeloPedido {
 	nodoPrimigenio = null;
 	nodoInicial = null;
 
-	cabe
 	datosMaestros;
 
 	constructor (datosNodos) {

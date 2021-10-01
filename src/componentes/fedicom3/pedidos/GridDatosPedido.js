@@ -8,6 +8,7 @@ import TituloPantalla from "navegacion/TituloPantalla";
 
 import { ContextoPedido } from 'componentes/fedicom3/pedidos/ContextoPedido';
 import BannerCargando from "common/BannerCargando";
+import BoxDatosTransmision from "./BoxDatosTransmision";
 
 const GridDatosPedido = ({ p }) => {
 
@@ -33,8 +34,11 @@ const GridDatosPedido = ({ p }) => {
 
 			<Grid item xs={4} xl={3} >
 				<Grid container spacing={2}>
-					<Grid item>
+					<Grid item xs={12} >
 						<BoxHistorialNodos />
+					</Grid>
+					<Grid item xs={12} >
+						<BoxDatosTransmision />
 					</Grid>
 				</Grid>
 			</Grid>

@@ -30,7 +30,7 @@ const BoxCabeceraPedido = () => {
 
 	return <Box>
 		<Paper elevation={10} sx={{ p: 1 }}>
-
+			<Typography sx={{ px: 2 }} variant='h6' component="h2">Datos de cabecera</Typography>
 			<Grid container>
 				<Grid item xs={4}>
 					<Grid container>

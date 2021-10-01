@@ -84,12 +84,39 @@ export default function useApiFedicom() {
 		return await resultado.json();
 	}, [getJwt, get])
 
+	const consultaTransmision = useCallback(async (txId, tipoConsulta) => {
+		let opciones = {
+			headers: generarCabeceras(getJwt())
+		}
+
+		if (tipoConsulta) tipoConsulta = '/' + tipoConsulta
+		else tipoConsulta = '';
+
+		let resultado = await get('/~/consulta/transmisiones/' + txId + tipoConsulta, opciones);
+		return await resultado.json();
+	}, [getJwt, get])
+
+
+	const consultaMaestro = useCallback(async (tipo, id) => {
+		let opciones = {
+			headers: generarCabeceras(getJwt())
+		}
+
+		if (id) id = '/' + id
+		else id = '';
+
+		let resultado = await get('/~/maestro/' + tipo + id, opciones);
+		return await resultado.json();
+	}, [getJwt, get])
+
 	return {
 		getTokenObservador,
 		getToken,
 		getEstadoInstancias,
 		descartarEstadoInstancia,
-		consultaPedido
+		consultaTransmision,
+		consultaPedido,
+		consultaMaestro
 	}
 
 }

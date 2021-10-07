@@ -16,7 +16,7 @@ const generarCabeceras = (jwt) => {
 
 export default function useApiFedicom() {
 
-	let { get, post, del } = useApi(K.URL_CONCENTRADOR);
+	let { get, post, put, del } = useApi(K.URL_CONCENTRADOR);
 	let { getJwt } = useContext(ContextoAplicacion);
 	
 
@@ -109,6 +109,20 @@ export default function useApiFedicom() {
 		return await resultado.json();
 	}, [getJwt, get])
 
+
+	const listadoPedidos = useCallback(async (filtro, proyeccion, orden, skip, limite) => {
+		let opciones = {
+			headers: generarCabeceras(getJwt())
+		}
+
+		let consulta = {
+			filtro, proyeccion, orden, skip, limite
+		}
+		
+		let resultado = await put('/~/consulta/pedidos', JSON.stringify(consulta), opciones);
+		return await resultado.json();
+	}, [getJwt, put])
+
 	return {
 		getTokenObservador,
 		getToken,
@@ -116,7 +130,8 @@ export default function useApiFedicom() {
 		descartarEstadoInstancia,
 		consultaTransmision,
 		consultaPedido,
-		consultaMaestro
+		consultaMaestro,
+		listadoPedidos
 	}
 
 }

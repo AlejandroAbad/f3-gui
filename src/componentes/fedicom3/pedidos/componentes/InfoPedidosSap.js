@@ -9,6 +9,7 @@ const InfoPedidosSap = () => {
 	let cabeceraPedido = pedido.datosMaestros
 
 	let { pedidosAsociadosSap, pedidoAgrupadoSap } = cabeceraPedido;
+	
 
 	if (!pedidosAsociadosSap?.length) {
 		return <>
@@ -23,11 +24,9 @@ const InfoPedidosSap = () => {
 		alignItems="flex-end"
 		flexWrap="wrap"
 		spacing={0}
-		mt={1}
 	>
 		{pedidosAsociadosSap.map(nPed =>
-			<Typography variant='button' key={nPed} color={nPed === pedidoAgrupadoSap ? 'secondary' : ''} >
-				{/*nPed === pedidoAgrupadoSap && <Typography variant='caption' sx={{ ml: 1 }}>Agrupando » </Typography>*/}
+			<Typography component="span" variant='button' key={nPed} color={pedidosAsociadosSap.length > 1 && nPed === pedidoAgrupadoSap ? 'secondary' : ''} >
 				{nPed}
 			</Typography>
 		)}

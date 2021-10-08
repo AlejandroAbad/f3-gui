@@ -2,7 +2,6 @@ import { memo } from "react";
 import { Avatar, Chip, Typography } from "@mui/material";
 import NoEncryptionIcon from "@mui/icons-material/NoEncryption";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import { Box } from "@mui/system";
 import BoxInfo from "./BoxInfo";
 
 

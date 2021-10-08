@@ -1,6 +1,3 @@
-const { default: ModeloNodoPedido } = require("./ModeloNodoPedido");
-
-
 
 class ModeloPedido {
 

@@ -1,14 +1,13 @@
 import { Card, Grid, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { memo } from "react"
-import InfoAlmacen from "./componentes/InfoAlmacen";
-import InfoCliente from "./componentes/InfoCliente";
-import InfoCrc from "./componentes/InfoCrc";
-import InfoNumeroPedidoOrigen from "./componentes/InfoNumeroPedidoOrigen";
-
-import InfoPedidosSap from "./componentes/InfoPedidosSap";
-import InfoTipoPedido from "./componentes/InfoTipoPedido";
-import InfoTotales from "./componentes/InfoTotales";
+import InfoAlmacen from "./componentes/detallePedidos/InfoAlmacen";
+import InfoCliente from "./componentes/detallePedidos/InfoCliente";
+import InfoCrc from "./componentes/detallePedidos/InfoCrc";
+import InfoNumeroPedidoOrigen from "./componentes/detallePedidos/InfoNumeroPedidoOrigen";
+import InfoPedidosSap from "./componentes/detallePedidos/InfoPedidosSap";
+import InfoTipoPedido from "./componentes/detallePedidos/InfoTipoPedido";
+import InfoTotales from "./componentes/detallePedidos/InfoTotales";
 // import ContextoPedido from "./ContextoPedido";
 
 

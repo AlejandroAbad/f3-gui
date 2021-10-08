@@ -18,16 +18,16 @@ const GridDatosPedido = ({ p }) => {
 	if (!pedido) return <BannerCargando />;
 
 	return (<>
-		<TituloPantalla titulo={`Pedido con CRC ${pedido.datosMaestros.crc}`} />
+		<TituloPantalla titulo={`Pedido ${pedido.crc.toUpperCase()}`} />
 
 		<Grid container spacing={2}>
 			<Grid item xs={8} xl={9}>
 				<Grid container spacing={2}>
 					<Grid item xs={12}>
-						<BoxCabeceraPedido />
+						{/*<BoxCabeceraPedido />*/}
 					</Grid>
 					<Grid item xs={12}>
-						<BoxLineasPedido />
+						{/*<BoxLineasPedido />*/}
 					</Grid>
 				</Grid>
 			</Grid>

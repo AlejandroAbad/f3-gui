@@ -1,7 +1,7 @@
 import { Chip, Stack, Typography } from "@mui/material";
 import { memo, useContext } from "react"
 
-import ContextoPedido from "../ContextoPedido";
+import ContextoPedido from "../../ContextoPedido";
 
 
 const InfoAlmacen = () => {

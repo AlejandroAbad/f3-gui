@@ -25,10 +25,10 @@ import ContextoPedido from "./ContextoPedido";
 
 
 const determinarColor = (nodo) => {
-	if (nodo.es.rechazado()) return 'warning.main'
-	if (nodo.es.duplicado()) return 'warning.main'
-	if (nodo.es.reejecucion()) return 'secondary.main'
-	if (nodo.es.primigenio()) {
+	if (nodo.es.rechazo) return 'warning.main'
+	if (nodo.es.duplicado) return 'warning.main'
+	if (nodo.es.interna) return 'secondary.main'
+	if (nodo.es.vigente) {
 		if (nodo.estado === 9900) return 'success.main'
 		return 'primary.main'
 	}
@@ -37,35 +37,35 @@ const determinarColor = (nodo) => {
 
 const determinarIcono = (nodo) => {
 
-	if (nodo.es.rechazado()) return <ClearIcon />
-	if (nodo.es.duplicado()) return <CopyAllIcon />
-	if (nodo.es.reejecucion()) return <LoopIcon />
-	if (nodo.es.primigenio()) return <CheckIcon />
+	if (nodo.es.rechazo) return <ClearIcon />
+	if (nodo.es.duplicado) return <CopyAllIcon />
+	if (nodo.es.interna) return <LoopIcon />
+	if (nodo.es.vigente) return <CheckIcon />
 	return <HelpIcon />
 }
 
 const determinarTextos = (nodo) => {
-	if (nodo.es.rechazado()) return { secundario: 'Rechazado por SAP' }
-	if (nodo.es.duplicado()) return { secundario: 'Detectado duplicado' }
-	if (nodo.es.reejecucion()) {
+	if (nodo.es.rechazo) return { secundario: 'Rechazado por SAP' }
+	if (nodo.es.duplicado) return { secundario: 'Detectado duplicado' }
+	if (nodo.es.interna) {
 		if (nodo.pedido.esPedidoDuplicadoSap) return { primario: 'Reenvío a SAP', secundario: 'SAP ya tenía el pedido' }
 		return { primario: 'Reenvío a SAP', secundario: 'Resultado ' + nodo.estado }
 	}
-	if (nodo.es.primigenio()) return { primario: 'Entra pedido', secundario: 'Resultado ' + nodo.estado }
+	if (nodo.es.vigente) return { primario: 'Entra pedido', secundario: 'Resultado ' + nodo.estado }
 	return { primario: 'NPI', secundario: 'Resultado ' + nodo.estado }
 }
 
 const NodoTimeline = ({ nodo }) => {
 
-
+	let fechaCreacionNodo = new Date(nodo.fechaCreacion);
 	let color = determinarColor(nodo);
 	let icono = determinarIcono(nodo);
 	let texto = determinarTextos(nodo);
 
 	return <TimelineItem >
 		<TimelineOppositeContent sx={{ my: 'auto', mx: 0, pl: 0}} align="right" variant="body2" color="text.secondary" >
-			<Typography variant="body1" component="span">{format(nodo.fechaCreacion, 'HH:mm:ss')}</Typography>
-			<Typography variant="body2" component="span" >.{format(nodo.fechaCreacion, 'SSS')}</Typography>
+			<Typography variant="body1" component="span">{format(fechaCreacionNodo, 'HH:mm:ss')}</Typography>
+			<Typography variant="body2" component="span" >.{format(fechaCreacionNodo, 'SSS')}</Typography>
 		</TimelineOppositeContent>
 
 		<TimelineSeparator>
@@ -89,7 +89,7 @@ const NodoTimeline = ({ nodo }) => {
 }
 
 
-const FechaTimeline = ({ nodo }) => {
+const FechaTimeline = ({ fechaEntrada }) => {
 
 
 	return <TimelineItem sx={{ minHeight: '40px' }} >
@@ -99,7 +99,7 @@ const FechaTimeline = ({ nodo }) => {
 		<TimelineSeparator sx={{ m: 'auto', minWidth: '200px' }}>
 			<Paper variant="outlined" sx={{ px: 2 }}>
 				<Typography variant="h6" component="span" >
-					{format(nodo.fechaCreacion, 'dd MMM yyyy', { locale: es })}
+					{format(fechaEntrada, 'dd MMM yyyy', { locale: es })}
 				</Typography>
 			</Paper>
 		</TimelineSeparator>
@@ -119,7 +119,7 @@ const BoxHistorialNodos = () => {
 	return <Box>
 		<Paper elevation={10} sx={{py: 1}}>
 			<Timeline>
-				<FechaTimeline nodo={pedido.nodoInicial} />
+				<FechaTimeline fechaEntrada={pedido.fechaEntrada} />
 				{pedido.nodos.map(nodo => <NodoTimeline nodo={nodo} key={nodo.id} />)}
 			</Timeline>
 		</Paper>

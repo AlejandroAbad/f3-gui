@@ -1,7 +1,7 @@
 import { memo, useContext } from "react";
 
 import { Typography } from "@mui/material";
-import ContextoPedido from "../ContextoPedido";
+import ContextoPedido from "../../ContextoPedido";
 
 
 const InfoCliente = () => {

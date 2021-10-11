@@ -4,50 +4,56 @@ import { memo } from "react"
 import InfoAlmacen from "./componentes/detallePedidos/InfoAlmacen";
 import InfoCliente from "./componentes/detallePedidos/InfoCliente";
 import InfoCrc from "./componentes/detallePedidos/InfoCrc";
+import InfoEstado from "./componentes/detallePedidos/InfoEstado";
 import InfoNumeroPedidoOrigen from "./componentes/detallePedidos/InfoNumeroPedidoOrigen";
+import InfoPedidoOrigen from "./componentes/detallePedidos/InfoPedidoOrigen";
 import InfoPedidosSap from "./componentes/detallePedidos/InfoPedidosSap";
 import InfoTipoPedido from "./componentes/detallePedidos/InfoTipoPedido";
 import InfoTotales from "./componentes/detallePedidos/InfoTotales";
 // import ContextoPedido from "./ContextoPedido";
-
-
-const TheBox = ({ titulo, children }) => {
-
-	return <Grid item xs={12} >
-		<Card sx={{ m: 1, py: 1, px: 2 }} >
-			<Typography variant='caption'>{titulo}</Typography>
-			<Box>
-				{children}
-			</Box>
-		</Card>
-	</Grid>
-}
 
 const BoxCabeceraPedido = () => {
 
 	// let { pedido } = useContext(ContextoPedido);
 
 	return <Box>
-		<Paper elevation={10} sx={{ p: 1 }}>
-			<Typography sx={{ px: 2 }} variant='h6' component="h2">Datos de cabecera</Typography>
-			<Grid container>
+		<Paper elevation={10} sx={{ p: 1, pt: 3, pb: 2 }}>
+			<Typography sx={{ px: 2 }} variant='h5' component="h2">Datos de cabecera</Typography>
+			<Grid container sx={{ mx: 2 }}>
 				<Grid item xs={4}>
 					<Grid container>
-						<TheBox titulo='Cliente'><InfoCliente /></TheBox>
-						<TheBox titulo='Almacén'><InfoAlmacen /></TheBox>
+						<Grid item xs={12}>
+							<InfoCliente />
+						</Grid>
+						<Grid item xs={12}>
+							<InfoCrc />
+						</Grid>
 					</Grid>
 				</Grid>
 				<Grid item xs={4}>
 					<Grid container>
-						<TheBox titulo='CRC'><InfoCrc /></TheBox>
-						<TheBox titulo='Números pedido SAP'><InfoPedidosSap /></TheBox>
-						<TheBox titulo='Número pedido origen'><InfoNumeroPedidoOrigen /></TheBox>
+						<Grid item xs={12}>
+							<InfoAlmacen />
+						</Grid>
+						<Grid item xs={12}>
+							<InfoPedidosSap />
+						</Grid>
+						<Grid item xs={12}>
+							<InfoTipoPedido />
+						</Grid>
 					</Grid>
 				</Grid>
 				<Grid item xs={4}>
 					<Grid container>
-						<TheBox titulo='Tipo de pedido'><InfoTipoPedido /></TheBox>
-						<TheBox titulo='Resumen de posiciones'><InfoTotales /></TheBox>
+						<Grid item xs={12}>
+							<InfoEstado />
+						</Grid>
+						<Grid item xs={12}>
+							<InfoPedidoOrigen />
+						</Grid>
+						<Grid item xs={12}>
+							<InfoTotales />
+						</Grid>
 					</Grid>
 				</Grid>
 			</Grid>

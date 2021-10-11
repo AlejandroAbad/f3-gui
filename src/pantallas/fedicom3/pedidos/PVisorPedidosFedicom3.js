@@ -49,9 +49,6 @@ export default function PantallaNavegadorPedidosFedicom3({ ...props }) {
 		let pedido = new ModeloPedido(datos);
 		contenido = (<ProveedorContextoPedido>
 			<GridDatosPedido p={pedido} />
-			<Box sx={{ marginTop: 20, borderTop: '1px solid #ccc', paddingTop: 6 }}>
-				<ReactJson src={pedido} />
-			</Box>
 		</ProveedorContextoPedido>)
 	}
 

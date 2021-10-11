@@ -1,20 +1,24 @@
 import { Avatar, Chip, Typography } from "@mui/material"
 import { memo, useContext } from "react"
 import ContextoPedido from "../../ContextoPedido";
+import BoxInfo from "./BoxInfo";
 
 const InfoCrc = () => {
 
 	let { pedido } = useContext(ContextoPedido);
-	let cabeceraPedido = pedido.datosMaestros
 
-	let crcSap = cabeceraPedido.crcSap.toString(16).toUpperCase()
-	let crc = cabeceraPedido.crc.toUpperCase();
-	let tipoCrc = cabeceraPedido.tipoCrc.charAt(0).toUpperCase()
+	let { crc, crcSap } = pedido;
 
-	return <>
-		<Typography component="div" sx={{ fontWeight: 'bold' }}>{crcSap}</Typography>
-		<Chip avatar={<Avatar>{tipoCrc}</Avatar>} label={crc} color='primary' variant="outlined" />
-	</>
+	if (!crc) return null;
+	return <BoxInfo titulo="Crc:">
+		<Typography component="div" variant="body1" sx={{ fontWeight: 'bold', fontSize: 22 }}>
+			{crcSap.toUpperCase()}
+		</Typography>
+		<Typography component="div" variant="subtitle2" sx={{ color: 'text.secondary' }}>
+			{crc.toUpperCase()}
+		</Typography>
+	</BoxInfo>
 }
+
 
 export default memo(InfoCrc)

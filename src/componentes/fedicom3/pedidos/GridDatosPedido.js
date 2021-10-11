@@ -9,6 +9,7 @@ import TituloPantalla from "navegacion/TituloPantalla";
 import { ContextoPedido } from 'componentes/fedicom3/pedidos/ContextoPedido';
 import BannerCargando from "common/BannerCargando";
 import BoxDatosTransmision from "./BoxDatosTransmision";
+import ReactJson from "react-json-view";
 
 const GridDatosPedido = ({ p }) => {
 
@@ -24,10 +25,13 @@ const GridDatosPedido = ({ p }) => {
 			<Grid item xs={8} xl={9}>
 				<Grid container spacing={2}>
 					<Grid item xs={12}>
-						{/*<BoxCabeceraPedido />*/}
+						<BoxCabeceraPedido />
 					</Grid>
 					<Grid item xs={12}>
 						{/*<BoxLineasPedido />*/}
+					</Grid>
+					<Grid item xs={12}>
+						<ReactJson src={pedido || {}} />
 					</Grid>
 				</Grid>
 			</Grid>

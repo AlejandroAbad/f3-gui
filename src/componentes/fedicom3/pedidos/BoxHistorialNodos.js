@@ -1,6 +1,8 @@
+import { memo, useContext, useState, useCallback, useEffect } from "react"
 import { Box, Typography, Paper } from "@mui/material"
+import useApiFedicom from "hooks/useApiFedicom";
 
-import { memo, useContext } from "react"
+
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
@@ -10,77 +12,119 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 
 
-import { format } from "date-fns";
+import { format, nextMonday } from "date-fns";
 import { es } from 'date-fns/locale'
 
 import ClearIcon from '@mui/icons-material/Clear';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import CheckIcon from '@mui/icons-material/Check';
 import LoopIcon from '@mui/icons-material/Loop';
-import HelpIcon from '@mui/icons-material/Help';
+import SendIcon from '@mui/icons-material/Send';
+import StarIcon from '@mui/icons-material/Star';
+import AttributionIcon from '@mui/icons-material/Attribution';
 import ContextoPedido from "./ContextoPedido";
 
 
 
-
-
-const determinarColor = (nodo) => {
-	if (nodo.es.rechazo) return 'warning.main'
-	if (nodo.es.duplicado) return 'warning.main'
-	if (nodo.es.interna) return 'secondary.main'
-	if (nodo.es.vigente) {
-		if (nodo.estado === 9900) return 'success.main'
-		return 'primary.main'
+const determinarInfoNodo = (nodo, infoEstado) => {
+	if (nodo.es.rechazo) return {
+		color: infoEstado.color,
+		primario: null,
+		secundario: infoEstado.nombre,
+		icono: <ClearIcon />
 	}
-	else return ''
-}
+	if (nodo.es.duplicado) return {
+		color: infoEstado.color,
+		primario: null,
+		secundario: infoEstado.nombre,
+		icono: <CopyAllIcon />
+	}
 
-const determinarIcono = (nodo) => {
+	let info = {
+		color: infoEstado.color,
+		primario: 'Recibido pedido',
+		secundario: infoEstado.nombre,
+		icono: < SendIcon />
+	}
 
-	if (nodo.es.rechazo) return <ClearIcon />
-	if (nodo.es.duplicado) return <CopyAllIcon />
-	if (nodo.es.interna) return <LoopIcon />
-	if (nodo.es.vigente) return <CheckIcon />
-	return <HelpIcon />
-}
-
-const determinarTextos = (nodo) => {
-	if (nodo.es.rechazo) return { secundario: 'Rechazado por SAP' }
-	if (nodo.es.duplicado) return { secundario: 'Detectado duplicado' }
 	if (nodo.es.interna) {
-		if (nodo.pedido.esPedidoDuplicadoSap) return { primario: 'Reenvío a SAP', secundario: 'SAP ya tenía el pedido' }
-		return { primario: 'Reenvío a SAP', secundario: 'Resultado ' + nodo.estado }
+		info.primario = 'Reenvío a SAP'
+		info.icono = <LoopIcon />
+		if (nodo.esPedidoDuplicadoSap) {
+			info.secundario = 'PEDIDO EN SAP'
+		}
+	} 
+
+	if (nodo.es.vigente && nodo.estado === 9900) {
+		info.icono = <CheckIcon />
 	}
-	if (nodo.es.vigente) return { primario: 'Entra pedido', secundario: 'Resultado ' + nodo.estado }
-	return { primario: 'NPI', secundario: 'Resultado ' + nodo.estado }
+
+	return info;
+
 }
 
 const NodoTimeline = ({ nodo }) => {
 
+	let codigoEstado = nodo.estado;
+	let [infoEstado, setInfoEstado] = useState({
+		"codigo": codigoEstado,
+		"ambito": null,
+		"nombre": "Estado " + codigoEstado,
+		"descripcion": "Cargando datos de estado",
+		"color": "disabled"
+	});
+
+	let { consultaMaestro } = useApiFedicom();
+	let cargarMaestroEstado = useCallback(async () => {
+
+		if (codigoEstado === null || codigoEstado === undefined) return;
+
+
+		try {
+			let resultado = await consultaMaestro('estados', codigoEstado)
+			if (resultado?.codigo)
+				setInfoEstado(resultado);
+		} catch (error) {
+
+		}
+
+	}, [codigoEstado, consultaMaestro, setInfoEstado])
+
+	useEffect(cargarMaestroEstado, [cargarMaestroEstado])
+
 	let fechaCreacionNodo = new Date(nodo.fechaCreacion);
-	let color = determinarColor(nodo);
-	let icono = determinarIcono(nodo);
-	let texto = determinarTextos(nodo);
+	let valores = determinarInfoNodo(nodo, infoEstado);
+
+	let iconoPrevio = null;
+
+	if (nodo.es.vigente) {
+		iconoPrevio = <StarIcon sx={{ fontSize: '17px', mr: 1, color: 'text.primary' }} title="Datos vigentes del pedido"/>
+	} else if (nodo.es.informado) {
+		iconoPrevio = <AttributionIcon sx={{ fontSize: '17px', mr: 1, color: 'warning.main' }} title="Datos informados a la farmacia"/>
+	}
 
 	return <TimelineItem >
-		<TimelineOppositeContent sx={{ my: 'auto', mx: 0, pl: 0}} align="right" variant="body2" color="text.secondary" >
+		<TimelineOppositeContent sx={{ my: 'auto', mx: 0, pl: 0 }} align="right" variant="body2" color="text.secondary" >
+			{iconoPrevio}
 			<Typography variant="body1" component="span">{format(fechaCreacionNodo, 'HH:mm:ss')}</Typography>
 			<Typography variant="body2" component="span" >.{format(fechaCreacionNodo, 'SSS')}</Typography>
 		</TimelineOppositeContent>
 
 		<TimelineSeparator>
 			<TimelineConnector />
-			<TimelineDot sx={{ bgcolor: color }}>
-				{icono}
+			<TimelineDot sx={{ bgcolor: valores.color + '.main' }}>
+				{valores.icono}
 			</TimelineDot>
 			<TimelineConnector />
 		</TimelineSeparator>
 
 		<TimelineContent sx={{ m: 'auto' }}>
-			{texto.primario && <Typography variant="body1" component="span" sx={{ fontWeight: 'bold' }}>
-				{texto.primario}
+			{valores.primario && <Typography variant="body1" component="span" sx={{ fontWeight: 'bold' }}>
+				{valores.primario}
 			</Typography>}
-			{texto.secundario && <Typography variant="body2">{texto.secundario}</Typography>}
+			{valores.secundario && <Typography variant="body2">
+				{valores.secundario}
+			</Typography>}
 		</TimelineContent>
 
 	</TimelineItem>
@@ -117,7 +161,7 @@ const BoxHistorialNodos = () => {
 	let { pedido } = useContext(ContextoPedido);
 
 	return <Box>
-		<Paper elevation={10} sx={{py: 1}}>
+		<Paper elevation={10} sx={{ py: 1 }}>
 			<Timeline>
 				<FechaTimeline fechaEntrada={pedido.fechaEntrada} />
 				{pedido.nodos.map(nodo => <NodoTimeline nodo={nodo} key={nodo.id} />)}

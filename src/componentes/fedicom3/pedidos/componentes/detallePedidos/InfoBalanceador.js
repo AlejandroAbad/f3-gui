@@ -4,7 +4,7 @@ import BoxInfo from "./BoxInfo";
 
 const InfoBalanceador = ({ balanceador, concentrador }) => {
 
-	let { servidor,  /* version,pid , git*/ } = concentrador;
+	let { servidor,  /* version, pid , git*/ } = concentrador;
 
 	let infoBalanceador = null;
 	if (!balanceador)

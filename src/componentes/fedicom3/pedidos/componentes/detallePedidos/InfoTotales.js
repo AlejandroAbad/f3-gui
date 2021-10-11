@@ -1,56 +1,36 @@
 import { Typography } from "@mui/material";
 import { memo, useContext } from "react"
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 import ContextoPedido from "../../ContextoPedido";
+import BoxTexto from "../navegadorPedidos/BoxTexto";
+import { Box } from "@mui/system";
 
 
 const InfoTotales = () => {
 
 	let { pedido } = useContext(ContextoPedido);
-	let t = pedido.datosMaestros.totales
+	let totales = pedido.totales
+
+	return <BoxTexto titulo="Totales:">
+		<Box>
+			<Typography variant="subtitle2" component="span" sx={{ fontWeight: 'bold', mr: 0.5 }}>Unidades:</Typography>
+			<Typography variant="subtitle2" component="span" color={totales.cantidad === totales.cantidadIncidencias ? 'error' : 'success'}>{totales.cantidad - totales.cantidadIncidencias} servida{totales.cantidad - totales.cantidadIncidencias === 1 ? '' : 's'}</Typography>
+			{totales.cantidadIncidencias > 0 && <Typography variant="subtitle2" component="span" color={totales.cantidadIncidencias ? 'error' : 'success'}> + {totales.cantidadIncidencias} en falta</Typography>}
+		</Box>
+
+		<Box>
+			<Typography variant="subtitle2" component="span" sx={{ fontWeight: 'bold', mr: 0.5 }}>Líneas:</Typography>
+			<Typography variant="subtitle2" component="span" color={totales.lineas === totales.lineasIncidencias ? 'error' : 'success'}>{totales.lineas - totales.lineasIncidencias} servida{totales.lineas - totales.lineasIncidencias === 1 ? '' : 's'}</Typography>
+			{totales.lineasIncidencias > 0 && <Typography variant="subtitle2" component="span" color={totales.lineasIncidencias ? 'error' : 'success'}> + {totales.lineasIncidencias} en falta</Typography>}
+		</Box>
+
+		{totales.cantidadEstupe > 0 && <Box>
+			<Typography variant="subtitle2" component="span" sx={{ fontWeight: 'bold', mr: 0.5 }}>Estupes:</Typography>
+			<Typography variant="subtitle2" component="span" >{totales.cantidadEstupe} unidad{totales.cantidadEstupe === 1 ? '' : 'es'} en {totales.lineasEstupe} línea{totales.lineasEstupe === 1 ? '' : 's'}</Typography>
+		</Box>}
 
 
-	return <Table size="small">
-
-		<TableBody>
-			<TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}					>
-				<TableCell component="th" scope="row">
-					<Typography variant="body2">Unidades:</Typography>
-				</TableCell>
-				<TableCell>
-					<Typography variant="body2" component="span" color={t.cantidad === t.cantidadIncidencias ? 'error' : 'success'}>{t.cantidad - t.cantidadIncidencias} servidas</Typography>
-					<Typography variant="body2" component="span" color={t.cantidadIncidencias ? 'error' : 'success'}>, {t.cantidadIncidencias} en falta</Typography>
-				</TableCell>
-			</TableRow>
-
-
-			<TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}					>
-				<TableCell component="th" scope="row">
-					<Typography variant="body2">Líneas:</Typography>
-				</TableCell>
-				<TableCell >
-					<Typography variant="body2" component="span" color={t.lineas === t.lineasIncidencias ? 'error' : 'success'}>{t.lineas - t.lineasIncidencias} servidas</Typography>
-					<Typography variant="body2" component="span" color={t.lineasIncidencias ? 'error' : 'success'}>, {t.lineasIncidencias} en falta</Typography>
-				</TableCell>
-			</TableRow>
-
-
-			<TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}					>
-				<TableCell component="th" scope="row">
-					<Typography variant="body2">Estupes:</Typography>
-				</TableCell>
-				<TableCell >
-					<Typography variant="body2" component="span" >{t.cantidadEstupe} unidades en {t.lineasEstupe} líneas</Typography>
-				</TableCell>
-			</TableRow>
-
-
-		</TableBody>
-	</Table >
+	</BoxTexto >
 }
 
 

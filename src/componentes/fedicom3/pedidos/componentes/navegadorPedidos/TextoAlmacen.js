@@ -68,10 +68,6 @@ export default function TextoAlmacen({ codigoAlmancenServicio,	almacenesDeRebote
 	return <BoxTexto titulo="Almacén:">
 		<Typography component="div" variant="body1" sx={{ fontWeight: 'bold' }}>
 			{componenteNombreAlmacen}
-			<Stack direction="row" sx={{ display: 'inline', ml: 1 }}>
-				{esCodigoAlmacenDesconocido && <Typography title="El cliente usó un código de almacén Desconocido" component="span" variant="overline" sx={{ fontWeight: 'bold', color: 'warning.main', fontSize: "14px" }}>D</Typography>}
-				{esCodigoAlmacenSaneado && <Typography title="Se hizo una Conversión del tipo del almacén" component="span" variant="overline" sx={{ fontWeight: 'bold', color: 'info.main', fontSize: "14px" }}>C</Typography>}
-			</Stack>
 		</Typography>
 
 		{

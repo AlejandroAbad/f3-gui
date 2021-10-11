@@ -13,7 +13,7 @@ export default function TextoEstado({ codigoEstado }) {
 	let { consultaMaestro } = useApiFedicom();
 	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
 
-	let cargarDatosPrograma = useCallback(async () => {
+	let cargarMaestroEstado = useCallback(async () => {
 
 		if (codigoEstado === null || codigoEstado === undefined) return;
 
@@ -28,7 +28,7 @@ export default function TextoEstado({ codigoEstado }) {
 
 	}, [codigoEstado, consultaMaestro, setCargando, setDatos, setError])
 
-	useEffect(cargarDatosPrograma, [cargarDatosPrograma])
+	useEffect(cargarMaestroEstado, [cargarMaestroEstado])
 
 	let componenteEstado = <>{codigoEstado}</>;
 

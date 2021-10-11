@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useState } from "react";
+import useApiFedicom from "hooks/useApiFedicom";
 import { Typography } from "@mui/material";
 import BoxTexto from "./BoxTexto";
 
@@ -5,22 +7,42 @@ import BoxTexto from "./BoxTexto";
 
 export default function TextoCliente({ cliente, usuario, dominio, solicitante }) {
 
+	let { consultaMaestro } = useApiFedicom();
+	let [nombreUsuario, setNombreUsuario] = useState(usuario);
+
+
+	let cargarDatosLaboratorio = useCallback(async () => {
+
+		if (!usuario) return;
+		if (usuario.search(/^T[RGP]/) !== -1) {
+
+		try {
+			let laboratorio = await consultaMaestro('laboratorios', usuario.substr(2))
+			if (laboratorio?.nombre) 
+				setNombreUsuario(laboratorio.nombre);
+		} catch (error) {
+		}
+	 }
+
+	}, [usuario, consultaMaestro, setNombreUsuario])
+
+	useEffect(cargarDatosLaboratorio, [cargarDatosLaboratorio])
+
+
 	let infoCliente = null;
 	let infoAutenticacion = null;
 	let infoSolicitante = null;
-
-
 	let usuarioCorto = null;
 
-	if (usuario) {
+	if (nombreUsuario) {
 
-		if (usuario.startsWith("BF")) {
-			usuarioCorto = parseInt(usuario.substr(usuario.length - 5))
+		if (nombreUsuario.startsWith("BF")) {
+			usuarioCorto = parseInt(nombreUsuario.substr(nombreUsuario.length - 5))
 		}
-		else if (usuario.endsWith("@hefame")) {
-			usuarioCorto = parseInt(usuario.substr(3, 5));
+		else if (nombreUsuario.endsWith("@hefame")) {
+			usuarioCorto = parseInt(nombreUsuario.substr(3, 5));
 		} else {
-			usuarioCorto = usuario;
+			usuarioCorto = nombreUsuario;
 		}
 
 		let color = (cliente >= 0 && dominio === 'FEDICOM') ? 'error.main' : 'text.secondary';
@@ -30,7 +52,7 @@ export default function TextoCliente({ cliente, usuario, dominio, solicitante })
 
 		infoAutenticacion = <Typography component="span">
 			{cliente >= 0 && <Typography component="span" variant={variante} sx={{ mx: 0.5,  color }} >{separador}</Typography>}
-			<Typography component="span" variant={variante} sx={{ color, fontWeight: negrita }} >{usuario}</Typography>
+			<Typography component="span" variant={variante} sx={{ color, fontWeight: negrita }} >{nombreUsuario}</Typography>
 		</Typography>
 	}
 

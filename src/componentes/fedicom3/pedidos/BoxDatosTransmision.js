@@ -16,7 +16,7 @@ const BoxDatosTransmision = () => {
 
 	return <Box>
 		<Paper elevation={10} sx={{ py: 2, px: 2 }} >
-			<Typography variant='h6' component="h2">Datos de conexión</Typography>
+			<Typography  variant='h5' component="h2">Datos del cliente</Typography>
 			<InfoIp ip={metadatosConexion.ip} />
 			<InfoAutenticacion autenticacion={metadatosConexion.autenticacion} />
 			<InfoProgramaFarmacia idPrograma={metadatosConexion.programa} />

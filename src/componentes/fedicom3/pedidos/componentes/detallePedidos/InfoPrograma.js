@@ -58,7 +58,7 @@ export default function InfoProgramaFarmacia({ idPrograma }) {
 			</>
 		}
 	}
-	return <BoxInfo titulo="Programa de farmacia">
+	return <BoxInfo titulo="Programa de farmacia:">
 		{componentePrograma}
 	</BoxInfo>
 

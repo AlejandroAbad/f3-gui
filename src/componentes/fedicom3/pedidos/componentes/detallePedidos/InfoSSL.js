@@ -11,7 +11,7 @@ const InfoSSL = ({ ssl }) => {
 
 	if (!protocoloSSL) {
 		return <BoxInfo titulo="Seguridad:">
-			<Chip size="small" sx={{ ml: 1 }} avatar={<NoEncryptionIcon />} label="Sin protección" color="error" variant="outlined" />
+			<Chip size="small" avatar={<NoEncryptionIcon />} label="Sin protección" color="error" variant="outlined" />
 		</BoxInfo>
 
 	}
@@ -23,8 +23,8 @@ const InfoSSL = ({ ssl }) => {
 
 
 	return <BoxInfo titulo="Seguridad:">
-		<Chip size="small" sx={{ ml: 1 }} avatar={<Avatar sx={{ bgcolor: `${color}.contrastText` }}><VerifiedUserIcon sx={{ color: `${color}.main` }} /></Avatar>} label={protocoloSSL} color={color} variant="outlined" />
-		<Typography sx={{ ml: 2, fontWeight: 'bold' }} variant='overline' component="div">
+		<Chip size="small" avatar={<Avatar sx={{ bgcolor: `${color}.contrastText` }}><VerifiedUserIcon sx={{ color: `${color}.main` }} /></Avatar>} label={protocoloSSL} color={color} variant="outlined" />
+		<Typography sx={{ ml: 1, fontWeight: 'bold' }} variant='overline' component="div">
 			{suiteSSL}
 		</Typography>
 	</BoxInfo>

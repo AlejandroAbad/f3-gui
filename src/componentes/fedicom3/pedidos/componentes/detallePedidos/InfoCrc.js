@@ -1,4 +1,4 @@
-import { Avatar, Chip, Typography } from "@mui/material"
+import { Typography } from "@mui/material"
 import { memo, useContext } from "react"
 import ContextoPedido from "../../ContextoPedido";
 import BoxInfo from "./BoxInfo";

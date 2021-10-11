@@ -2,7 +2,6 @@ import { memo, useContext, useEffect } from "react"
 
 import { Grid } from '@mui/material';
 import BoxHistorialNodos from "./BoxHistorialNodos";
-import BoxLineasPedido from "./BoxLineasPedido";
 import BoxCabeceraPedido from "./BoxCabeceraPedido";
 import TituloPantalla from "navegacion/TituloPantalla";
 

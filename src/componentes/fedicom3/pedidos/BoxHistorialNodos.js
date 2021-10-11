@@ -12,7 +12,7 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 
 
-import { format, nextMonday } from "date-fns";
+import { format } from "date-fns";
 import { es } from 'date-fns/locale'
 
 import ClearIcon from '@mui/icons-material/Clear';

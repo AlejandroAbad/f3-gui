@@ -1,5 +1,4 @@
 import { Container } from "@mui/material";
-import { Box } from "@mui/system";
 import BannerCargando from "common/BannerCargando";
 import BannerError from "common/BannerError";
 import FediCommons from "common/FediCommons";
@@ -8,7 +7,6 @@ import ModeloPedido from "componentes/fedicom3/pedidos/ModeloPedido";
 import useApiFedicom from "hooks/useApiFedicom";
 import useEstadoCarga from "hooks/useEstadoCarga";
 import { useCallback, useEffect } from "react";
-import ReactJson from "react-json-view";
 
 import { ProveedorContextoPedido } from 'componentes/fedicom3/pedidos/ContextoPedido';
 

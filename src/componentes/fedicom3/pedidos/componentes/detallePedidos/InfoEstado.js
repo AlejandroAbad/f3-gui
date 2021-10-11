@@ -1,5 +1,5 @@
-import { Avatar, Chip, CircularProgress, Typography } from "@mui/material";
-import ErrorIcon from '@mui/icons-material/Error';
+import { Chip, CircularProgress } from "@mui/material";
+
 import useApiFedicom from "hooks/useApiFedicom";
 import useEstadoCarga from "hooks/useEstadoCarga";
 import { useCallback, useContext, useEffect } from "react";
@@ -15,7 +15,7 @@ export default function InfoEstado() {
 	let codigoEstado = pedido.estado;
 
 	let { consultaMaestro } = useApiFedicom();
-	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
+	let { cargando, datos, setCargando, setDatos, setError } = useEstadoCarga();
 
 	let cargarMaestroEstado = useCallback(async () => {
 

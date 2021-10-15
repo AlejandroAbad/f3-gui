@@ -1,30 +1,34 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import useApiFedicom from "hooks/useApiFedicom";
 import { Typography } from "@mui/material";
 import BoxTexto from "./BoxTexto";
+import ContextoMaestros from "contexto/contextoMaestros";
 
 
 
 export default function TextoCliente({ cliente, usuario, dominio, solicitante }) {
 
-	let { consultaMaestro } = useApiFedicom();
+
+	let { maestroLaboratorios } = useContext(ContextoMaestros);
 	let [nombreUsuario, setNombreUsuario] = useState(usuario);
 
 
 	let cargarDatosLaboratorio = useCallback(async () => {
 
 		if (!usuario) return;
+		if (!maestroLaboratorios?.datos?.length) return;
+
 		if (usuario.search(/^T[RGP]/) !== -1) {
-
-		try {
-			let laboratorio = await consultaMaestro('laboratorios', usuario.substr(2))
-			if (laboratorio?.nombre) 
-				setNombreUsuario(laboratorio.nombre);
-		} catch (error) {
+			try {
+				let laboratorio = maestroLaboratorios.datos.find( l => l.id === parseInt(usuario.substr(2)) );
+				
+				if (laboratorio?.nombre)
+					setNombreUsuario(laboratorio.nombre);
+			} catch (error) {
+			}
 		}
-	 }
 
-	}, [usuario, consultaMaestro, setNombreUsuario])
+	}, [usuario, maestroLaboratorios, setNombreUsuario])
 
 	useEffect(cargarDatosLaboratorio, [cargarDatosLaboratorio])
 
@@ -51,7 +55,7 @@ export default function TextoCliente({ cliente, usuario, dominio, solicitante })
 		let negrita = (cliente >= 0) ? 'normal' : 'bold';
 
 		infoAutenticacion = <Typography component="span">
-			{cliente >= 0 && <Typography component="span" variant={variante} sx={{ mx: 0.5,  color }} >{separador}</Typography>}
+			{cliente >= 0 && <Typography component="span" variant={variante} sx={{ mx: 0.5, color }} >{separador}</Typography>}
 			<Typography component="span" variant={variante} sx={{ color, fontWeight: negrita }} >{nombreUsuario}</Typography>
 		</Typography>
 	}

@@ -3,7 +3,6 @@ import K from 'K';
 
 import useStateLocalStorage from 'hooks/useStateLocalStorage';
 
-
 const ContextoAplicacion = createContext(null);
 const { Provider } = ContextoAplicacion;
 
@@ -11,7 +10,6 @@ const ProveedorContextoAplicacion = ({ children }) => {
 
 	const [jwt, _setJwt] = useStateLocalStorage('login.jwt', null, true);
 	const [usuario, _setUsuario] = useStateLocalStorage('login.usuario', null, true);
-
 	const setJwt = useCallback((token, datos) => {
 		_setJwt(token);
 		if (datos)
@@ -31,8 +29,6 @@ const ProveedorContextoAplicacion = ({ children }) => {
 		}
 
 	}, [_setJwt, _setUsuario]);
-
-
 	const getJwt = useCallback((inclusoSiEstaCadudado = false) => {
 		if (inclusoSiEstaCadudado) return jwt;
 		if (!usuario) return null;
@@ -46,8 +42,6 @@ const ProveedorContextoAplicacion = ({ children }) => {
 		return null;
 
 	}, [jwt, usuario])
-
-
 	const getUsuario = useCallback((inclusoSiEstaCadudado = false) => {
 		if (inclusoSiEstaCadudado) return usuario;
 		if (!usuario) return null;

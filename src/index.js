@@ -5,17 +5,20 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import ReactDOM from 'react-dom';
-import { ProveedorContextoAplicacion } from './contexto';
+import { ProveedorContextoAplicacion } from './contexto/contexto';
 import App from 'App';
 
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
+import { ProveedorContextoMaestros } from 'contexto/contextoMaestros';
 
 
 ReactDOM.render(
 	<ThemeProvider theme={theme}>
 		<ProveedorContextoAplicacion>
-			<App />
+			<ProveedorContextoMaestros>
+				<App />
+			</ProveedorContextoMaestros>
 		</ProveedorContextoAplicacion>
 	</ThemeProvider>
 	,

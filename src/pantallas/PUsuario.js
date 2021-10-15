@@ -1,6 +1,6 @@
 import { Alert, AlertTitle, Avatar, Backdrop, Box, Chip, CircularProgress, Container, Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import ContextoAplicacion from "contexto";
+import ContextoAplicacion from "contexto/contexto";
 import { format, fromUnixTime } from "date-fns";
 import TituloPantalla from "navegacion/TituloPantalla";
 import { useContext } from "react";

@@ -7,7 +7,7 @@ import MenuSuperior from 'navegacion/MenuSuperior';
 import DrawerLateral from 'navegacion/DrawerLateral';
 import Pantallas from 'pantallas/Pantallas';
 
-import { ContextoAplicacion } from 'contexto';
+import { ContextoAplicacion } from 'contexto/contexto';
 
 const useStyles = makeStyles((theme) => ({
 	root: {

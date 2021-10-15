@@ -1,70 +1,51 @@
-import { useCallback, useEffect } from "react";
+import { useContext } from "react";
 import useApiFedicom from "hooks/useApiFedicom";
 import useEstadoCarga from "hooks/useEstadoCarga";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import ErrorIcon from '@mui/icons-material/Error';
-
+import ContextoMaestros from 'contexto/contextoMaestros';
 
 import BoxTexto from "./BoxTexto";
 
 
 
-export default function TextoAlmacen({ codigoAlmancenServicio,	almacenesDeRebote,	esCodigoAlmacenDesconocido,	esCodigoAlmacenSaneado,}) {
+export default function TextoAlmacen({ codigoAlmacenServicio, almacenesDeRebote, esCodigoAlmacenDesconocido, esCodigoAlmacenSaneado, }) {
 
 
-	let { consultaMaestro } = useApiFedicom();
-	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
+	let { maestroAlmacenes } = useContext(ContextoMaestros);
 
 
-	let cargarDatosPrograma = useCallback(async () => {
+	let componenteNombreAlmacen = <>{codigoAlmacenServicio}</>;
 
-		if (!codigoAlmancenServicio) return;
-
-		setCargando(true);
-		try {
-			let resultado = await consultaMaestro('almacenes', codigoAlmancenServicio)
-			if (resultado?.id) setDatos(resultado);
-			else setError(resultado);
-		} catch (error) {
-			setError(error);
-		}
-
-	}, [codigoAlmancenServicio, consultaMaestro, setCargando, setDatos, setError])
-
-	useEffect(cargarDatosPrograma, [cargarDatosPrograma])
+	if (!codigoAlmacenServicio) return null;
 
 
-	let componenteNombreAlmacen = <>{codigoAlmancenServicio}</>;
-
-	if (!codigoAlmancenServicio) {
-		return null;
-		// componentePrograma = <Typography component="span" variant="subtitle2" sx={{ color: 'warning.main', fontWeight: 'bold' }}>N/D</Typography>
-	}
-
-	if (cargando) {
+	if (maestroAlmacenes.cargando) {
 		componenteNombreAlmacen = <Typography component="span" variant="subtitle2" sx={{ fontWeight: 'bold', mr: 1 }}>
 			<CircularProgress size={10} color="secondary" sx={{ mr: 1 }} />
-			{codigoAlmancenServicio}
+			{codigoAlmacenServicio}
 		</Typography>
 
 	}
 
-	if (error) {
+	if (maestroAlmacenes.error) {
 		componenteNombreAlmacen = <Typography component="span" variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-			{codigoAlmancenServicio} <ErrorIcon sx={{ fontSize: 12, color: 'warning.main' }} />
+			{codigoAlmacenServicio} <ErrorIcon sx={{ fontSize: 12, color: 'warning.main' }} />
 		</Typography>
 	}
 
-	if (datos) {
-		componenteNombreAlmacen = <>
-			<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{datos.nombre ?? 'Desconocido'}</Typography>
-			<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datos.id ?? codigoAlmancenServicio})</Typography>
-		</>
+	if (maestroAlmacenes.datos) {
+
+		let datosAlmacen = maestroAlmacenes.datos.find(a => a.id === codigoAlmacenServicio)
+		if (datosAlmacen) {
+			componenteNombreAlmacen = <>
+				<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{datosAlmacen.nombre ?? 'Desconocido'}</Typography>
+				<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datosAlmacen.id ?? codigoAlmacenServicio})</Typography>
+			</>
+		}
 	}
 
 
-
-	if (!codigoAlmancenServicio) return null;
 	return <BoxTexto titulo="Almacén:">
 		<Typography component="div" variant="body1" sx={{ fontWeight: 'bold' }}>
 			{componenteNombreAlmacen}

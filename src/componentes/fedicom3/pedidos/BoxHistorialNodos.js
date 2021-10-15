@@ -23,6 +23,7 @@ import SendIcon from '@mui/icons-material/Send';
 import StarIcon from '@mui/icons-material/Star';
 import AttributionIcon from '@mui/icons-material/Attribution';
 import ContextoPedido from "./ContextoPedido";
+import ContextoMaestros from "contexto/contextoMaestros";
 
 
 
@@ -53,7 +54,7 @@ const determinarInfoNodo = (nodo, infoEstado) => {
 		if (nodo.esPedidoDuplicadoSap) {
 			info.secundario = 'PEDIDO EN SAP'
 		}
-	} 
+	}
 
 	if (nodo.es.vigente && nodo.estado === 9900) {
 		info.icono = <CheckIcon />
@@ -74,22 +75,19 @@ const NodoTimeline = ({ nodo }) => {
 		"color": "disabled"
 	});
 
-	let { consultaMaestro } = useApiFedicom();
+	let { maestroEstados } = useContext(ContextoMaestros);
+
 	let cargarMaestroEstado = useCallback(async () => {
 
 		if (codigoEstado === null || codigoEstado === undefined) return;
-
-
 		try {
-			let resultado = await consultaMaestro('estados', codigoEstado)
+			let resultado = maestroEstados.datos.find(e => e.codigo === codigoEstado);
 			if (resultado?.codigo)
 				setInfoEstado(resultado);
 		} catch (error) {
-
 		}
 
-	}, [codigoEstado, consultaMaestro, setInfoEstado])
-
+	}, [codigoEstado, maestroEstados, setInfoEstado])
 	useEffect(cargarMaestroEstado, [cargarMaestroEstado])
 
 	let fechaCreacionNodo = new Date(nodo.fechaCreacion);
@@ -98,9 +96,9 @@ const NodoTimeline = ({ nodo }) => {
 	let iconoPrevio = null;
 
 	if (nodo.es.vigente) {
-		iconoPrevio = <StarIcon sx={{ fontSize: '17px', mr: 1, color: 'text.primary' }} title="Datos vigentes del pedido"/>
+		iconoPrevio = <StarIcon sx={{ fontSize: '17px', mr: 1, color: 'text.primary' }} title="Datos vigentes del pedido" />
 	} else if (nodo.es.informado) {
-		iconoPrevio = <AttributionIcon sx={{ fontSize: '17px', mr: 1, color: 'warning.main' }} title="Datos informados a la farmacia"/>
+		iconoPrevio = <AttributionIcon sx={{ fontSize: '17px', mr: 1, color: 'warning.main' }} title="Datos informados a la farmacia" />
 	}
 
 	return <TimelineItem >

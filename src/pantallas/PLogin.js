@@ -8,7 +8,7 @@ import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
 import { Box, Collapse, IconButton, Alert, AlertTitle  } from '@mui/material';
 
-import ContextoAplicacion from 'contexto';
+import ContextoAplicacion from 'contexto/contexto';
 import BarraProgresoSuperior from '../navegacion/BarraProgresoSuperior';
 import FediCommons from 'common/FediCommons';
 import CloseIcon from '@mui/icons-material/Close';

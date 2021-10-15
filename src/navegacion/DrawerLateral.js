@@ -1,6 +1,6 @@
 import { Avatar, Box, Chip, Collapse, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader,  SwipeableDrawer } from "@mui/material";
 import { Assessment, Business, CallSplit, Input, ChevronLeft, Dashboard, ExpandLess, ExpandMore, Filter2, Looks3, NearMe, Speed, Storage, Security, FindInPage } from "@mui/icons-material";
-import ContextoAplicacion from "contexto";
+import ContextoAplicacion from "contexto/contexto";
 import { useCallback, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';

@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import ContextoAplicacion from 'contexto';
+import ContextoAplicacion from 'contexto/contexto';
 import { Divider, ListItemIcon, Snackbar } from '@mui/material';
 
 

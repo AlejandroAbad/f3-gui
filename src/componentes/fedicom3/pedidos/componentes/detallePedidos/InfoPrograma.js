@@ -1,33 +1,14 @@
 import { CircularProgress, Typography } from "@mui/material";
 import ErrorIcon from '@mui/icons-material/Error';
-import useApiFedicom from "hooks/useApiFedicom";
-import useEstadoCarga from "hooks/useEstadoCarga";
-import { useCallback, useEffect } from "react";
+import { useContext } from "react";
 import BoxInfo from "./BoxInfo";
+import ContextoMaestros from "contexto/contextoMaestros";
 
 
 
 export default function InfoProgramaFarmacia({ idPrograma }) {
 
-	let { consultaMaestro } = useApiFedicom();
-	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
-
-	let cargarDatosPrograma = useCallback(async () => {
-
-		if (!idPrograma) return;
-
-		setCargando(true);
-		try {
-			let resultado = await consultaMaestro('programas', idPrograma)
-			if (resultado?.id) setDatos(resultado);
-			else setError(resultado);
-		} catch (error) {
-			setError(error);
-		}
-
-	}, [idPrograma, consultaMaestro, setCargando, setDatos, setError])
-
-	useEffect(cargarDatosPrograma, [cargarDatosPrograma])
+	let { maestroProgramas } = useContext(ContextoMaestros);
 
 	let componentePrograma = <>{idPrograma}</>;
 
@@ -37,7 +18,7 @@ export default function InfoProgramaFarmacia({ idPrograma }) {
 		</Typography>
 	} else {
 
-		if (cargando) {
+		if (maestroProgramas.cargando) {
 			componentePrograma = <Typography component="span" variant="subtitle2" sx={{ fontWeight: 'bold', mr: 1 }}>
 				<CircularProgress size={10} color="secondary" sx={{ mr: 1 }} />
 				{idPrograma}
@@ -45,16 +26,17 @@ export default function InfoProgramaFarmacia({ idPrograma }) {
 
 		}
 
-		if (error) {
+		if (maestroProgramas.error) {
 			componentePrograma = <Typography component="span" variant="subtitle2" sx={{ fontWeight: 'bold' }}>
 				{idPrograma} <ErrorIcon sx={{ fontSize: 12, color: 'warning.main' }} />
 			</Typography>
 		}
 
-		if (datos) {
+		if (maestroProgramas.datos) {
+			let datosPrograma = maestroProgramas.datos.find(e => e.id === idPrograma);
 			componentePrograma = <>
-				<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{datos.nombre ?? 'Desconocido'}</Typography>
-				<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datos.id ?? idPrograma})</Typography>
+				<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{datosPrograma.nombre ?? 'Desconocido'}</Typography>
+				<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datosPrograma.id ?? idPrograma})</Typography>
 			</>
 		}
 	}

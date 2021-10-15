@@ -1,31 +1,31 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import BoxInfo from "./BoxInfo";
-import useApiFedicom from "hooks/useApiFedicom";
+import ContextoMaestros from "contexto/contextoMaestros";
 
 
 
 const InfoAutenticacion = ({ autenticacion }) => {
 
 	let { usuario, /*dominio,*/ solicitante } = autenticacion;
-
-	let { consultaMaestro } = useApiFedicom();
+	let { maestroLaboratorios } = useContext(ContextoMaestros);
 
 	let [nombreLaboratorio, setNombreLaboratorio] = useState(null);
 	let cargarDatosLaboratorio = useCallback(async () => {
 
 		if (!usuario) return;
+		if (!maestroLaboratorios?.datos?.length) return;
 		if (usuario.search(/^T[RGP]/) !== -1) {
 
 			try {
-				let laboratorio = await consultaMaestro('laboratorios', usuario.substr(2))
+				let laboratorio = maestroLaboratorios.datos.find(l => l.id === parseInt(usuario.substr(2)));
 				if (laboratorio?.id === parseInt(usuario.substr(2)))
 					setNombreLaboratorio(laboratorio.nombre);
 			} catch (error) {
 			}
 		}
 
-	}, [usuario, consultaMaestro, setNombreLaboratorio])
+	}, [usuario, maestroLaboratorios, setNombreLaboratorio])
 
 	useEffect(cargarDatosLaboratorio, [cargarDatosLaboratorio])
 

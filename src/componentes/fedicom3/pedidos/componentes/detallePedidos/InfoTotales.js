@@ -9,7 +9,7 @@ import { Box } from "@mui/system";
 const InfoTotales = () => {
 
 	let { pedido } = useContext(ContextoPedido);
-	let totales = pedido.totales
+	let totales = pedido.totales || {}
 
 	return <BoxTexto titulo="Totales:">
 		<Box>

@@ -1,9 +1,9 @@
 import { Chip, CircularProgress } from "@mui/material";
-
-import useApiFedicom from "hooks/useApiFedicom";
-import useEstadoCarga from "hooks/useEstadoCarga";
-import { useCallback, useContext, useEffect } from "react";
+import ContextoMaestros from "contexto/contextoMaestros";
 import ContextoPedido from "../../ContextoPedido";
+
+import {  useContext } from "react";
+
 
 import BoxInfo from "./BoxInfo";
 
@@ -12,27 +12,8 @@ import BoxInfo from "./BoxInfo";
 export default function InfoEstado() {
 
 	let { pedido } = useContext(ContextoPedido);
+	let { maestroEstados } = useContext(ContextoMaestros);
 	let codigoEstado = pedido.estado;
-
-	let { consultaMaestro } = useApiFedicom();
-	let { cargando, datos, setCargando, setDatos, setError } = useEstadoCarga();
-
-	let cargarMaestroEstado = useCallback(async () => {
-
-		if (codigoEstado === null || codigoEstado === undefined) return;
-
-		setCargando(true);
-		try {
-			let resultado = await consultaMaestro('estados', codigoEstado)
-			if (resultado?.codigo) setDatos(resultado);
-			else setError(resultado);
-		} catch (error) {
-			setError(error);
-		}
-
-	}, [codigoEstado, consultaMaestro, setCargando, setDatos, setError])
-
-	useEffect(cargarMaestroEstado, [cargarMaestroEstado])
 
 	if (!codigoEstado) return null;
 
@@ -41,7 +22,7 @@ export default function InfoEstado() {
 		label={`ESTADO ${codigoEstado}`}
 	/>
 
-	if (cargando) {
+	if (maestroEstados.cargando) {
 		eleEstado = <Chip
 			sx={{ fontWeight: 'bold', px: 1 }}
 			avatar={<CircularProgress size={14} color="secondary" />}
@@ -49,12 +30,15 @@ export default function InfoEstado() {
 		/>
 	}
 
-	if (datos) {
-		eleEstado = <Chip
-			color={datos.color}
-			sx={{ fontWeight: 'bold', px: 1 }}
-			label={datos.nombre}
-		/>
+	if (maestroEstados.datos) {
+		let datosEstado = maestroEstados.datos.find(e => e.codigo === codigoEstado);
+		if (datosEstado) {
+			eleEstado = <Chip
+				color={datosEstado.color}
+				sx={{ fontWeight: 'bold', px: 1 }}
+				label={datosEstado.nombre}
+			/>
+		}
 	}
 
 	return <BoxInfo titulo="Estado:">

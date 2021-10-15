@@ -4,63 +4,47 @@ import useEstadoCarga from "hooks/useEstadoCarga";
 import { Chip, CircularProgress, Stack, Typography } from "@mui/material";
 import ContextoPedido from "../../ContextoPedido";
 import BoxInfo from "./BoxInfo";
+import ContextoMaestros from "contexto/contextoMaestros";
 
 
 
 export default function InfoAlmacen() {
 
 	let { pedido } = useContext(ContextoPedido);
+	let { maestroAlmacenes } = useContext(ContextoMaestros);
 
-	let { codigoAlmancenServicio, almacenesDeRebote, codigoAlmacenDesconocido, codigoAlmacenSaneado } = pedido;
+	let { codigoAlmacenServicio, almacenesDeRebote, codigoAlmacenDesconocido, codigoAlmacenSaneado } = pedido;
 
-	let { consultaMaestro } = useApiFedicom();
-	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
-
-
-	let cargarDatosPrograma = useCallback(async () => {
-
-		if (!codigoAlmancenServicio) return;
-
-		setCargando(true);
-		try {
-			let resultado = await consultaMaestro('almacenes', codigoAlmancenServicio)
-			if (resultado?.id) setDatos(resultado);
-			else setError(resultado);
-		} catch (error) {
-			setError(error);
-		}
-
-	}, [codigoAlmancenServicio, consultaMaestro, setCargando, setDatos, setError])
-
-	useEffect(cargarDatosPrograma, [cargarDatosPrograma])
-
-	if (!codigoAlmancenServicio) return null;
+	if (!codigoAlmacenServicio) return null;
 
 
 
-	let eleNombreAlmacen = <>{codigoAlmancenServicio}</>;
+	let eleNombreAlmacen = <>{codigoAlmacenServicio}</>;
 	let eleAlmacenesDeRebote = null;
 
-	if (cargando) {
+	if (maestroAlmacenes.cargando) {
 		eleNombreAlmacen = <Typography component="span" variant="body1" sx={{ fontSize: 22, fontWeight: 'bold', mr: 1 }}>
 			<CircularProgress size={16} color="secondary" sx={{ mr: 1 }} />
-			{codigoAlmancenServicio}
+			{codigoAlmacenServicio}
 		</Typography>
 	}
 
-	if (error) {
-		eleNombreAlmacen = <Typography  component="span" variant="body1" sx={{ fontSize: 22, fontWeight: 'bold', mr: 1 }}>
-			{codigoAlmancenServicio}
+	if (maestroAlmacenes.error) {
+		eleNombreAlmacen = <Typography component="span" variant="body1" sx={{ fontSize: 22, fontWeight: 'bold', mr: 1 }}>
+			{codigoAlmacenServicio}
 		</Typography>
 	}
 
-	if (datos) {
-		eleNombreAlmacen = <>
-			<Typography component="span" variant="body1" sx={{ fontSize: 22, fontWeight: 'bold', mr: 1 }}>
-				{datos.nombre ?? 'Desconocido'}
-			</Typography>
-			<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datos.id ?? codigoAlmancenServicio})</Typography>
-		</>
+	if (maestroAlmacenes.datos) {
+		let datosAlmacen = maestroAlmacenes.datos.find(a => a.id === codigoAlmacenServicio)
+		if (datosAlmacen) {
+			eleNombreAlmacen = <>
+				<Typography component="span" variant="body1" sx={{ fontSize: 22, fontWeight: 'bold', mr: 1 }}>
+					{datosAlmacen.nombre ?? 'Desconocido'}
+				</Typography>
+				<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datosAlmacen.id ?? codigoAlmacenServicio})</Typography>
+			</>
+		}
 	}
 
 	if (almacenesDeRebote?.length > 0) {

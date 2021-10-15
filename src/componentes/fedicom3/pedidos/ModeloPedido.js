@@ -62,7 +62,7 @@ class ModeloPedido {
 		return this.nodoVigente.clienteSap;
 	}
 
-	get codigoAlmancenServicio() {
+	get codigoAlmacenServicio() {
 		return this.nodoVigente.codigoAlmacenServicio;
 	}
 	get almacenesDeRebote() {
@@ -88,6 +88,10 @@ class ModeloPedido {
 
 	get totales() {
 		return this.nodoVigente.totales;
+	}
+
+	get lineas() {
+		return this.nodoVigente.transmision?.respuesta?.body?.lineas;
 	}
 
 }

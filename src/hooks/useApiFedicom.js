@@ -1,4 +1,4 @@
-import ContextoAplicacion from 'contexto';
+import ContextoAplicacion from 'contexto/contexto';
 import K from 'K';
 import { useCallback, useContext } from 'react';
 import useApi from "./useApi"

@@ -1,43 +1,24 @@
-import { Avatar, Chip, CircularProgress, Typography } from "@mui/material";
-import ErrorIcon from '@mui/icons-material/Error';
-import useApiFedicom from "hooks/useApiFedicom";
-import useEstadoCarga from "hooks/useEstadoCarga";
-import { useCallback, useEffect } from "react";
+import { Avatar, Chip, CircularProgress } from "@mui/material";
+import ErrorIcon from "@mui/icons-material/Error";
+import { useContext } from "react";
 import BoxTexto from "./BoxTexto";
+
+import ContextoMaestros from "contexto/contextoMaestros";
 
 
 
 export default function TextoEstado({ codigoEstado }) {
 
+	let { maestroEstados } = useContext(ContextoMaestros);
+	if (!codigoEstado) return null;
 
-	let { consultaMaestro } = useApiFedicom();
-	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
+	let componenteEstado = <Chip
+		size="small"
+		sx={{ fontWeight: 'bold', px: 1 }}
+		label={`Estado ${codigoEstado}`}
+	/>
 
-	let cargarMaestroEstado = useCallback(async () => {
-
-		if (codigoEstado === null || codigoEstado === undefined) return;
-
-		setCargando(true);
-		try {
-			let resultado = await consultaMaestro('estados', codigoEstado)
-			if (resultado?.codigo) setDatos(resultado);
-			else setError(resultado);
-		} catch (error) {
-			setError(error);
-		}
-
-	}, [codigoEstado, consultaMaestro, setCargando, setDatos, setError])
-
-	useEffect(cargarMaestroEstado, [cargarMaestroEstado])
-
-	let componenteEstado = <>{codigoEstado}</>;
-
-	if (!codigoEstado) {
-		return null;
-		// componentePrograma = <Typography component="span" variant="subtitle2" sx={{ color: 'warning.main', fontWeight: 'bold' }}>N/D</Typography>
-	}
-
-	if (cargando) {
+	if (maestroEstados.cargando) {
 		componenteEstado = <Chip
 			size="small"
 			sx={{ fontWeight: 'bold', px: 1 }}
@@ -46,7 +27,7 @@ export default function TextoEstado({ codigoEstado }) {
 		/>
 	}
 
-	if (error) {
+	if (maestroEstados.error) {
 		componenteEstado = <Chip
 			size="small"
 			sx={{ fontWeight: 'bold', px: 1 }}
@@ -55,18 +36,17 @@ export default function TextoEstado({ codigoEstado }) {
 		/>
 	}
 
-	if (datos) {
-		componenteEstado = <>
-			<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{datos.nombre ?? 'Desconocido'}</Typography>
-			<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datos.id ?? codigoEstado})</Typography>
-		</>
+	if (maestroEstados.datos) {
 
-		componenteEstado = <Chip
-			size="small"
-			color={datos.color}
-			sx={{ fontWeight: 'bold', px: 1 }}
-			label={datos.nombre}
-		/>
+		let datosEstado = maestroEstados.datos.find(e => e.codigo === codigoEstado);
+		if (datosEstado) {
+			componenteEstado = <Chip
+				size="small"
+				color={datosEstado.color}
+				sx={{ fontWeight: 'bold', px: 1 }}
+				label={datosEstado.nombre}
+			/>
+		}
 	}
 
 	return <BoxTexto titulo="Estado:">

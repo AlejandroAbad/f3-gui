@@ -81,7 +81,7 @@ export default function LineaNavegadorPedido({ pedido }) {
 					<Grid container>
 						<Grid item xs={12}>
 							<TextoAlmacen
-								codigoAlmancenServicio={p.codigoAlmacenServicio}
+								codigoAlmacenServicio={p.codigoAlmacenServicio}
 								almacenesDeRebote={p.almacenesDeRebote}
 								esCodigoAlmacenDesconocido={p.codigoAlmacenDesconocido}
 								esCodigoAlmacenSaneado={p.codigoAlmacenSaneado}

@@ -1,6 +1,5 @@
 import { memo, useContext, useState, useCallback, useEffect } from "react"
 import { Box, Typography, Paper } from "@mui/material"
-import useApiFedicom from "hooks/useApiFedicom";
 
 
 import Timeline from '@mui/lab/Timeline';
@@ -10,21 +9,18 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-
-
-import { format } from "date-fns";
-import { es } from 'date-fns/locale'
-
 import ClearIcon from '@mui/icons-material/Clear';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import CheckIcon from '@mui/icons-material/Check';
 import LoopIcon from '@mui/icons-material/Loop';
 import SendIcon from '@mui/icons-material/Send';
-import StarIcon from '@mui/icons-material/Star';
-import AttributionIcon from '@mui/icons-material/Attribution';
-import ContextoPedido from "./ContextoPedido";
-import ContextoMaestros from "contexto/contextoMaestros";
 
+
+import { format } from "date-fns";
+import { es } from 'date-fns/locale'
+
+import ContextoPedido from "componentes/fedicom3/pedidos/ContextoPedido";
+import ContextoMaestros from "contexto/contextoMaestros";
 
 
 const determinarInfoNodo = (nodo, infoEstado) => {
@@ -52,7 +48,8 @@ const determinarInfoNodo = (nodo, infoEstado) => {
 		info.primario = 'Reenvío a SAP'
 		info.icono = <LoopIcon />
 		if (nodo.esPedidoDuplicadoSap) {
-			info.secundario = 'PEDIDO EN SAP'
+			info.icono = <CopyAllIcon />
+			info.secundario = 'REPETIDO EN SAP'
 		}
 	}
 
@@ -96,9 +93,9 @@ const NodoTimeline = ({ nodo }) => {
 	let iconoPrevio = null;
 
 	if (nodo.es.vigente) {
-		iconoPrevio = <StarIcon sx={{ fontSize: '17px', mr: 1, color: 'text.primary' }} title="Datos vigentes del pedido" />
+		iconoPrevio = <Typography variant="body1" component="span" sx={{ color: 'common.black', mr: 1 }}>★</Typography>
 	} else if (nodo.es.informado) {
-		iconoPrevio = <AttributionIcon sx={{ fontSize: '17px', mr: 1, color: 'warning.main' }} title="Datos informados a la farmacia" />
+		iconoPrevio = <Typography variant="body1" component="span" sx={{ fontWeight: 'bold', color: 'error.main', mr: 1 }}>☄</Typography>
 	}
 
 	return <TimelineItem >
@@ -154,10 +151,10 @@ const FechaTimeline = ({ fechaEntrada }) => {
 }
 
 
-const BoxHistorialNodos = () => {
+const PaperHistorialNodos = () => {
 
 	let { pedido } = useContext(ContextoPedido);
-
+	
 	return <Box>
 		<Paper elevation={10} sx={{ py: 1 }}>
 			<Timeline>
@@ -170,4 +167,4 @@ const BoxHistorialNodos = () => {
 }
 
 
-export default memo(BoxHistorialNodos)
+export default memo(PaperHistorialNodos)

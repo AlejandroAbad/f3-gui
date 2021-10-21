@@ -7,16 +7,23 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-const OPCIONES_FILAS_POR_PAGINA = [];
-OPCIONES_FILAS_POR_PAGINA[2] = 'Mostrar 2 por página';
-OPCIONES_FILAS_POR_PAGINA[10] = 'Mostrar 10 por página';
-OPCIONES_FILAS_POR_PAGINA[25] = 'Mostrar 25 por página';
-OPCIONES_FILAS_POR_PAGINA[50] = 'Mostrar 50 por página';
+const OPCIONES_POR_DEFECTO = [];
+
+OPCIONES_POR_DEFECTO[5] = 'Mostrar 5 por página';
+OPCIONES_POR_DEFECTO[10] = 'Mostrar 10 por página';
+OPCIONES_POR_DEFECTO[25] = 'Mostrar 25 por página';
+OPCIONES_POR_DEFECTO[50] = 'Mostrar 50 por página';
 
 
-export default function BotonLimiteResultados({ limite, cambiaLimite, ...props }) {
+export default function BotonLimiteResultados({ limite, cambiaLimite, opciones, ...props }) {
+
 	const [menuAbierto, setMenuAbierto] = useState(false);
 	const refPopper = useRef(null);
+
+	if (!opciones) {
+		opciones = OPCIONES_POR_DEFECTO;
+	}
+
 
 	const cambiaElementoSeleccionado = (_, index) => {
 		cambiaLimite(index);
@@ -35,13 +42,13 @@ export default function BotonLimiteResultados({ limite, cambiaLimite, ...props }
 	return (
 		<>
 			<Button {...props} endIcon={<ArrowDropDownIcon />} ref={refPopper} variant="link" size="small" onClick={cambiaEstadoMenu}>
-				{OPCIONES_FILAS_POR_PAGINA[limite]}
+				{opciones[limite]}
 			</Button>
 			<Popper open={menuAbierto} anchorEl={refPopper.current} >
 				<Paper>
 					<ClickAwayListener onClickAway={cierraMenu}>
 						<MenuList>
-							{OPCIONES_FILAS_POR_PAGINA.map((valor, clave) => (
+							{opciones.map((valor, clave) => (
 								<MenuItem key={valor} selected={clave === limite} onClick={(_) => cambiaElementoSeleccionado(_, clave)}>
 									{valor}
 								</MenuItem>

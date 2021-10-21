@@ -108,7 +108,6 @@ export default function LineaNavegadorPedido({ pedido }) {
 					</Grid>
 				</Grid>
 			</Grid>
-			{/*<ReactJson src={p} />*/}
 		</ListItem>
 
 	)

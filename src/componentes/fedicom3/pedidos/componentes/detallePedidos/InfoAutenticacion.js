@@ -7,7 +7,8 @@ import ContextoMaestros from "contexto/contextoMaestros";
 
 const InfoAutenticacion = ({ autenticacion }) => {
 
-	let { usuario, /*dominio,*/ solicitante } = autenticacion;
+	
+	let { usuario, /*dominio,*/ solicitante } = autenticacion || {};
 	let { maestroLaboratorios } = useContext(ContextoMaestros);
 
 	let [nombreLaboratorio, setNombreLaboratorio] = useState(null);
@@ -32,7 +33,7 @@ const InfoAutenticacion = ({ autenticacion }) => {
 	let infoSolicitante = null;
 
 	if (solicitante?.usuario) {
-		infoSolicitante = <Typography component="div" variant="subtitle2" sx={{ pt: 0 }}>› Solicitado por {solicitante.usuario}</Typography>
+		infoSolicitante = <Typography component="div" variant="subtitle1" sx={{ pt: 0, pl: 2, fontSize: '12px' }}>› Simulado por {solicitante.usuario}</Typography>
 	}
 
 	let componenteUsuario = null;

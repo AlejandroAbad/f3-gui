@@ -6,16 +6,13 @@ export default function useApi(baseUrl) {
 
 		if (!opciones) opciones = {};
 
-		if (!opciones.url) opciones.url = baseUrl;
-		else opciones.url = baseUrl + opciones.url;
-
-		let { url, ...opcionesHttp } = opciones;
-
-		console.group('EJECUTANDO CONSULTA ' + url);
-		console.log('OPCIONES', opcionesHttp);
+		console.group('EJECUTANDO CONSULTA')
+		console.log(opciones.url);
 		console.groupEnd();
 
-		opciones.mode = 'cors';
+		if (!opciones.url) opciones.url = baseUrl;
+		else opciones.url = baseUrl + opciones.url;
+		let { url, ...opcionesHttp } = opciones;
 		return fetch(url, opcionesHttp)
 
 	}, [baseUrl])

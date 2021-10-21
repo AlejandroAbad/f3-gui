@@ -86,7 +86,7 @@ export default function useApiFedicom() {
 
 	const consultaTransmision = useCallback(async (txId, tipoConsulta) => {
 		let opciones = {
-			headers: generarCabeceras(getJwt())
+			headers: generarCabeceras(getJwt()) 
 		}
 
 		if (tipoConsulta) tipoConsulta = '/' + tipoConsulta

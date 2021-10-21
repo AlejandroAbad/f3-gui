@@ -16,10 +16,12 @@ export default function InfoLineaPedido({ linea, almacenOriginal }) {
 	let observaciones = linea.observaciones || false;
 
 
+	let cantidadSolicitada = linea.cantidad;
 	let cantidadServida = (linea.cantidad - (linea.cantidadFalta || 0));
 	let cantidadFalta = linea.cantidadFalta - (linea.servicioAplazado?.cantidad || 0)
 	let cantidadAplazada = linea.servicioAplazado?.cantidad || 0;
 	let cantidadRebotada = 0;
+
 
 	let esRebote = false;
 	let esAplazado = cantidadAplazada > 0;
@@ -72,6 +74,19 @@ export default function InfoLineaPedido({ linea, almacenOriginal }) {
 			{cantidadRebotada} unidad{cantidadRebotada === 1 ? '' : 'es'} rebota{cantidadRebotada === 1 ? '' : 'n'} por {linea.codigoAlmacenServicio}.
 		</Typography>)
 	}
+	if (linea.codigoArticuloSustituyente) {
+		eleChips.push(<Chip size="small" key="sustituyente" variant="outlined" label="SUSTITUIDO" color="info" />)
+		eleDetalles.push(<Typography key="sustituyente" variant="subtitle2" gutterBottom component="div">
+			Se sustituye el artículo por el código {linea.codigoArticuloSustituyente}.
+		</Typography>)
+	}
+	if (!linea.descripcionArticulo) {
+		eleChips.push(<Chip size="small" key="faltasNoDisponibles" variant="outlined" label="NO SAP" color="warning" />)
+		linea.descripcionArticulo = <Typography sx={{ fontStyle: 'italic', color: 'text.disabled' }}>DESCRIPCIÓN NO DISPONIBLE</Typography>
+		cantidadServida = 0;
+	} else {
+		cantidadSolicitada = 0;
+	}
 
 	let hayDetalles = eleDetalles.length > 0;
 
@@ -86,14 +101,15 @@ export default function InfoLineaPedido({ linea, almacenOriginal }) {
 					}
 				</TableCell>
 				<TableCell sx={{ width: 460 }}>
-					<Typography >{linea.descripcionArticulo}</Typography>
-					<Typography sx={{ fontWeight: 'bold' }}>{linea.codigoArticulo}</Typography>
+					<Typography component="div">{linea.descripcionArticulo}</Typography>
+					<Typography component="div" sx={{ fontWeight: 'bold' }}>{linea.codigoArticulo}</Typography>
 				</TableCell>
 				<TableCell sx={{ width: 120 }}>
-					{cantidadServida > 0 && <Typography >{cantidadServida} servido{cantidadServida === 1 ? '' : 's'}</Typography>}
-					{cantidadFalta > 0 && <Typography sx={{ color: 'error.main' }}>{cantidadFalta} en falta{cantidadFalta === 1 ? '' : 's'}</Typography>}
-					{cantidadAplazada > 0 && <Typography sx={{ color: 'primary.main' }}>{cantidadAplazada} aplazado{cantidadAplazada === 1 ? '' : 's'}</Typography>}
-					{cantidadRebotada > 0 && <Typography sx={{ color: 'info.main' }}>{cantidadRebotada} rebotado{cantidadRebotada === 1 ? '' : 's'}</Typography>}
+					{cantidadSolicitada > 0 && <Typography component="div">{cantidadSolicitada} pedido{cantidadSolicitada === 1 ? '' : 's'}</Typography>}
+					{cantidadServida > 0 && <Typography component="div">{cantidadServida} servido{cantidadServida === 1 ? '' : 's'}</Typography>}
+					{cantidadFalta > 0 && <Typography component="div" sx={{ color: 'error.main' }}>{cantidadFalta} en falta</Typography>}
+					{cantidadAplazada > 0 && <Typography component="div" sx={{ color: 'primary.main' }}>{cantidadAplazada} aplazado{cantidadAplazada === 1 ? '' : 's'}</Typography>}
+					{cantidadRebotada > 0 && <Typography component="div" sx={{ color: 'info.main' }}>{cantidadRebotada} rebotado{cantidadRebotada === 1 ? '' : 's'}</Typography>}
 				</TableCell>
 				<TableCell >
 					<Stack direction="row" spacing={0} flexWrap="wrap">

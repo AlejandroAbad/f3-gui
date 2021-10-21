@@ -3,13 +3,20 @@ class ModeloPedido {
 
 	nodoVigente = null;
 	nodoInformado = null;
+	ultimoNodoCliente = null;
 	nodos = [];
-
 
 	constructor(nodos) {
 		this.nodos = nodos;
 		this.nodoVigente = this.nodos.find(nodo => nodo.es.vigente);
-		this.nodoInformado = this.nodos.find(nodo => nodo.es.informado);
+		this.nodoInformado = this.nodos.find(nodo => nodo.es.informado) || this.nodoVigente;
+
+		this.ultimoNodoCliente = this.nodoInformado;
+		for (let i = 0; i > this.nodos.length; i++) {
+			if (this.nodos[i].es.externa) {
+				this.ultimoNodoCliente = this.nodos[i];
+			}
+		}
 	}
 
 	get estado() {
@@ -43,12 +50,12 @@ class ModeloPedido {
 
 	get datosConexion() {
 		return {
-			ip: this.nodoInformado.ip,
-			autenticacion: this.nodoInformado.autenticacion,
-			programa: this.nodoInformado.programa,
-			ssl: this.nodoInformado.ssl,
-			balanceador: this.nodoInformado.balanceador,
-			concentrador: this.nodoInformado.concentrador,
+			ip: this.ultimoNodoCliente.ip,
+			autenticacion: this.ultimoNodoCliente.autenticacion,
+			programa: this.ultimoNodoCliente.programa,
+			ssl: this.ultimoNodoCliente.ssl,
+			balanceador: this.ultimoNodoCliente.balanceador,
+			concentrador: this.ultimoNodoCliente.concentrador,
 		}
 	}
 
@@ -91,7 +98,17 @@ class ModeloPedido {
 	}
 
 	get lineas() {
+		if (!this.nodoVigente.transmision?.respuesta?.body?.lineas)
+			return this.nodoVigente.transmision?.solicitud?.body?.lineas
 		return this.nodoVigente.transmision?.respuesta?.body?.lineas;
+	}
+
+	get transmisionHttp() {
+		return this.nodoInformado.transmision;
+	}
+
+	get transmisionSap() {
+		return this.nodoInformado.sap;
 	}
 
 }

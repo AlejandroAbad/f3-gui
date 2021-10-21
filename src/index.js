@@ -11,15 +11,18 @@ import App from 'App';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { ProveedorContextoMaestros } from 'contexto/contextoMaestros';
+import { IconContext } from "react-icons";
 
 
 ReactDOM.render(
 	<ThemeProvider theme={theme}>
-		<ProveedorContextoAplicacion>
-			<ProveedorContextoMaestros>
-				<App />
-			</ProveedorContextoMaestros>
-		</ProveedorContextoAplicacion>
+		<IconContext.Provider value={{ size: '1.5em'}}>
+			<ProveedorContextoAplicacion>
+				<ProveedorContextoMaestros>
+					<App />
+				</ProveedorContextoMaestros>
+			</ProveedorContextoAplicacion>
+		</IconContext.Provider>
 	</ThemeProvider>
 	,
 	document.getElementById('root')

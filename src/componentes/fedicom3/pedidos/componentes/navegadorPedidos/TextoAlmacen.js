@@ -1,6 +1,4 @@
 import { useContext } from "react";
-import useApiFedicom from "hooks/useApiFedicom";
-import useEstadoCarga from "hooks/useEstadoCarga";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import ErrorIcon from '@mui/icons-material/Error';
 import ContextoMaestros from 'contexto/contextoMaestros';

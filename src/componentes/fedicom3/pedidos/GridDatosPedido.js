@@ -1,34 +1,43 @@
-import { memo, useContext, useEffect } from "react"
-
-import { Grid } from '@mui/material';
-import BoxHistorialNodos from "./BoxHistorialNodos";
-import BoxCabeceraPedido from "./BoxCabeceraPedido";
-import TituloPantalla from "navegacion/TituloPantalla";
+import { memo, useContext, useEffect, useState } from "react"
 
 import { ContextoPedido } from 'componentes/fedicom3/pedidos/ContextoPedido';
+
+import { Grid, Typography } from '@mui/material';
+import PaperHistorialNodos from "./contenedores/PaperHistorialNodos";
+import PaperCabeceraPedido from "./contenedores/PaperCabeceraPedido";
+import PaperDatosTransmision from "./contenedores/PaperDatosTransmision";
+import PaperLineasPedido from "./componentes/lineasPedido/PaperLineasPedido";
+
 import BannerCargando from "common/BannerCargando";
-import BoxDatosTransmision from "./BoxDatosTransmision";
-import ReactJson from "react-json-view";
-import BoxLineasPedido from "./componentes/lineasPedido/BoxLineasPedido";
+import PaperSeleccionNodo from "./contenedores/PaperSeleccionNodo";
+import PaperLogTransmision from "componentes/transmision/contenedores/PaperLogTransmision";
+import PaperHttpTransmision from "componentes/transmision/contenedores/PaperHttpTransmision";
+
+
 
 const GridDatosPedido = ({ p }) => {
 
-	let { pedido, setPedido } = useContext(ContextoPedido);
+	const { pedido, setPedido } = useContext(ContextoPedido);
+	const [idNodoSeleccionado, setIdNodoSeleccionado] = useState();
+	useEffect(() => {
+		setPedido(p)
+		setIdNodoSeleccionado(p.nodos.find(n => n.es.vigente)?.id);
+	}, [p, setPedido]);
 
-	useEffect(() => setPedido(p), [p, setPedido]);
 	if (!pedido) return <BannerCargando />;
 
-	return (<>
-		<TituloPantalla titulo={`Pedido ${pedido.crc.toUpperCase()}`} />
 
-		<Grid container spacing={2}>
+
+
+	return (<>
+		<Grid container spacing={2} sx={{ mb: 5 }}>
 			<Grid item xs={8} xl={9}>
 				<Grid container spacing={2}>
 					<Grid item xs={12}>
-						<BoxCabeceraPedido />
+						<PaperCabeceraPedido />
 					</Grid>
 					<Grid item xs={12}>
-						<BoxLineasPedido />
+						<PaperLineasPedido />
 					</Grid>
 				</Grid>
 			</Grid>
@@ -36,14 +45,26 @@ const GridDatosPedido = ({ p }) => {
 			<Grid item xs={4} xl={3} >
 				<Grid container spacing={2}>
 					<Grid item xs={12} >
-						<BoxHistorialNodos />
+						<PaperHistorialNodos />
 					</Grid>
 					<Grid item xs={12} >
-						<BoxDatosTransmision />
+						<PaperDatosTransmision />
 					</Grid>
 				</Grid>
 			</Grid>
 
+			<Grid item xs={12}>
+				<Typography variant="h4" component="h6" gutterBottom>Datos de transmisión</Typography>
+				<PaperSeleccionNodo {...{ idNodoSeleccionado, setIdNodoSeleccionado }} />
+			</Grid>
+			
+			<Grid item xs={12}>
+				<PaperHttpTransmision idTransmision={idNodoSeleccionado} />
+			</Grid>
+
+			<Grid item xs={12}>
+				<PaperLogTransmision idTransmision={idNodoSeleccionado} />
+			</Grid>
 
 		</Grid>
 	</>

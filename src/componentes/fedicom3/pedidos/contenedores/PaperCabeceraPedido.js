@@ -1,23 +1,23 @@
 import { Grid, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { memo } from "react"
-import InfoAlmacen from "./componentes/detallePedidos/InfoAlmacen";
-import InfoCliente from "./componentes/detallePedidos/InfoCliente";
-import InfoCrc from "./componentes/detallePedidos/InfoCrc";
-import InfoEstado from "./componentes/detallePedidos/InfoEstado";
-import InfoPedidoOrigen from "./componentes/detallePedidos/InfoPedidoOrigen";
-import InfoPedidosSap from "./componentes/detallePedidos/InfoPedidosSap";
-import InfoTipoPedido from "./componentes/detallePedidos/InfoTipoPedido";
-import InfoTotales from "./componentes/detallePedidos/InfoTotales";
+import InfoAlmacen from "../componentes/detallePedidos/InfoAlmacen";
+import InfoCliente from "../componentes/detallePedidos/InfoCliente";
+import InfoCrc from "../componentes/detallePedidos/InfoCrc";
+import InfoEstado from "../componentes/detallePedidos/InfoEstado";
+import InfoPedidoOrigen from "../componentes/detallePedidos/InfoPedidoOrigen";
+import InfoPedidosSap from "../componentes/detallePedidos/InfoPedidosSap";
+import InfoTipoPedido from "../componentes/detallePedidos/InfoTipoPedido";
+import InfoTotales from "../componentes/detallePedidos/InfoTotales";
 // import ContextoPedido from "./ContextoPedido";
 
-const BoxCabeceraPedido = () => {
+const PaperCabeceraPedido = () => {
 
 	// let { pedido } = useContext(ContextoPedido);
 
 	return <Box>
-		<Paper elevation={10} sx={{ p: 1, pt: 3, pb: 2 }}>
-			<Typography sx={{ px: 2 }} variant='h5' component="h2">Datos de cabecera</Typography>
+		<Paper elevation={10} sx={{ px: 4, pt: 4, pb: 2 }}>
+			<Typography variant='h5' component="h2">Datos de cabecera</Typography>
 			<Grid container sx={{ mx: 2 }}>
 				<Grid item xs={4}>
 					<Grid container>
@@ -60,4 +60,4 @@ const BoxCabeceraPedido = () => {
 	</Box>
 }
 
-export default memo(BoxCabeceraPedido);
+export default memo(PaperCabeceraPedido);

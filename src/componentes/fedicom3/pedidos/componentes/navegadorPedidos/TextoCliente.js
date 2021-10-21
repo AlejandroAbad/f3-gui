@@ -1,5 +1,4 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import useApiFedicom from "hooks/useApiFedicom";
 import { Typography } from "@mui/material";
 import BoxTexto from "./BoxTexto";
 import ContextoMaestros from "contexto/contextoMaestros";
@@ -61,7 +60,7 @@ export default function TextoCliente({ cliente, usuario, dominio, solicitante })
 	}
 
 	if (solicitante && solicitante.usuario && solicitante.dominio) {
-		infoSolicitante = <Typography component="div" variant="caption" sx={{ mt: -0.8, pt: 0 }}>› Solicitado por {solicitante.usuario}</Typography>
+		infoSolicitante = <Typography component="div" variant="caption" sx={{ mt: -0.8, pt: 0 }}>› Simulado por {solicitante.usuario}</Typography>
 	}
 
 	if (cliente >= 0) {

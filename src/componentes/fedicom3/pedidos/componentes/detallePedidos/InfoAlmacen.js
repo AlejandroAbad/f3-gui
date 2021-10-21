@@ -1,6 +1,4 @@
-import { useCallback, useEffect, useContext } from "react";
-import useApiFedicom from "hooks/useApiFedicom";
-import useEstadoCarga from "hooks/useEstadoCarga";
+import { useContext } from "react";
 import { Chip, CircularProgress, Stack, Typography } from "@mui/material";
 import ContextoPedido from "../../ContextoPedido";
 import BoxInfo from "./BoxInfo";

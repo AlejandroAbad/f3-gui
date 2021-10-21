@@ -15,14 +15,12 @@ export default function useMaestro(tipoMaestro) {
 
 		setCargando();
 		try {
-			console.log(`Cargando maestro ${tipoMaestro}`);
 			let resultado = await consultaMaestro(tipoMaestro)
 			if (resultado?.length) {
-				console.log(resultado);
 				setDatos(resultado);
 				return;
 			} else {
-				console.group(`Resultado vací o al cargar el maestro ${tipoMaestro}`);
+				console.group(`Resultado vacío al cargar el maestro ${tipoMaestro}`);
 				console.error(resultado);
 				setError(resultado);
 			}
@@ -32,7 +30,7 @@ export default function useMaestro(tipoMaestro) {
 			setError(error);
 		}
 		console.groupEnd();
-		console.log(`Se reintenta la carga del maestro ${tipoMaestro} en 5 segs`);
+		console.warn(`Se reintenta la carga del maestro ${tipoMaestro} en 5 segs`);
 
 		setTimeout(cargarMaestro, 5000);
 

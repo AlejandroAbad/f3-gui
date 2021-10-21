@@ -16,12 +16,11 @@ export default function PantallaNavegadorPedidosFedicom3({ ...props }) {
 	let { consultaPedido } = useApiFedicom();
 	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
 	let obtenerDatosPedido = useCallback(async () => {
-
 		if (cargando) return;
-
 		setCargando(true);
 		try {
 			let respuesta = await consultaPedido(numeroPedido);
+
 			if (FediCommons.esRespuestaErroresFedicom(respuesta)) {
 				setError(respuesta);
 			} else if (respuesta.length === 0) {

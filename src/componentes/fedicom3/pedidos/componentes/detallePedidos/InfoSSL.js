@@ -7,7 +7,11 @@ import BoxInfo from "./BoxInfo";
 
 const InfoSSL = ({ ssl }) => {
 
-	let { protocoloSSL, suiteSSL } = ssl;
+	let { protocoloSSL, suiteSSL } = ssl ||{};
+
+	if (protocoloSSL === 'no-aplica') {
+		return null;
+	}
 
 	if (!protocoloSSL) {
 		return <BoxInfo titulo="Seguridad:">

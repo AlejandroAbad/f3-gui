@@ -1,10 +1,11 @@
-import { useState, forwardRef } from 'react';
-import { Container, Typography, IconButton, Button, Dialog, AppBar, Toolbar, Slide  } from '@mui/material';
+import { useState, forwardRef, useRef } from 'react';
+import { Container, Typography, IconButton, Button, Dialog, AppBar, Toolbar, Slide } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 import FormularioFiltroPedidosEstandard from './FormularioFiltroPedidosEstandard';
+import clone from 'clone';
 
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -14,6 +15,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 export default function BotonFiltrosPedido({ filtro, setFiltro }) {
 
 	const [dialogoAbierto, setDialogoAbierto] = useState(false);
+	const refFiltros = useRef(filtro);
 
 	const abrirDialogo = () => {
 		setDialogoAbierto(true);
@@ -24,7 +26,10 @@ export default function BotonFiltrosPedido({ filtro, setFiltro }) {
 	};
 
 	const aplicarCambiosYCerrarDialogo = () => {
+
+		setFiltro(clone(refFiltros.current));
 		setDialogoAbierto(false);
+		
 	}
 
 	const resetearFormulario = () => {
@@ -39,7 +44,7 @@ export default function BotonFiltrosPedido({ filtro, setFiltro }) {
 		<Dialog fullScreen open={dialogoAbierto} onClose={descartarCambiosYCerrarDialogo} TransitionComponent={Transition} >
 			<AppBar sx={{ position: 'relative' }}>
 				<Toolbar>
-					<IconButton edge="start" color="inherit" onClick={descartarCambiosYCerrarDialogo} aria-label="close"					>
+					<IconButton edge="start" color="inherit" onClick={descartarCambiosYCerrarDialogo}>
 						<CloseIcon />
 					</IconButton>
 					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
@@ -55,7 +60,7 @@ export default function BotonFiltrosPedido({ filtro, setFiltro }) {
 			</AppBar>
 
 			<Container maxWidth="xl" sx={{ mt: 0, pl: 1, pr: 8, py: 4 }}>
-				<FormularioFiltroPedidosEstandard />
+				<FormularioFiltroPedidosEstandard filtroActual={filtro} refFiltro={refFiltros} />
 			</Container>
 		</Dialog>
 	</>

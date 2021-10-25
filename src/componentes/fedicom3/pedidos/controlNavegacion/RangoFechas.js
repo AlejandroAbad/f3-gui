@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Grid, Paper, TextField, Typography } from "@mui/material"
-import es from 'date-fns/locale/es';
-//import { addDays, startOfWeek, endOfWeek, addWeeks, startOfMonth, endOfMonth, addMonths,  startOfDay, endOfDay } from 'date-fns';
-//import { DateRange } from "@mui/icons-material";
 
-import DateRangePicker from "@mui/lab/DateRangePicker";
+
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DesktopDateRangePicker from "@mui/lab/DesktopDateRangePicker";
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+
+import { endOfDay, startOfDay } from "date-fns";
+import es from 'date-fns/locale/es';
+
 
 /*
 const generarRangos = () => {
@@ -62,10 +65,19 @@ const generarRangos = () => {
 */
 
 
-export const RangoFechas = () => {
+export const RangoFechas = ({ refFiltro }) => {
 
+	const fechaInicio = refFiltro.current.fechaCreacion?.['$gte'] || new Date();
+	const fechaFin = refFiltro.current.fechaCreacion?.['$lte'] || new Date();
+	const [fechas, _setFechas] = useState([fechaInicio, fechaFin]);
 
-	const [value, setValue] = useState([new Date(), new Date()]);
+	const cambiaFechas = (fechasNuevas) => {
+		refFiltro.current.fechaCreacion = {
+			'$gte': startOfDay(fechasNuevas[0]),
+			'$lte': endOfDay(fechasNuevas[1])
+		}
+		_setFechas(fechasNuevas);
+	}
 
 	return <Paper elevation={5} sx={{ p: 4, pt: 2, m: 0, mb: 2 }} >
 
@@ -74,20 +86,25 @@ export const RangoFechas = () => {
 		</Typography>
 
 		<LocalizationProvider dateAdapter={AdapterDateFns} locale={es}>
-			<DateRangePicker
+			<DesktopDateRangePicker
+				inputFormat="dd MMMM yyyy"
+				disableMaskedInput
+				reduceAnimations
+				allowSameDateSelection
+				disableHighlightToday
 				showTodayButton
 				disableFuture
 				startText="Desde"
 				endText="Hasta"
-				value={value}
-				onChange={(newValue) => { setValue(newValue); }}
+				value={fechas}
+				onChange={cambiaFechas}
 				renderInput={(startProps, endProps) => (
 					<Grid container spacing={4}>
 						<Grid item xs={12} sm={6}>
-							<TextField fullWidth {...startProps} />
+							<TextField readOnly fullWidth {...startProps} />
 						</Grid>
 						<Grid item xs={12} sm={6}>
-							<TextField fullWidth {...endProps} />
+							<TextField readOnly fullWidth {...endProps} />
 						</Grid>
 					</Grid>
 				)}

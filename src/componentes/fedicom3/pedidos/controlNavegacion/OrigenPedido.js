@@ -1,54 +1,88 @@
-import { useState } from "react";
-import { Box, Grid, makeStyles, Paper } from "@material-ui/core"
+import { useContext, useEffect, useState } from "react";
 import { ControlTextoChip } from "common/camposFormulario/ControlTextoChip";
-import ControlModoFiltro from "common/camposFormulario/ControlModoFiltro";
-import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@material-ui/icons";
+import { ControlModoFiltro, obtenerModoDeFiltro } from "common/camposFormulario/ControlModoFiltro";
+import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import BoxFiltro from "./BoxFiltro";
+import { Grid, Typography } from "@mui/material";
+import ContextoMaestros from "contexto/contextoMaestros";
 
-
-
-const useStyles = makeStyles((theme) => ({
-	grupoSeleccion: {
-		margin: theme.spacing(1, 0, 0, 0)
-	},
-	boxSelector: {
-		margin: theme.spacing(0, 0, 2),
-		padding: theme.spacing(1, 4, 4)
-	},
-	boxSelectorDisabled: {
-		backgroundColor: theme.palette.grey[200]
-	}
-}));
 
 const MODOS = [
-	{ texto: 'Incluye', color: 'success', icono: <AddCircleOutline /> },
-	{ texto: 'NO incluye', color: 'danger', icono: <RemoveCircleOutline /> },
-	{ texto: 'no aplicar', color: 'mutted', icono: <PauseCircleOutline /> }
+	{ id: '$in', texto: 'ES', color: 'primary', icono: <AddCircleOutline /> },
+	{ id: '$nin', texto: 'NO ES', color: 'error', icono: <RemoveCircleOutline /> },
+	{ id: '', texto: 'n/a', color: 'inherit', icono: <PauseCircleOutline /> }
 ]
 
 
 
-export const OrigenPedido = () => {
-
-	const classes = useStyles();
-	const [seleccionIps, setSeleccionIps] = useState([]);
-	const [modoFiltroIps, setModoFiltroIps] = useState(0);
-
-	const [seleccionProgramas, setSeleccionProgramas] = useState([]);
-	const [modoFiltroProgramas, setModoFiltroProgramas] = useState(0);
+const RUTA_NODO_IP = 'conexion.metadatos.ip';
+const RUTA_NODO_PROGRAMA = 'conexion.metadatos.programa';
 
 
 
+export const OrigenPedido = ({ refFiltro }) => {
 
-	return <Box component={Paper} elevation={3} className={classes.boxSelector} >
+	const nodoIps = refFiltro?.current?.[RUTA_NODO_IP];
+	let modoFiltroActualIp = MODOS[0].id;
+	let ipsSeleccionadas = [];
+	if (nodoIps) {
+		modoFiltroActualIp = obtenerModoDeFiltro(nodoIps, MODOS) || MODOS[0].id
+		ipsSeleccionadas = ipsSeleccionadas.concat(Object.values(nodoIps)?.[0] || [])
+	}
+	const [seleccionIps, setSeleccionIps] = useState(ipsSeleccionadas);
+	const [modoFiltroIps, setModoFiltroIps] = useState(modoFiltroActualIp);
+	useEffect(() => {
+		if (seleccionIps.length && modoFiltroIps) {
+			refFiltro.current[RUTA_NODO_IP] = {
+				[modoFiltroIps]: seleccionIps
+			};
+		} else {
+			delete refFiltro.current[RUTA_NODO_IP];
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [seleccionIps, modoFiltroIps])
 
-		<h3>Origen de la transmisión</h3>
+
+	const { maestroProgramas } = useContext(ContextoMaestros);
+	const nodoPrograma = refFiltro?.current?.[RUTA_NODO_PROGRAMA];
+	let modoFiltroActualPrograma = MODOS[0].id;
+	let programasSelecccionados = [];
+	if (nodoPrograma) {
+		modoFiltroActualPrograma = obtenerModoDeFiltro(nodoPrograma, MODOS) || MODOS[0].id
+		if (maestroProgramas.datos) {
+			programasSelecccionados = Object.values(nodoPrograma)?.[0]?.map?.( codPrograma => {
+				return maestroProgramas.datos?.find?.(p => p.id === codPrograma)?.nombre || codPrograma;
+			}) || [];
+		}
+	}
+	const [seleccionProgramas, setSeleccionProgramas] = useState(programasSelecccionados);
+	const [modoFiltroProgramas, setModoFiltroProgramas] = useState(modoFiltroActualPrograma);
+	useEffect(() => {
+		if (seleccionProgramas.length && modoFiltroProgramas) {
+			refFiltro.current[RUTA_NODO_PROGRAMA] = {
+				[modoFiltroProgramas]: seleccionProgramas.map(programa => {
+					if (parseInt(programa) || typeof programa === 'number') return parseInt(programa);
+					return (maestroProgramas.datos?.find?.(p => p.nombre === programa))?.id
+				})
+			};
+		} else {
+			delete refFiltro.current[RUTA_NODO_PROGRAMA];
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [seleccionProgramas, modoFiltroProgramas])
 
 
-		<Grid container direction="row" justify="flex-start" alignItems="center">
-			<Grid item xs={4} sm={2}>
-				<strong>IP Origen</strong>
+	return <BoxFiltro relleno={seleccionIps?.length || seleccionProgramas.length.length} modoFiltro="$in" >
+
+		<Typography sx={{ mb: 2 }} component="div" variant="h6">
+			Origen de la transmisión
+		</Typography>
+
+		<Grid container direction="row" justifyContent="space-even" alignItems="center">
+			<Grid item md={1}>
+				<Typography>IP</Typography>
 			</Grid>
-			<Grid item xs={8} md={2}>
+			<Grid item md={2} sx={{ mx: 2 }}>
 				<ControlModoFiltro modo={modoFiltroIps} onChange={setModoFiltroIps} listaModos={MODOS} />
 			</Grid>
 			<Grid item xs={12} md={8}>
@@ -63,25 +97,24 @@ export const OrigenPedido = () => {
 			</Grid>
 		</Grid>
 
-		<Grid container direction="row" justify="flex-start" alignItems="center" className={classes.grupoSeleccion}>
-			<Grid item xs={4} sm={2}>
-				<strong>Programa de farmacia</strong>
+		<Grid container direction="row" justifyContent="space-even" alignItems="center" sx={{ mt: 2 }}>
+			<Grid item md={1}>
+				<Typography>Programa</Typography>
 			</Grid>
-			<Grid item xs={8} md={2}>
+			<Grid item md={2} sx={{ mx: 2 }}>
 				<ControlModoFiltro modo={modoFiltroProgramas} onChange={setModoFiltroProgramas} listaModos={MODOS} />
 			</Grid>
 			<Grid item xs={12} md={8}>
 				<ControlTextoChip
-					opcionesFijas
-					opciones={['Farmatic', 'Unycopwin', 'Nixfarma', 'F+Online', 'And so on...']}
+					opciones={maestroProgramas.datos?.map(programa => programa.nombre)}
 					valor={seleccionProgramas}
 					onChange={setSeleccionProgramas}
 					label="Programa de farmacia"
 				/>
 			</Grid>
 		</Grid>
-		
-	</Box>
+
+	</BoxFiltro>
 
 
 }

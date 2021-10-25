@@ -9,8 +9,8 @@ export default function ControlNavegacionPedidos({ consulta, cambiaConsulta, tot
 
 	let { filtro, /*proyeccion, orden,*/ skip, limite, vista } = consulta;
 
-	const setFiltro = useCallback(filtro => cambiaConsulta({ type: 'filtro', value: filtro }), [cambiaConsulta]);
-	const setLimite = useCallback(limite => cambiaConsulta({ type: 'limite', value: limite }), [cambiaConsulta]);
+	const setFiltro = useCallback(filtro => { cambiaConsulta({ type: 'filtro', value: filtro }) }, [cambiaConsulta]);
+	const setLimite = useCallback(limite => { cambiaConsulta({ type: 'limite', value: limite }) }, [cambiaConsulta]);
 	const setSkip = useCallback((pagina, limite) => cambiaConsulta({ type: 'skip', value: ((pagina - 1) * limite) }), [cambiaConsulta]);
 	const setVista = useCallback(vista => cambiaConsulta({ type: 'vista', value: vista }), [cambiaConsulta]);
 
@@ -23,15 +23,23 @@ export default function ControlNavegacionPedidos({ consulta, cambiaConsulta, tot
 
 
 	return (<Paper elevation={10} sx={{ p: 2 }}>
-		<Grid container direction="row" justifyContent="space-between" alignItems="flex-start" >
+		<Grid container direction="row" justifyContent="space-between" alignItems="center" >
 			<Box sx={{ width: '33%', display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "top" }}>
 				<BotonFiltrosPedido filtro={filtro} setFiltro={setFiltro} />
 				<BotonLimiteResultados limite={limite} cambiaLimite={setLimite} />
 			</Box>
 
 			<Box sx={{ width: '33%', display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-				<Pagination sx={{ p: 0, m: 0 }} count={totalPaginas} page={paginaActual} onChange={(_, pagina) => setSkip(pagina, limite)} color="primary" />
-				<Typography sx={{ mt: 0.8 }} variant="caption">Mostrando resultados del {primerResultadoMostrado} al {ultimoResultadoMostrado} de un total de {totalResultados}</Typography>
+				{(totalPaginas > 1) ?
+					<>
+						<Pagination sx={{ p: 0, m: 0 }} count={totalPaginas} page={paginaActual} onChange={(_, pagina) => setSkip(pagina, limite)} color="primary" />
+						{totalResultados > 0 && <Typography sx={{ mt: 0.8 }} variant="caption">Mostrando pedidos del {primerResultadoMostrado} al {ultimoResultadoMostrado} de un total de {totalResultados}</Typography>}
+					</>
+					:
+					<>
+						{(totalResultados > 0) && <Typography sx={{ mt: 0.8 }} variant="caption">Encontrados {totalResultados} pedidos</Typography>}
+					</>
+				}
 			</Box>
 
 			<Box sx={{ width: '33%', display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>

@@ -1,54 +1,89 @@
-import { useState } from "react";
-import { Paper, Typography } from "@mui/material"
+import { useEffect, useState } from "react";
+import { Typography } from "@mui/material"
 import { ControlTextoChip } from "common/camposFormulario/ControlTextoChip";
-import ControlModoFiltro from "common/camposFormulario/ControlModoFiltro";
+import { ControlModoFiltro, obtenerModoDeFiltro } from "common/camposFormulario/ControlModoFiltro";
 import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import BoxFiltro from "./BoxFiltro";
 
 
 
 
 const MODOS = [
-	{ texto: 'Incluye', color: 'primary', icono: <AddCircleOutline /> },
-	{ texto: 'NO incluye', color: 'error', icono: <RemoveCircleOutline /> },
-	{ texto: 'Filtro desactivado', color: 'inherit', icono: <PauseCircleOutline /> }
+	{ id: '$in', texto: 'Incluye', color: 'primary', icono: <AddCircleOutline /> },
+	{ id: '$nin', texto: 'NO incluye', color: 'error', icono: <RemoveCircleOutline /> },
+	{ id: '', texto: 'Filtro desactivado', color: 'inherit', icono: <PauseCircleOutline /> }
 ]
 
 
-export const CodigoCliente = ({ codigoCliente, setCodigoCliente }) => {
+export const CodigoCliente = ({ refFiltro }) => {
 
-	const [seleccionActual, setSeleccionActual] = useState([]);
-	const [modoFiltro, setModoFiltro] = useState(0);
-
-	
-
-	const estiloPaper = {
-		m: 0,
-		mb: 2,
-		p: 4,
-		pt: 3,
-		bgcolor: modoFiltro === 2 ? 'grey.100' : '',
-		border: 1,
-		borderColor: (modoFiltro !== 2 && seleccionActual?.length) ? modoFiltro === 1 ? 'error.main' : 'primary.main' : 'grey.100',
+	const nodoCodigoCliente = refFiltro?.current?.['pedido.codigoCliente'];
+	const nodoPuntoEntrega = refFiltro?.current?.['pedido.puntoEntrega'];
+	let modoFiltroActual = MODOS[0].id;
+	let clientesSeleccionados = [];
+	if (nodoCodigoCliente) {
+		modoFiltroActual = obtenerModoDeFiltro(nodoCodigoCliente) || MODOS[0].id
+		clientesSeleccionados = clientesSeleccionados.concat(Object.values(nodoCodigoCliente)?.[0] || [])
+	}
+	if (nodoPuntoEntrega) {
+		modoFiltroActual = obtenerModoDeFiltro(nodoPuntoEntrega) || MODOS[0].id
+		clientesSeleccionados = clientesSeleccionados.concat(Object.values(nodoPuntoEntrega)?.[0] || [])
 	}
 
-	return <Paper elevation={modoFiltro === 2 ? 1 : 5} sx={estiloPaper} >
+
+	const [clientes, _setClientes] = useState(clientesSeleccionados);
+	const [modoFiltro, _setModoFiltro] = useState(modoFiltroActual);
+
+	const cambiaModoFiltro = (nuevoModo) => {
+		_setModoFiltro(nuevoModo)
+	}
+
+	const cambiaCliente = (nuevosClientes) => {
+		_setClientes(nuevosClientes);
+	}
+
+	useEffect(() => {
+		if (clientes.length && modoFiltro) {
+
+			refFiltro.current['pedido.codigoCliente'] = { [modoFiltro]: [] };
+			refFiltro.current['pedido.puntoEntrega'] = { [modoFiltro]: [] };
+			clientes.forEach(cliente => {
+
+				if (/^PT[0-9]{10}/.test(cliente)) { // Punto de entrega
+					refFiltro.current['pedido.puntoEntrega'][modoFiltro].push(cliente);
+				} else { // Cliente "integer"
+					let clienteNumerico = parseInt(cliente?.substr?.(-5) || cliente);
+					if (clienteNumerico)
+						refFiltro.current['pedido.codigoCliente'][modoFiltro].push(clienteNumerico);
+				}
+			})
+
+			if (refFiltro.current['pedido.codigoCliente'][modoFiltro].length === 0) delete refFiltro.current['pedido.codigoCliente'];
+			if (refFiltro.current['pedido.puntoEntrega'][modoFiltro].length === 0) delete refFiltro.current['pedido.puntoEntrega'];
+
+		} else {
+			delete refFiltro.current['pedido.codigoCliente'];
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [clientes, modoFiltro])
+
+
+	return <BoxFiltro relleno={clientes?.length} modoFiltro={modoFiltro} >
 
 		<Typography sx={{ mb: 2 }} component="div" variant="h6">
 			Código de cliente
-			<ControlModoFiltro modo={modoFiltro} onChange={setModoFiltro} listaModos={MODOS} />
+			<ControlModoFiltro modo={modoFiltro} onChange={cambiaModoFiltro} listaModos={MODOS} />
 		</Typography>
 
 		<ControlTextoChip
-			regexValidacion={/^[0-9]{1,10}/i}
+			regexValidacion={/^[0-9]{1,10}$|^PT[0-9]{10}$/i}
 			regexParticionado={/[\s\r\n\t,-.]+/}
-			valor={seleccionActual}
-			onChange={setSeleccionActual}
+			valor={clientes}
+			onChange={cambiaCliente}
 			label="Códigos de cliente"
 		/>
 
-
-
-	</Paper>
+	</BoxFiltro>
 
 }
 

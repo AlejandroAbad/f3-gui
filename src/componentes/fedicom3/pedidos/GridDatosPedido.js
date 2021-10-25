@@ -45,9 +45,6 @@ const GridDatosPedido = ({ p }) => {
 			<Grid item xs={4} xl={3} >
 				<Grid container spacing={2}>
 					<Grid item xs={12} >
-						<PaperHistorialNodos />
-					</Grid>
-					<Grid item xs={12} >
 						<PaperDatosTransmision />
 					</Grid>
 				</Grid>
@@ -55,9 +52,15 @@ const GridDatosPedido = ({ p }) => {
 
 			<Grid item xs={12}>
 				<Typography variant="h4" component="h6" gutterBottom>Datos de transmisión</Typography>
+			</Grid>
+
+			<Grid item xs={8}>
 				<PaperSeleccionNodo {...{ idNodoSeleccionado, setIdNodoSeleccionado }} />
 			</Grid>
-			
+			<Grid item xs={4} >
+				<PaperHistorialNodos />
+			</Grid>
+
 			<Grid item xs={12}>
 				<PaperHttpTransmision idTransmision={idNodoSeleccionado} />
 			</Grid>

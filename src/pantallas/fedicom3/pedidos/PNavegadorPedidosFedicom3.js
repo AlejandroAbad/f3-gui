@@ -11,6 +11,8 @@ import BannerError from "common/BannerError";
 import BannerVacio from "common/BannerVacio";
 import ControlNavegacionPedidos from "componentes/fedicom3/pedidos/controlNavegacion/ControlNavegacion";
 import LineaNavegadorPedido from "componentes/fedicom3/pedidos/LineaNavegadorPedido";
+import { EJSON } from "bson";
+import ReactJson from "react-json-view";
 
 const PROYECCION = { sap: 0, 'conexion.solicitud': 0, 'conexion.respuesta': 0 }
 
@@ -38,7 +40,7 @@ export default function PantallaNavegadorPedidosFedicom3() {
 		orden: { fechaCreacion: -1 },
 		skip: 0,
 		limite: 50,
-		vista: 'compacto'
+		vista: 'extendido'
 	})
 	let { filtro, /*proyeccion, orden,*/ skip, limite, vista } = consulta;
 
@@ -46,9 +48,11 @@ export default function PantallaNavegadorPedidosFedicom3() {
 	const { listadoPedidos } = useApiFedicom();
 	const { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
 	const refrescarListadoPedidos = useCallback(async () => {
-		setCargando();
+		setCargando(true);
 		try {
-			let resultados = await listadoPedidos(filtro, PROYECCION, { fechaCreacion: -1 }, skip, limite);
+			let filtroEjson = EJSON.serialize(filtro);
+
+			let resultados = await listadoPedidos(filtroEjson, PROYECCION, { fechaCreacion: -1 }, skip, limite);
 			if (FediCommons.esRespuestaErroresFedicom(resultados)) {
 				setError(resultados);
 			} else {
@@ -59,6 +63,7 @@ export default function PantallaNavegadorPedidosFedicom3() {
 			setError(error)
 		}
 	}, [listadoPedidos, setCargando, setDatos, setError, filtro, skip, limite])
+
 	useEffect(refrescarListadoPedidos, [refrescarListadoPedidos])
 
 
@@ -70,11 +75,14 @@ export default function PantallaNavegadorPedidosFedicom3() {
 	} else if (error) {
 		contenido = <BannerError errores={error} onRecargar={refrescarListadoPedidos} />
 	} else if (!datos?.resultados?.length) {
-		contenido = <BannerVacio titulo="No se han encontrado pedidos" onRecargar={refrescarListadoPedidos} />
+		contenido = <Box>
+			<ControlNavegacionPedidos consulta={consulta} cambiaConsulta={cambiaConsulta} totalResultados={0} />
+			<BannerVacio titulo="No se han encontrado pedidos" onRecargar={refrescarListadoPedidos} />
+		</Box>
 	} else {
 		contenido = <Box>
-
 			<ControlNavegacionPedidos consulta={consulta} cambiaConsulta={cambiaConsulta} totalResultados={datos.totalResultados} />
+
 
 			<Paper elevation={10} sx={{ mt: 2 }} >
 				<List >
@@ -89,7 +97,9 @@ export default function PantallaNavegadorPedidosFedicom3() {
 	return (
 		<Container fixed maxWidth="xl">
 			<TituloPantalla titulo="Pedidos Fedicom v3" />
-
+			<Box sx={{ mt: 6, mb: 4 }}>
+				<ReactJson src={filtro} />
+			</Box>
 			{contenido}
 
 		</Container>

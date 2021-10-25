@@ -1,5 +1,6 @@
 import { Chip, List, ListItem, ListItemAvatar, ListItemText, Menu, MenuItem, Paper, Typography } from "@mui/material";
 import { memo, useContext, useState } from "react";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ContextoPedido from "../ContextoPedido";
 
 import ContextoMaestros from "contexto/contextoMaestros";
@@ -38,7 +39,7 @@ const PaperSeleccionNodo = ({ idNodoSeleccionado, setIdNodoSeleccionado }) => {
 			iconoPrevio = <Typography component="span" sx={{ mr: 1 }}>☄</Typography>
 		}
 
-		return <MenuItem key={nodo.id} selected={nodo.id === idNodoSeleccionado} onClick={(event) => handleMenuItemClick(event, nodo.id)} >
+		return <MenuItem key={nodo.id} selected={nodo.id === idNodoSeleccionado} onClick={(event) => handleMenuItemClick(event, nodo.id)} sx={{ px: 4, py: 2 }} >
 			<Typography variant="caption">{nodo.id.toUpperCase()}</Typography>
 			<Chip sx={{ mx: 2, px: 1 }} size="small" color={infoEstado.color} label={<>{iconoPrevio}{infoEstado.nombre}</>} />
 			<Typography variant="body2">{nodo.fechaCreacion}</Typography>
@@ -60,7 +61,7 @@ const PaperSeleccionNodo = ({ idNodoSeleccionado, setIdNodoSeleccionado }) => {
 			{opcionesMenu.length > 1 ? 'Seleccione transmisión' : 'Transmisión'}
 		</Typography>
 
-		<List component="nav" >
+		<List component={Paper} elevation={10} sx={{ m: 0, my: 2, p: 0 }} >
 			<ListItem button={opcionesMenu.length > 1} onClick={opcionesMenu.length > 1 ? handleClickListItem : null} >
 				<ListItemText
 					primary={<Typography variant='h6' component="div">{nodoSeleccionado.id.toUpperCase()}</Typography>}
@@ -68,6 +69,9 @@ const PaperSeleccionNodo = ({ idNodoSeleccionado, setIdNodoSeleccionado }) => {
 				/>
 				<ListItemAvatar>
 					<Chip sx={{ px: 1 }} color={infoEstado.color} label={<>{iconoPrevio}{infoEstado.nombre}</>} />
+				</ListItemAvatar>
+				<ListItemAvatar>
+					<ExpandMoreIcon sx={{ mx: 4, mt: 1 }} />
 				</ListItemAvatar>
 			</ListItem>
 

@@ -65,7 +65,7 @@ export const ControlTextoChip = ({
 			onChange(nuevoValorEscrito);
 		}}
 		renderTags={(value, getTagProps) => {
-			return value.map((option, index) => {
+			return value?.map?.((option, index) => {
 
 				if (opcionesFijas) {
 					return <Chip

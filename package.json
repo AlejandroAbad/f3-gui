@@ -11,6 +11,7 @@
     "@mui/material": "^5.0.0",
     "@mui/styles": "^5.0.0",
     "@mui/system": "^5.0.0",
+    "bson": "^4.5.3",
     "clone": "^2.1.2",
     "date-fns": "^2.23.0",
     "fontsource-roboto": "^4.0.0",

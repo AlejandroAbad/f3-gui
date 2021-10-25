@@ -5,9 +5,9 @@ import { Button } from "@mui/material";
 const ControlModoFiltro = ({ listaModos, modo, onChange }) => {
 	
 	const avanzaModo = useCallback(() => {
-		let indiceActual = modo + 1;
-		indiceActual %= listaModos.length;
-		onChange(indiceActual);
+		let indiceActual = listaModos.findIndex(m => m.id === modo);
+		indiceActual = (indiceActual + 1) % listaModos.length;
+		onChange(listaModos[indiceActual].id);
 	}, [listaModos, modo, onChange])
 
 
@@ -16,7 +16,7 @@ const ControlModoFiltro = ({ listaModos, modo, onChange }) => {
 		return null;
 	}
 
-	let modoSeleccionado = listaModos[modo];
+	let modoSeleccionado = listaModos.find( m => m.id === modo);
 
 	return <Button
 		size="small"
@@ -31,4 +31,16 @@ const ControlModoFiltro = ({ listaModos, modo, onChange }) => {
 
 }
 
-export default memo(ControlModoFiltro);
+const obtenerModoDeFiltro = (filtro, listaModos) => {
+
+	if (!filtro) return null;
+	let claveModo = Object.keys(filtro)?.[0];
+	let modo = listaModos?.find(modo => modo.id === claveModo);
+	if (modo) return modo.id;
+	return null;
+	
+}
+
+const ControlModoFiltroMemorizado = memo(ControlModoFiltro);
+export { obtenerModoDeFiltro, ControlModoFiltroMemorizado as ControlModoFiltro };
+export default ControlModoFiltroMemorizado;

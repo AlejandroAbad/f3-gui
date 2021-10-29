@@ -10,12 +10,17 @@ import BoxTransmisionHttp from "../http/BoxTransmisionHttp";
 
 
 
-const PaperHttpTransmision = ({ idTransmision }) => {
+const PaperHttpTransmision = ({ idTransmision, transmision }) => {
 
 	const { consultaTransmision } = useApiFedicom();
 	const { datos, error, cargando, setDatos, setError, setCargando } = useEstadoCarga();
 
 	const obtenerDatosTransmision = useCallback(async () => {
+		if (transmision) {
+			setDatos(transmision)
+			return;
+		}
+		
 		setCargando(true);
 		try {
 			let resultado = await consultaTransmision(idTransmision);
@@ -27,7 +32,7 @@ const PaperHttpTransmision = ({ idTransmision }) => {
 		} catch (excepcion) {
 			setError(excepcion);
 		}
-	}, [idTransmision, consultaTransmision, setDatos, setError, setCargando])
+	}, [transmision, idTransmision, consultaTransmision, setDatos, setError, setCargando])
 
 	useEffect(obtenerDatosTransmision, [obtenerDatosTransmision]);
 

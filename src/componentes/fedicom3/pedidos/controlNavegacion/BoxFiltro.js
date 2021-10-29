@@ -13,7 +13,7 @@ export default function BoxFiltro({ modoFiltro, relleno, ...props }) {
 		p: 4,
 		pt: 3,
 		bgcolor: modoFiltro ? '' : 'grey.100',
-		border: 1,
+		border: 2,
 		borderColor: (modoFiltro && relleno) ? modoFiltro === '$nin' ? 'error.main' : 'primary.main' : 'grey.100',
 	}
 

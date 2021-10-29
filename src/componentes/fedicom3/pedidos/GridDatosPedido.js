@@ -50,7 +50,7 @@ const GridDatosPedido = ({ p }) => {
 				</Grid>
 			</Grid>
 
-			<Grid item xs={12}>
+			<Grid item xs={12} sx={{mt: 4}}>
 				<Typography variant="h4" component="h6" gutterBottom>Datos de transmisión</Typography>
 			</Grid>
 

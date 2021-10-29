@@ -26,7 +26,7 @@ export default function InfoLineaPedido({ linea, almacenOriginal }) {
 	let esRebote = false;
 	let esAplazado = cantidadAplazada > 0;
 
-	if (linea.codigoAlmacenServicio !== almacenOriginal) {
+	if (almacenOriginal && linea.codigoAlmacenServicio !== almacenOriginal) {
 
 		if (esAplazado) {
 			cantidadFalta = cantidadFalta - cantidadAplazada;

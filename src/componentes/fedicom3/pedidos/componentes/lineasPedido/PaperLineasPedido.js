@@ -1,4 +1,4 @@
-import { Button, Checkbox, ClickAwayListener, FormControlLabel, FormGroup, Grid, List, ListItem, ListItemIcon, ListItemText, MenuList, Pagination, Paper, Popper, Table, TableBody, Typography } from "@mui/material";
+import { Button, Checkbox, ClickAwayListener, FormControlLabel, FormGroup, Grid,  MenuList, Pagination, Paper, Popper, Table, TableBody,  Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { memo, useContext, useState } from "react"
 import ContextoPedido from "../../ContextoPedido";
@@ -7,7 +7,6 @@ import InfoLineaPedido from "./InfoLineaPedido";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 
-import { RiFilterOffFill, RiFilterFill } from 'react-icons/ri';
 
 import BannerVacio from "common/BannerVacio";
 import BannerError from "common/BannerError";
@@ -22,7 +21,7 @@ const MenuNavegacionLineas = ({ cambiaEstadoMenu, menuFiltroAbierto, refMenuFilt
 				<Button endIcon={<ArrowDropDownIcon />} variant="link" size="small" onClick={cambiaEstadoMenu}>
 					FILTROS
 				</Button>
-				<Popper open={menuFiltroAbierto} anchorEl={refMenuFiltro} placement="bottom-start" >
+				<Popper open={menuFiltroAbierto} anchorEl={refMenuFiltro} placement="bottom-start" disablePortal>
 					<Paper elevation={4}>
 						<ClickAwayListener onClickAway={cierraMenu} >
 							<MenuList>
@@ -147,27 +146,23 @@ const PaperLineasPedido = () => {
 		}
 
 		{((filtros.fEstupe + filtros.fFaltas + filtros.fRebote) > 0) &&
-			<List dense sx={{ bgcolor: 'grey.100', p: 0, pt: 0.3 }} >
-				<ListItem>
-					<ListItemIcon>{filtros.fFaltas === 1 && <RiFilterFill />}{filtros.fFaltas !== 2 || <RiFilterOffFill />}</ListItemIcon>
-					{filtros.fFaltas === 1 && <ListItemText primary='Mostrando filas con incidencias' />}
-					{filtros.fFaltas === 2 && <ListItemText primary='Excluyendo filas con incidencias' />}
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>{filtros.fEstupe === 1 && <RiFilterFill />}{filtros.fEstupe !== 2 || <RiFilterOffFill />}</ListItemIcon>
-					{filtros.fEstupe === 1 && <ListItemText primary='Mostrando filas con estupefacientes' />}
-					{filtros.fEstupe === 2 && <ListItemText primary='Excluyendo filas con estupefacientes' />}
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>{filtros.fRebote === 1 && <RiFilterFill />}{filtros.fRebote !== 2 || <RiFilterOffFill />}</ListItemIcon>
-					{filtros.fRebote === 1 && <ListItemText primary='Mostrando filas con rebote de faltas o con servicio aplazado' />}
-					{filtros.fRebote === 2 && <ListItemText primary='Excluyendo filas con rebote de faltas o con servicio aplazado' />}
-				</ListItem>
-			</List>
+
+			<Paper square elevation={3} sx={{ px: 4, py: 2, mb: 1 }} >
+
+				{filtros.fFaltas === 1 && <Typography>• Mostrando filas que tienen incidencias.</Typography>}
+				{filtros.fFaltas === 2 && <Typography>• Excluyendo filas que tengan incidencias.</Typography>}
+
+				{filtros.fEstupe === 1 && <Typography>• Mostrando filas con estupefacientes.</Typography>}
+				{filtros.fEstupe === 2 && <Typography>• Excluyendo filas con estupefacientes.</Typography>}
+
+				{filtros.fRebote === 1 && <Typography>• Mostrando  filas con rebote de faltas o con servicio aplazado.</Typography>}
+				{filtros.fRebote === 2 && <Typography>• Excluyendo filas con rebote de faltas o con servicio aplazado.</Typography>}
+
+			</Paper>
 		}
 
 		{lineasFiltradas.length > 0 ?
-			<Table aria-label="collapsible table">
+			<Table>
 				<TableBody>
 					{lineasFiltradas.map((linea, i) => (
 						<InfoLineaPedido key={i} linea={linea} almacenOriginal={pedido.codigoAlmacenServicio} />

@@ -1,5 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { makeStyles } from "@mui/styles"
+import {  useContext, useEffect, useState } from "react";
 import { ControlTextoChip } from "common/camposFormulario/ControlTextoChip";
 import ControlModoFiltro, { obtenerModoDeFiltro } from "common/camposFormulario/ControlModoFiltro";
 import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
@@ -68,14 +67,21 @@ export const DatosPedido = ({ refFiltro }) => {
 	let almacenesSeleccionados = [];
 	if (nodoAlmacenes) {
 		modoFiltroActualAlmacenes = obtenerModoDeFiltro(nodoAlmacenes, MODOS) || MODOS[0].id
-		almacenesSeleccionados = almacenesSeleccionados.concat(Object.values(nodoAlmacenes)?.[0] || [])
+		if (maestroAlmacenes.datos) {
+			almacenesSeleccionados = Object.values(nodoAlmacenes)?.[0]?.map?.(codAlmacen => {
+				return maestroAlmacenes.datos?.find?.(p => p.id === codAlmacen)?.nombre || codAlmacen;
+			}) || [];
+		}
 	}
 	const [seleccionAlmacen, setSeleccionAlmacen] = useState(almacenesSeleccionados);
 	const [modoFiltroAlmacen, setModoFiltroAlmacen] = useState(modoFiltroActualAlmacenes);
 	useEffect(() => {
 		if (seleccionAlmacen.length && modoFiltroAlmacen) {
 			refFiltro.current[RUTA_NODO_ALMACEN] = {
-				[modoFiltroAlmacen]: seleccionAlmacen
+				[modoFiltroAlmacen]: seleccionAlmacen.map(almacen => {
+					if (/^RG[0-9]$/i.test(almacen)) return almacen;
+					return (maestroAlmacenes.datos?.find?.(a => a.nombre === almacen))?.id
+				})
 			};
 		} else {
 			delete refFiltro.current[RUTA_NODO_ALMACEN];
@@ -122,7 +128,7 @@ export const DatosPedido = ({ refFiltro }) => {
 			<Grid item xs={12} md={7}>
 				<ControlTextoChip
 					opcionesFijas
-					opciones={['RG01 - Santomera', 'RG03 - Cartagena', 'RG04 - Getafe', 'RG15 - Barcelona', 'And so on...']}
+					opciones={maestroAlmacenes.datos?.map(almacen => almacen.nombre)}
 					valor={seleccionAlmacen}
 					onChange={setSeleccionAlmacen}
 					label="Almacén"

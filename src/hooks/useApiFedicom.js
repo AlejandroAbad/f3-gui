@@ -84,6 +84,20 @@ export default function useApiFedicom() {
 		return await resultado.json();
 	}, [getJwt, get])
 
+
+	const listadoPedidos = useCallback(async (filtro, proyeccion, orden, skip, limite) => {
+		let opciones = {
+			headers: generarCabeceras(getJwt())
+		}
+
+		let consulta = {
+			filtro, proyeccion, orden, skip, limite
+		}
+
+		let resultado = await put('/~/consulta/pedidos', JSON.stringify(consulta), opciones);
+		return await resultado.json();
+	}, [getJwt, put])
+
 	const consultaTransmision = useCallback(async (txId, tipoConsulta) => {
 		let opciones = {
 			headers: generarCabeceras(getJwt()) 
@@ -95,6 +109,22 @@ export default function useApiFedicom() {
 		let resultado = await get('/~/consulta/transmisiones/' + txId + tipoConsulta, opciones);
 		return await resultado.json();
 	}, [getJwt, get])
+
+
+	const listadoTransmisiones = useCallback(async (filtro, proyeccion, orden, skip, limite) => {
+		let opciones = {
+			headers: generarCabeceras(getJwt())
+		}
+
+		let consulta = {
+			filtro, proyeccion, orden, skip, limite
+		}
+
+		let resultado = await put('/~/consulta/transmisiones', JSON.stringify(consulta), opciones);
+		return await resultado.json();
+	}, [getJwt, put])
+
+
 
 
 	const consultaMaestro = useCallback(async (tipo, id) => {
@@ -110,28 +140,18 @@ export default function useApiFedicom() {
 	}, [getJwt, get])
 
 
-	const listadoPedidos = useCallback(async (filtro, proyeccion, orden, skip, limite) => {
-		let opciones = {
-			headers: generarCabeceras(getJwt())
-		}
-
-		let consulta = {
-			filtro, proyeccion, orden, skip, limite
-		}
-		
-		let resultado = await put('/~/consulta/pedidos', JSON.stringify(consulta), opciones);
-		return await resultado.json();
-	}, [getJwt, put])
 
 	return {
 		getTokenObservador,
 		getToken,
 		getEstadoInstancias,
 		descartarEstadoInstancia,
+		listadoTransmisiones,
 		consultaTransmision,
+		listadoPedidos,
 		consultaPedido,
 		consultaMaestro,
-		listadoPedidos
+		
 	}
 
 }

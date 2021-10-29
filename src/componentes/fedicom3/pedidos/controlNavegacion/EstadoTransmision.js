@@ -1,30 +1,20 @@
-import { useCallback, useState } from "react";
-import { Box, Button, Grid,  Paper } from "@mui/material"
-import { makeStyles } from "@mui/styles"
-import ControlModoFiltro from "common/camposFormulario/ControlModoFiltro";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Button, Stack, Typography } from "@mui/material"
+import ControlModoFiltro, { obtenerModoDeFiltro } from "common/camposFormulario/ControlModoFiltro";
 import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import ContextoMaestros from "contexto/contextoMaestros";
+import BoxFiltro from "./BoxFiltro";
 
-
-
-
-const useStyles = makeStyles((theme) => ({
-	boxSelector: {
-		margin: theme.spacing(0, 0, 2),
-		padding: theme.spacing(1, 4, 4)
-	},
-	boxSelectorDisabled: {
-		backgroundColor: theme.palette.grey[200]
-	}
-}));
 
 const MODOS = [
-	{ texto: 'es alguno de', color: 'success', icono: <AddCircleOutline /> },
-	{ texto: 'NO es ninguno de', color: 'danger', icono: <RemoveCircleOutline /> },
-	{ texto: 'Filtro desactivado', color: 'mutted', icono: <PauseCircleOutline /> }
+	{ id: '$in', texto: 'ES ALGUNO DE ', color: 'primary', icono: <AddCircleOutline /> },
+	{ id: '$nin', texto: 'NO ES NINGUNO DE', color: 'error', icono: <RemoveCircleOutline /> },
+	{ id: '', texto: 'FILTRO DESACTIVADO', color: 'inherit', icono: <PauseCircleOutline /> }
 ]
 
+const RUTA_NODO = 'estado';
 
-const BotonEstado = ({ estados, seleccionActual, setSeleccionActual, children }) => {
+const BotonEstado = ({ estados, seleccionActual, setSeleccionActual, color, children }) => {
 
 	const estaSeleccionado = useCallback(() => {
 		let aparecenTodos = true;
@@ -38,46 +28,88 @@ const BotonEstado = ({ estados, seleccionActual, setSeleccionActual, children })
 
 	const cambiarSeleccion = () => {
 		if (seleccionado) {
-			setSeleccionActual(seleccionActual.filter(estado => !estados.includes(estado)))
+			setSeleccionActual(v => {
+				return v.filter(estado => !estados.includes(estado))
+			})
 		} else {
-			setSeleccionActual([...seleccionActual, ...estados])
-		}
+			setSeleccionActual(v => {
+				return [...v, ...estados]
+			})
 
+		}
 		setSeleccionado(!seleccionado);
 	}
 
-	return <Grid item>
-		<Button variant={seleccionado ? "contained" : "outlined"} color={seleccionado ? "primary" : "default"} onClick={cambiarSeleccion} 	>
-			{children}
-		</Button >
-	</Grid>
+	let estilo = {}
+	if (!seleccionado) {
+		estilo = { bgcolor: color }
+	}
+
+	return <Button sx={estilo} variant={seleccionado ? "contained" : "outlined"} color={seleccionado ? color : undefined} onClick={cambiarSeleccion}	>
+		{children}
+	</Button >
 }
 
-export const EstadoTransmision = () => {
+export const EstadoTransmision = ({ refFiltro }) => {
 
-	const classes = useStyles();
-	const [seleccionActual, setSeleccionActual] = useState([]);
-	const [modoFiltro, setModoFiltro] = useState(0);
+
+
+	const { maestroEstados } = useContext(ContextoMaestros);
+	let estadosRelevantes = maestroEstados?.datos?.filter?.(estado => {
+		return !estado.ambito || estado.ambito === "PEDIDO"
+	}) || [];
+
+
+	const nodo = refFiltro?.current?.[RUTA_NODO];
+	let modoFiltroActual = MODOS[0].id;
+	let estadosSeleccionados = [];
+	if (nodo) {
+		modoFiltroActual = obtenerModoDeFiltro(nodo, MODOS) || MODOS[0].id
+		estadosSeleccionados = Object.values(nodo)?.[0] || [];
+		if (estadosSeleccionados.length === 0) {
+			estadosRelevantes.forEach(estado => {
+				estadosSeleccionados.push(estado);
+			})
+		}
+	}
+	const [seleccionActual, setSeleccionActual] = useState(estadosSeleccionados);
+	const [modoFiltro, setModoFiltro] = useState(modoFiltroActual);
+	useEffect(() => {
+		if (seleccionActual.length && modoFiltro) {
+			refFiltro.current[RUTA_NODO] = {
+				[modoFiltro]: seleccionActual
+			};
+		} else {
+			delete refFiltro.current[RUTA_NODO];
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [seleccionActual, modoFiltro])
+
+
+	let gruposEstados = {};
+	let botonesEstado = [];
+	estadosRelevantes.forEach(estado => {
+		if (!gruposEstados[estado.grupo]) gruposEstados[estado.grupo] = [];
+		gruposEstados[estado.grupo].push(estado);
+	})
 
 	let propiedadesBotones = { seleccionActual, setSeleccionActual };
+	for (let grupo in gruposEstados) {
+		let color = gruposEstados[grupo][0].color;
+		let codigosDeEstado = gruposEstados[grupo].map(e => e.codigo);
+		botonesEstado.push(<BotonEstado key={grupo} estados={codigosDeEstado} {...propiedadesBotones} color={color}>{grupo}</BotonEstado>)
+	}
 
-	return <Box component={Paper} elevation={modoFiltro === 2 ? 1 : 3} className={`${classes.boxSelector} ${modoFiltro === 2 && classes.boxSelectorDisabled}`} >
-
-		<h3>Estado del pedido <ControlModoFiltro modo={modoFiltro} onChange={setModoFiltro} listaModos={MODOS} /></h3>
-
-		<Grid container spacing={1} justify="space-start" alignItems="center">
-			<BotonEstado estados={[1010, 1020, 1030, 8010]} {...propiedadesBotones} >PROCESANDO</BotonEstado>
-			<BotonEstado estados={[9900]} {...propiedadesBotones}>COMPLETADO</BotonEstado>
-			<BotonEstado estados={[3010, 3011, 3020, 3120]} {...propiedadesBotones}>RECHAZADO</BotonEstado >
-			<BotonEstado estados={[3110]} {...propiedadesBotones}>NO SAP</BotonEstado >
-			<BotonEstado estados={[8100, 9140]} {...propiedadesBotones}>ERROR BAPI</BotonEstado >
-		</Grid>
-
-
-	</Box>
-
+	return <BoxFiltro relleno={seleccionActual?.length} modoFiltro={modoFiltro} >
+		<Typography sx={{ mb: 2 }} component="div" variant="h6">
+			Estado del pedido
+			<ControlModoFiltro modo={modoFiltro} onChange={setModoFiltro} listaModos={MODOS} />
+		</Typography>
+		<Stack direction="row" justifyContent="space-around" alignItems="center" spacing={1}>
+			{botonesEstado}
+		</Stack>
+	</BoxFiltro>
 
 }
-
 
 export default EstadoTransmision;

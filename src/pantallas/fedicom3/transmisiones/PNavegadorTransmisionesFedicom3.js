@@ -6,13 +6,12 @@ import FediCommons from "common/FediCommons";
 import BannerCargando from "common/BannerCargando";
 import BannerError from "common/BannerError";
 import BannerVacio from "common/BannerVacio";
-import ControlNavegacionPedidos from "componentes/fedicom3/pedidos/controlNavegacion/ControlNavegacion";
-import LineaNavegadorPedido from "componentes/fedicom3/pedidos/LineaNavegadorPedido";
 import { EJSON } from "bson";
-import ResumenFiltrosActivos from "componentes/fedicom3/pedidos/controlNavegacion/ResumenFiltrosActivos";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import PVisorPedidosFedicom3 from './PVisorPedidosFedicom3';
-
+import ResumenFiltrosActivos from "componentes/fedicom3/pedidos/controlNavegacion/ResumenFiltrosActivos";
+import ControlNavegacionPedidos from "componentes/fedicom3/pedidos/controlNavegacion/ControlNavegacion";
+import PantallaVisorTransmisionesFedicom3 from "./PVisorTransmisionesFedicom3";
+import LineaNavegadorTransmision from "componentes/transmision/LineaNavegadorTransmision";
 const PROYECCION = { sap: 0, 'conexion.solicitud': 0, 'conexion.respuesta': 0 }
 
 function reducer(state, action) {
@@ -34,8 +33,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="left" ref={ref} {...props} />;
 });
 
-export default function PantallaNavegadorPedidosFedicom3(props) {
-
+export default function PantallaNavegadorTransmisionesFedicom3(props) {
 
 	const [consulta, cambiaConsulta] = useReducer(reducer, {
 		filtro: {},
@@ -46,17 +44,17 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 		vista: 'extendido'
 	})
 	const { filtro, /*proyeccion, orden,*/ skip, limite, vista } = consulta;
-	const [idPedidoSeleccionado, setIdPedidoSeleccionado] = React.useState(null);
+	const [txIdSeleccionada, setTxIdSeleccionada] = React.useState(null);
 
 	// Llamada API
-	const { listadoPedidos } = useApiFedicom();
+	const { listadoTransmisiones } = useApiFedicom();
 	const { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
-	const refrescarListadoPedidos = useCallback(async () => {
+	const refrescarListadoTransmisiones = useCallback(async () => {
 		setCargando(true);
 		try {
 			let filtroEjson = EJSON.serialize(filtro);
 
-			let resultados = await listadoPedidos(filtroEjson, PROYECCION, { fechaCreacion: -1 }, skip, limite);
+			let resultados = await listadoTransmisiones(filtroEjson, PROYECCION, { fechaCreacion: -1 }, skip, limite);
 			if (FediCommons.esRespuestaErroresFedicom(resultados)) {
 				setError(resultados);
 			} else {
@@ -66,8 +64,8 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 		} catch (error) {
 			setError(error)
 		}
-	}, [listadoPedidos, setCargando, setDatos, setError, filtro, skip, limite]);
-	useEffect(refrescarListadoPedidos, [refrescarListadoPedidos]);
+	}, [listadoTransmisiones, setCargando, setDatos, setError, filtro, skip, limite]);
+	useEffect(refrescarListadoTransmisiones, [refrescarListadoTransmisiones]);
 
 
 	let contenido = null;
@@ -75,12 +73,12 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 	if (cargando) {
 		contenido = <BannerCargando />
 	} else if (error) {
-		contenido = <BannerError errores={error} onRecargar={refrescarListadoPedidos} />
+		contenido = <BannerError errores={error} onRecargar={refrescarListadoTransmisiones} />
 	} else if (!datos?.resultados?.length) {
 		contenido = <Box>
 			<ControlNavegacionPedidos consulta={consulta} cambiaConsulta={cambiaConsulta} totalResultados={0} />
 			{eleResumenFiltros}
-			<BannerVacio titulo="No se han encontrado pedidos" onRecargar={refrescarListadoPedidos} />
+			<BannerVacio titulo="No se han encontrado transmisiones" onRecargar={refrescarListadoTransmisiones} />
 		</Box>
 	} else {
 		contenido = <Box>
@@ -89,7 +87,9 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 
 				{eleResumenFiltros}
 				<List sx={{ mt: 2 }} >
-					{datos.resultados.map(pedido => <LineaNavegadorPedido key={pedido._id} pedido={pedido} vista={vista} mostrarDetalle={setIdPedidoSeleccionado} />)}
+					{datos.resultados.map(tx =>
+						<LineaNavegadorTransmision key={tx._id} tx={tx} vista={vista} mostrarDetalle={setTxIdSeleccionada} />
+					)}
 				</List>
 			</Box>
 
@@ -105,22 +105,22 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 		<Dialog
 			fullScreen
 			scroll='body'
-			open={Boolean(idPedidoSeleccionado)}
-			onClose={() => setIdPedidoSeleccionado(null)}
+			open={Boolean(txIdSeleccionada)}
+			onClose={() => setTxIdSeleccionada(null)}
 			TransitionComponent={Transition}
 		>
 			<AppBar sx={{ position: 'fixed' }}>
 				<Toolbar>
-					<IconButton edge="start" color="inherit" onClick={() => setIdPedidoSeleccionado(null)} >
+					<IconButton edge="start" color="inherit" onClick={() => setTxIdSeleccionada(null)} >
 						<ArrowBackIcon />
 					</IconButton>
 					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-						Pedido {idPedidoSeleccionado?.toUpperCase()}
+						Transmisión con ID {txIdSeleccionada?.toUpperCase()}
 					</Typography>
 				</Toolbar>
 			</AppBar>
 			<Box sx={{ mt: 12 }}>
-				<PVisorPedidosFedicom3 idPedido={idPedidoSeleccionado} />
+				<PantallaVisorTransmisionesFedicom3 idTransmision={txIdSeleccionada} />
 			</Box>
 		</Dialog>
 	</>)

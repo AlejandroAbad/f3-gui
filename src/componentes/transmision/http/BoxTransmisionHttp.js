@@ -109,6 +109,9 @@ const Solicitud = ({ solicitud }) => {
 	let { /*fechaEnvio,*/ metodo, method, url, headers, body } = solicitud;
 	if (method) metodo = method;
 
+	if (body?.password) body.password = '********';
+	if (headers?.['X-Key']) headers['X-Key'] = '********';
+
 	return <Grid item xs={6} >
 		<List>
 			<ListItem >
@@ -122,9 +125,9 @@ const Solicitud = ({ solicitud }) => {
 			<ListItem >
 				<VisorJson src={headers} name="cabeceras" collapsed />
 			</ListItem>
-			<ListItem >
+			{body && <ListItem >
 				<VisorJson src={body} name="cuerpo" />
-			</ListItem>
+			</ListItem>}
 		</List>
 	</Grid >
 }
@@ -150,9 +153,9 @@ const Respuesta = ({ respuesta }) => {
 			<ListItem >
 				<VisorJson src={headers} name="cabeceras" collapsed />
 			</ListItem>
-			<ListItem >
+			{(error || body) && <ListItem >
 				<VisorJson src={error || body} name="respuesta" />
-			</ListItem>
+			</ListItem>}
 
 		</List>
 	</Grid >

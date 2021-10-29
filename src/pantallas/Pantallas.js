@@ -6,6 +6,10 @@ import PantallaMonitorInstancias from './monitor/PInstancias';
 import PantallaNavegadorPedidosFedicom3 from './fedicom3/pedidos/PNavegadorPedidosFedicom3';
 import PantallaVisorPedidosFedicom3 from './fedicom3/pedidos/PVisorPedidosFedicom3';
 
+
+import PantallaNavegadorTransmisionesFedicom3 from './fedicom3/transmisiones/PNavegadorTransmisionesFedicom3';
+import PantallaVisorTransmisionesFedicom3 from './fedicom3/transmisiones/PVisorTransmisionesFedicom3';
+
 // import PantallaVisorTramasFedicom2 from './utilidades/visorTramasFedicom2/PVisorTramasFedicom2';
 
 
@@ -19,6 +23,10 @@ const Pantallas = {
 	Usuario: PantallaUsuario,
 	
 	Fedicom3: {
+		Transmisiones: {
+			Navegador: PantallaNavegadorTransmisionesFedicom3,
+			Visor: PantallaVisorTransmisionesFedicom3
+		},
 		Pedidos: {
 			Navegador: PantallaNavegadorPedidosFedicom3,
 			Visor: PantallaVisorPedidosFedicom3

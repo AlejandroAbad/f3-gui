@@ -12,7 +12,9 @@ import { ProveedorContextoPedido } from 'componentes/fedicom3/pedidos/ContextoPe
 
 export default function PantallaNavegadorPedidosFedicom3({ ...props }) {
 
-	let numeroPedido = props?.match?.params?.idPedido;
+	let numeroPedido = props?.idPedido || props?.match?.params?.idPedido;
+
+	
 	let { consultaPedido } = useApiFedicom();
 	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
 	let obtenerDatosPedido = useCallback(async () => {

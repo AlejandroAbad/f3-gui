@@ -1,8 +1,6 @@
-import { useHistory } from "react-router-dom";
-
+//import { useHistory } from "react-router-dom";
 import { Grid, ListItem } from "@mui/material";
 import TextoAlmacen from "./componentes/navegadorPedidos/TextoAlmacen";
-
 import TextoCliente from "./componentes/navegadorPedidos/TextoCliente";
 import TextoEstado from "./componentes/navegadorPedidos/TextoEstado";
 import TextoFechaCreacion from "./componentes/navegadorPedidos/TextoFechaCreacion";
@@ -16,9 +14,9 @@ import TextoTipoPedido from "./componentes/navegadorPedidos/TextoTipoPedido";
 import TextoTotales from "./componentes/navegadorPedidos/TextoTotales";
 
 
-export default function LineaNavegadorPedido({ pedido }) {
+export default function LineaNavegadorPedido({ pedido, vista, mostrarDetalle }) {
 
-	const history = useHistory();
+	//const history = useHistory();
 
 	let p = pedido.pedido || {};
 	let c = pedido.conexion?.metadatos || {};
@@ -28,14 +26,13 @@ export default function LineaNavegadorPedido({ pedido }) {
 		py: 3,
 		px: 4,
 		borderBottom: 1,
-		borderColor: 'text.disabled',
-		":hover": { boxShadow: 10, cursor: 'pointer' }
+		borderColor: 'grey.200'
 	};
 
-	let enlace = (p.crc) ? '/fedicom3/pedidos/' + p.crc : '/fedicom3/transmisiones/' + id
+	//let enlace = (p.crc) ? '/fedicom3/pedidos/' + p.crc : '/fedicom3/transmisiones/' + id
 
 	return (
-		<ListItem sx={estilo} onClick={() => { history.push(enlace); }}>
+		<ListItem button sx={estilo} onClick={() => { mostrarDetalle?.(p.crc); }}>
 			<Grid container>
 				<Grid item xs={3}>
 					<Grid container>

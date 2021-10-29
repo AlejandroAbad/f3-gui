@@ -2,12 +2,9 @@ import { Grid } from "@mui/material";
 import CodigoCliente from "./CodigosCliente";
 import CodigoSolicitante from "./CodigoSolicitante";
 import DatosPedido from "./DatosPedido";
+import EstadoTransmision from "./EstadoTransmision";
 import NumeroPedido from "./NumeroPedido";
 import OrigenPedido from "./OrigenPedido";
-// import DatosPedido from "./DatosPedido";
-// import EstadoTransmision from "./EstadoTransmision";
-// import NumeroPedido from "./NumeroPedido";
-// import { OrigenPedido } from "./OrigenPedido";
 import RangoFechas from "./RangoFechas";
 
 
@@ -28,7 +25,7 @@ export default function FormularioFiltroPedidosEstandard({ refFiltro }) {
 					<NumeroPedido refFiltro={refFiltro} />
 				</Grid>
 				<Grid item xs={12}>
-					{/*<EstadoTransmision />*/}
+					<EstadoTransmision refFiltro={refFiltro} />
 				</Grid>
 			</Grid>
 		</Grid>

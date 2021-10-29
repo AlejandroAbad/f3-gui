@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, Collapse, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader,  SwipeableDrawer } from "@mui/material";
+import { Avatar, Box, Collapse, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader, SwipeableDrawer, Typography } from "@mui/material";
 import { Assessment, Business, CallSplit, Input, ChevronLeft, Dashboard, ExpandLess, ExpandMore, Filter2, Looks3, NearMe, Speed, Storage, Security, FindInPage } from "@mui/icons-material";
 import ContextoAplicacion from "contexto/contexto";
 import { useCallback, useContext, useState } from "react";
@@ -23,17 +23,17 @@ const useStyles = makeStyles((theme) => ({
 		// necessary for content to be below app bar
 		...theme.mixins.toolbar,
 		justifyContent: 'flex-end',
-		backgroundColor: theme.palette.primary.light,
-		color: theme.palette.getContrastText(theme.palette.primary.light),
+		backgroundColor: theme.palette.secondary.main,
+		color: theme.palette.getContrastText(theme.palette.secondary.main),
 	},
 	drawerTitulo: {
 		padding: theme.spacing(1.2, 0, 8),
-		backgroundColor: theme.palette.primary.light,
-		color: theme.palette.getContrastText(theme.palette.primary.light)
+		backgroundColor: theme.palette.secondary.main,
+		color: theme.palette.getContrastText(theme.palette.secondary.main)
 	},
 	avatar: {
-		width: theme.spacing(12),
-		height: theme.spacing(12),
+		width: '60px',
+		height: '60px',
 		margin: theme.spacing(0, 'auto'),
 		fontSize: '2rem',
 		color: theme.palette.primary.contrastText,
@@ -108,7 +108,7 @@ function BotonMenu({ texto, icono, link, onClick, subMenu, esTitulo, cerrarDrawe
 				<ListItemText primary={texto} />
 				{subMenu && (menuAbierto ? <ExpandLess /> : <ExpandMore />)}
 			</ListItem>
-			{ elementoMenu}
+			{elementoMenu}
 		</Box>
 	)
 }
@@ -182,13 +182,17 @@ export default function DrawerLateral({ open, onClose, onOpen }) {
 		<div className={classes.drawerTitulo}>
 			<Box display="flex" justifyContent="center" width="100%">
 				{usuario.token.permanente ?
-					<Avatar className={classes.avatar} color="primary"><VisibilityRoundedIcon fontSize="large" /></Avatar>
+					<Avatar className={classes.avatar} color="primary">
+						<VisibilityRoundedIcon />
+					</Avatar>
 					:
-					<Avatar className={classes.avatar} color="primary">{usuario.nombre.substring(0, 1)}</Avatar>
+					<Avatar sx={{ bgcolor: 'primary.light', fontSize: '60px', width: 100, height: 100 }}>
+						{usuario.nombre.substring(0, 1)}
+					</Avatar>
 				}
 			</Box>
 			<Box display="flex" justifyContent="center">
-				<Chip label={usuario.nombre} className={classes.chipNombreUsuario} />
+				<Typography variant="h6" component="div" sx={{ color: "primary" }}>{usuario.nombre}</Typography>
 			</Box>
 		</div>
 

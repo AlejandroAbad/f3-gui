@@ -41,11 +41,11 @@ export default function BotonLimiteResultados({ limite, cambiaLimite, opciones, 
 
 	return (
 		<>
-			<Button {...props} endIcon={<ArrowDropDownIcon />} ref={refPopper} variant="link" size="small" onClick={cambiaEstadoMenu}>
+			<Button {...props} endIcon={<ArrowDropDownIcon />} ref={refPopper} variant="link" size="small" onClick={cambiaEstadoMenu}  >
 				{opciones[limite]}
 			</Button>
-			<Popper open={menuAbierto} anchorEl={refPopper.current} >
-				<Paper>
+			<Popper open={menuAbierto} anchorEl={refPopper.current} placement="bottom-end" disablePortal >
+				<Paper style={{ zIndex: 2 }} >
 					<ClickAwayListener onClickAway={cierraMenu}>
 						<MenuList>
 							{opciones.map((valor, clave) => (

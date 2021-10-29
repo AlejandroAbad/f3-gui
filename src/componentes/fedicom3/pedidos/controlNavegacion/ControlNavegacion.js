@@ -22,7 +22,7 @@ export default function ControlNavegacionPedidos({ consulta, cambiaConsulta, tot
 	const ultimoResultadoMostrado = Math.min(skip + limite, totalResultados);
 
 
-	return (<Paper elevation={10} sx={{ p: 2 }}>
+	return (<Paper elevation={10} sx={{ mt: 0, p: 2, position: 'sticky', top: '60px', zIndex: 100 }}>
 		<Grid container direction="row" justifyContent="space-between" alignItems="center" >
 			<Box sx={{ width: '33%', display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "top" }}>
 				<BotonFiltrosPedido filtro={filtro} setFiltro={setFiltro} />
@@ -50,7 +50,5 @@ export default function ControlNavegacionPedidos({ consulta, cambiaConsulta, tot
 				</ToggleButtonGroup>
 			</Box>
 		</Grid>
-
-
 	</Paper>)
 }

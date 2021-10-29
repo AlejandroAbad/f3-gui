@@ -1,18 +1,15 @@
 import { createTheme } from '@mui/material/styles';
 
 // A custom theme for this app
-const theme = createTheme(/*{
+const theme = createTheme({
 	palette: {
 		primary: {
-			main: '#556cd6',
+			main: '#0C39A6'
 		},
 		secondary: {
-			main: '#19857b',
-		},
-		error: {
-			main: red.A400,
-		},
-	},
-}*/);
+			main: '#7E4FFF'
+		}
+	}
+});
 
 export default theme;

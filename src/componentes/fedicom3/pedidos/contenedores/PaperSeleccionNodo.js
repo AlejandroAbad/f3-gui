@@ -55,14 +55,16 @@ const PaperSeleccionNodo = ({ idNodoSeleccionado, setIdNodoSeleccionado }) => {
 		iconoPrevio = <Typography component="span" sx={{ mr: 1 }}>☄</Typography>
 	}
 
+	let hayMultiplesOpciones = opcionesMenu.length > 1;
+
 	return <Paper elevation={10} sx={{ px: 4, pt: 4, pb: 2 }} >
 
 		<Typography variant='h5' component="h2" sx={{ mb: 0 }} >
-			{opcionesMenu.length > 1 ? 'Seleccione transmisión' : 'Transmisión'}
+			{hayMultiplesOpciones ? 'Seleccione transmisión' : 'Transmisión'}
 		</Typography>
 
-		<List component={Paper} elevation={10} sx={{ m: 0, my: 2, p: 0 }} >
-			<ListItem button={opcionesMenu.length > 1} onClick={opcionesMenu.length > 1 ? handleClickListItem : null} >
+		<List component={Paper} elevation={hayMultiplesOpciones ? 10 : 0} sx={{ m: 0, my: 2, p: 0 }} >
+			<ListItem button={hayMultiplesOpciones} onClick={hayMultiplesOpciones ? handleClickListItem : null} >
 				<ListItemText
 					primary={<Typography variant='h6' component="div">{nodoSeleccionado.id.toUpperCase()}</Typography>}
 					secondary={<Typography variant="body2">{nodoSeleccionado.fechaCreacion}</Typography>}
@@ -70,13 +72,13 @@ const PaperSeleccionNodo = ({ idNodoSeleccionado, setIdNodoSeleccionado }) => {
 				<ListItemAvatar>
 					<Chip sx={{ px: 1 }} color={infoEstado.color} label={<>{iconoPrevio}{infoEstado.nombre}</>} />
 				</ListItemAvatar>
-				<ListItemAvatar>
+				{hayMultiplesOpciones && <ListItemAvatar>
 					<ExpandMoreIcon sx={{ mx: 4, mt: 1 }} />
-				</ListItemAvatar>
+				</ListItemAvatar>}
 			</ListItem>
 
 		</List>
-		{opcionesMenu.length > 1 &&
+		{hayMultiplesOpciones &&
 			<Menu anchorEl={anchorEl} open={open} onClose={handleClose} PaperProps={{ style: { maxHeight: 48 * 4.5 } }}	>
 				{opcionesMenu}
 			</Menu>

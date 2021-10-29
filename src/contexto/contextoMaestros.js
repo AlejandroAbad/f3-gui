@@ -10,12 +10,16 @@ const ProveedorContextoMaestros = ({ children }) => {
 	const maestroProgramas = useMaestro('programas');
 	const maestroLaboratorios = useMaestro('laboratorios');
 	const maestroAlmacenes = useMaestro('almacenes');
+	const maestroTipos = useMaestro('tipos');
+
+	console.log(maestroTipos)
 
 	const valorRetornado = { 
 		maestroEstados, 
 		maestroProgramas, 
 		maestroLaboratorios,
-		maestroAlmacenes
+		maestroAlmacenes,
+		maestroTipos
 	}
 
 	return <Provider value={valorRetornado}>{children}</Provider>;

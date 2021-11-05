@@ -6,46 +6,27 @@ import { Link } from "react-router-dom";
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import { makeStyles } from "@mui/styles";
 
-const drawerWidth = 340;
-
+const DRAWER_WIDTH = 340;
+const DRAWER_BGCOLOR = (theme) => theme.palette.primary.light;
+const DRAWER_COLOR = (theme) => theme.palette.getContrastText(DRAWER_BGCOLOR(theme));
 const useStyles = makeStyles((theme) => ({
-	drawer: {
-		width: drawerWidth,
-		flexShrink: 0,
-	},
 	drawerPaper: {
-		width: drawerWidth,
+		width: DRAWER_WIDTH,
 	},
 	drawerHeader: {
 		display: 'flex',
 		alignItems: 'center',
 		padding: theme.spacing(0, 1),
-		// necessary for content to be below app bar
 		...theme.mixins.toolbar,
 		justifyContent: 'flex-end',
-		backgroundColor: theme.palette.secondary.main,
-		color: theme.palette.getContrastText(theme.palette.secondary.main),
+		backgroundColor: DRAWER_BGCOLOR(theme),
+		color: DRAWER_COLOR(theme),
 	},
 	drawerTitulo: {
 		padding: theme.spacing(1.2, 0, 8),
-		backgroundColor: theme.palette.secondary.main,
-		color: theme.palette.getContrastText(theme.palette.secondary.main)
-	},
-	avatar: {
-		width: '60px',
-		height: '60px',
-		margin: theme.spacing(0, 'auto'),
-		fontSize: '2rem',
-		color: theme.palette.primary.contrastText,
-		backgroundColor: theme.palette.primary.dark,
-	},
-	chipNombreUsuario: {
-		margin: theme.spacing(1, 'auto', 0),
-		backgroundColor: theme.palette.background.paper,
-		color: theme.palette.getContrastText(theme.palette.background.paper),
-		fontWeight: theme.typography.fontWeightBold
+		backgroundColor: DRAWER_BGCOLOR(theme),
+		color: DRAWER_COLOR(theme),
 	}
-
 }));
 
 
@@ -130,12 +111,12 @@ const BOTONES = [
 
 
 	{ texto: "Monitorización", esTitulo: true },
-	{ texto: "Base de datos", icono: Storage, link: '/' },
+	{ texto: "Base de datos", icono: Storage, link: '/monitor/mongodb' },
 	{ texto: "Instancias", icono: Speed, link: '/monitor/instancias' },
 	{
 		texto: "Balanceo de carga", icono: CallSplit, subMenu: [
-			{ texto: "Entrada pedidos", icono: Input, link: '/' },
-			{ texto: "Servidores SAP", icono: Storage, link: '/' },
+			{ texto: "Entrada pedidos", icono: Input, link: '/balanceadores/fedicom3' },
+			{ texto: "Servidores SAP", icono: Storage, link: '/balanceadores/sap' },
 		]
 	},
 
@@ -165,13 +146,12 @@ export default function DrawerLateral({ open, onClose, onOpen }) {
 	if (!usuario) return null;
 
 	return <SwipeableDrawer
-		className={classes.drawer}
+		sx={{ width: DRAWER_WIDTH, flexShrink: 0 }}
 		anchor="left"
 		open={open}
 		onClose={onClose}
 		onOpen={onOpen}
 		classes={{ paper: classes.drawerPaper, }}
-
 	>
 		<div className={classes.drawerHeader}>
 			<IconButton onClick={onClose}>
@@ -181,15 +161,9 @@ export default function DrawerLateral({ open, onClose, onOpen }) {
 
 		<div className={classes.drawerTitulo}>
 			<Box display="flex" justifyContent="center" width="100%">
-				{usuario.token.permanente ?
-					<Avatar className={classes.avatar} color="primary">
-						<VisibilityRoundedIcon />
-					</Avatar>
-					:
-					<Avatar sx={{ bgcolor: 'primary.light', fontSize: '60px', width: 100, height: 100 }}>
-						{usuario.nombre.substring(0, 1)}
-					</Avatar>
-				}
+				<Avatar sx={{ bgcolor: 'primary.dark', fontSize: '60px', width: 100, height: 100 }}>
+					{usuario.token.permanente ? <VisibilityRoundedIcon /> :  usuario.nombre.substring(0, 1) }
+				</Avatar>
 			</Box>
 			<Box display="flex" justifyContent="center">
 				<Typography variant="h6" component="div" sx={{ color: "primary" }}>{usuario.nombre}</Typography>

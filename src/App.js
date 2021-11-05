@@ -55,6 +55,8 @@ function App() {
 
 						<Switch>
 							<Route path="/monitor/instancias" render={(props) => <Pantallas.Monitor.Instancias {...props} />} />
+							<Route path="/monitor/mongodb" render={(props) => <Pantallas.Monitor.MongoDB {...props} />} />
+
 							<Route path="/usuario" render={(props) => <Pantallas.Usuario {...props} />} />
 							<Route path="/fedicom3/pedidos/:idPedido" render={(props) => <Pantallas.Fedicom3.Pedidos.Visor {...props} />} />
 							<Route path="/fedicom3/pedidos" render={(props) => <Pantallas.Fedicom3.Pedidos.Navegador {...props} />} />

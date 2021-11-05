@@ -109,7 +109,7 @@ export default function PantallaNavegadorTransmisionesFedicom3(props) {
 			onClose={() => setTxIdSeleccionada(null)}
 			TransitionComponent={Transition}
 		>
-			<AppBar sx={{ position: 'fixed' }}>
+			<AppBar sx={{ position: 'fixed' }} color="secondary">
 				<Toolbar>
 					<IconButton edge="start" color="inherit" onClick={() => setTxIdSeleccionada(null)} >
 						<ArrowBackIcon />

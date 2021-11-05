@@ -1,7 +1,9 @@
 import PantallaUsuario from './PUsuario';
 import PantallaLogin from './PLogin';
 import PantallaPrincipal from './PPrincipal';
+
 import PantallaMonitorInstancias from './monitor/PInstancias';
+import PantallaMonitorMongoDB from './monitor/PMongoDB';
 
 import PantallaNavegadorPedidosFedicom3 from './fedicom3/pedidos/PNavegadorPedidosFedicom3';
 import PantallaVisorPedidosFedicom3 from './fedicom3/pedidos/PVisorPedidosFedicom3';
@@ -33,7 +35,8 @@ const Pantallas = {
 		}
 	},
 	Monitor: {
-		Instancias: PantallaMonitorInstancias
+		Instancias: PantallaMonitorInstancias,
+		MongoDB: PantallaMonitorMongoDB
 	}
 	// PedidosF3: PantallaPedidosF3
 	// VisorTramasFedicom2: PantallaVisorTramasFedicom2

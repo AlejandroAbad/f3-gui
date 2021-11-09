@@ -38,15 +38,26 @@ export default function useApiFedicom() {
 		}
 
 		let opciones = {
-			headers: {
-				'content-type': 'application/json'
-			}
+			headers: generarCabeceras(null)
 		}
 
 		let resultado = await post('/authenticate', JSON.stringify(body), opciones)
 		return await resultado.json();
 
 	}, [post]);
+
+	const generarTokenPermanente = useCallback(async (usuario, dominio) => {
+
+		let body = { usuario, dominio }
+
+		let opciones = {
+			headers: generarCabeceras(getJwt())
+		}
+
+		let resultado = await post('/~/token', JSON.stringify(body), opciones)
+		return await resultado.json();
+
+	}, [getJwt, post]);
 
 
 	const getEstadoInstancias = useCallback(async () => {
@@ -144,6 +155,7 @@ export default function useApiFedicom() {
 	return {
 		getTokenObservador,
 		getToken,
+		generarTokenPermanente,
 		getEstadoInstancias,
 		descartarEstadoInstancia,
 		listadoTransmisiones,

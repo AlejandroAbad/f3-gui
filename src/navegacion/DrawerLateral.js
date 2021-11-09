@@ -1,5 +1,5 @@
 import { Avatar, Box, Collapse, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader, SwipeableDrawer, Typography } from "@mui/material";
-import { Assessment, Business, CallSplit, Input, ChevronLeft, Dashboard, ExpandLess, ExpandMore, Filter2, Looks3, NearMe, Speed, Storage, Security, FindInPage } from "@mui/icons-material";
+import { VpnKey, Assessment, Business, CallSplit, Input, ChevronLeft, Dashboard, ExpandLess, ExpandMore, Filter2, Looks3, NearMe, Speed, Storage, Security, FindInPage } from "@mui/icons-material";
 import ContextoAplicacion from "contexto/contexto";
 import { useCallback, useContext, useState } from "react";
 import { Link } from "react-router-dom";
@@ -131,6 +131,7 @@ const BOTONES = [
 			{ texto: "Test de stress", icono: Security, link: '/' },
 		]
 	},
+	{ texto: "Gestión de tokens", icono: VpnKey, link: '/herramientas/tokens' },
 	// { texto: "Visor de tramas Fedicom2", icono: Translate, link: '/utilidades/visorTramasFedicom2' },
 
 
@@ -162,7 +163,7 @@ export default function DrawerLateral({ open, onClose, onOpen }) {
 		<div className={classes.drawerTitulo}>
 			<Box display="flex" justifyContent="center" width="100%">
 				<Avatar sx={{ bgcolor: 'primary.dark', fontSize: '60px', width: 100, height: 100 }}>
-					{usuario.token.permanente ? <VisibilityRoundedIcon /> :  usuario.nombre.substring(0, 1) }
+					{usuario.token.permanente ? <VisibilityRoundedIcon /> : usuario.nombre.substring(0, 1)}
 				</Avatar>
 			</Box>
 			<Box display="flex" justifyContent="center">

@@ -9,12 +9,13 @@ import useEstadoCarga from "hooks/useEstadoCarga";
 import { useCallback, useEffect } from "react";
 
 import { ProveedorContextoPedido } from 'componentes/fedicom3/pedidos/ContextoPedido';
+import useTema from "hooks/useTema";
 
 export default function PantallaNavegadorPedidosFedicom3({ ...props }) {
 
+	useTema('Navegación de Pedidos Fedicom v3');
 	let numeroPedido = props?.idPedido || props?.match?.params?.idPedido;
 
-	
 	let { consultaPedido } = useApiFedicom();
 	let { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
 	let obtenerDatosPedido = useCallback(async () => {

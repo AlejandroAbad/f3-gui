@@ -18,6 +18,9 @@ export default function useMaestro(tipoMaestro) {
 			let resultado = await consultaMaestro(tipoMaestro)
 			if (resultado?.length) {
 				setDatos(resultado);
+				console.group(`Cargando maestro ${tipoMaestro}`)
+				console.log(resultado);
+				console.groupEnd()
 				return;
 			} else {
 				console.group(`Resultado vacío al cargar el maestro ${tipoMaestro}`);

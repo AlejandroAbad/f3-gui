@@ -11,8 +11,7 @@ const ProveedorContextoMaestros = ({ children }) => {
 	const maestroLaboratorios = useMaestro('laboratorios');
 	const maestroAlmacenes = useMaestro('almacenes');
 	const maestroTipos = useMaestro('tipos');
-
-	console.log(maestroTipos)
+	
 
 	const valorRetornado = { 
 		maestroEstados, 

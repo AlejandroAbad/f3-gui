@@ -1,63 +1,27 @@
-import React, { createContext, useCallback } from 'react';
-import K from 'K';
-
-import useStateLocalStorage from 'hooks/useStateLocalStorage';
+import { ThemeProvider } from '@mui/material/styles';
+import React, { createContext } from 'react';
+import ContextoAutenticacion from './contextoAutenticacion';
+import ContextoTema from './contextoTema';
 
 const ContextoAplicacion = createContext(null);
+
 const { Provider } = ContextoAplicacion;
 
 const ProveedorContextoAplicacion = ({ children }) => {
 
-	const [jwt, _setJwt] = useStateLocalStorage('login.jwt', null, true);
-	const [usuario, _setUsuario] = useStateLocalStorage('login.usuario', null, true);
-	const setJwt = useCallback((token, datos) => {
-		_setJwt(token);
-		if (datos)
-			_setUsuario({
-				nombre: datos.sub,
-				dominio: datos.aud,
-				grupos: datos.grupos || [],
-				token: {
-					permanente: datos.permanente,
-					fechaEmision: datos.iat,
-					fechaExpiracion: datos.exp,
-					bruto: datos
-				}
-			});
-		else {
-			_setUsuario(null)
-		}
+	let contextoAutenticacion = ContextoAutenticacion();
+	let contextoTema = ContextoTema();
 
-	}, [_setJwt, _setUsuario]);
-	const getJwt = useCallback((inclusoSiEstaCadudado = false) => {
-		if (inclusoSiEstaCadudado) return jwt;
-		if (!usuario) return null;
+	let contexto = {
+		...contextoAutenticacion,
+		...contextoTema
+	}
 
-		let now = (new Date()).getTime() / 1000;
-		let ttl = Math.round(usuario?.token?.bruto?.exp - now);
-
-		if (ttl > K.MARGEN_TTL_TOKEN) {
-			return jwt;
-		}
-		return null;
-
-	}, [jwt, usuario])
-	const getUsuario = useCallback((inclusoSiEstaCadudado = false) => {
-		if (inclusoSiEstaCadudado) return usuario;
-		if (!usuario) return null;
-
-		let now = (new Date()).getTime() / 1000;
-		let ttl = Math.round(usuario?.token?.bruto?.exp - now);
-
-		if (ttl > K.MARGEN_TTL_TOKEN) {
-			return usuario;
-		}
-		return null;
-
-	}, [usuario])
-
-
-	return <Provider value={{ getJwt, getUsuario, setJwt }}>{children}</Provider>;
+	return <Provider value={contexto}>
+		<ThemeProvider theme={contextoTema.tema}>
+			{children}
+		</ThemeProvider>
+	</Provider>;
 };
 
 export { ContextoAplicacion, ProveedorContextoAplicacion };

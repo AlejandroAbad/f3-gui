@@ -12,6 +12,7 @@ import { EJSON } from "bson";
 import ResumenFiltrosActivos from "componentes/fedicom3/pedidos/controlNavegacion/ResumenFiltrosActivos";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PVisorPedidosFedicom3 from './PVisorPedidosFedicom3';
+import useTema from "hooks/useTema";
 
 const PROYECCION = { sap: 0, 'conexion.solicitud': 0, 'conexion.respuesta': 0 }
 
@@ -36,7 +37,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function PantallaNavegadorPedidosFedicom3(props) {
 
-
+	useTema('Navegación de Pedidos Fedicom v3');
 	const [consulta, cambiaConsulta] = useReducer(reducer, {
 		filtro: {},
 		proyeccion: { sap: 0, 'conexion.solicitud': 0, 'conexion.respuesta': 0 },
@@ -50,6 +51,8 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 
 	// Llamada API
 	const { listadoPedidos } = useApiFedicom();
+
+	
 	const { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
 	const refrescarListadoPedidos = useCallback(async () => {
 		setCargando(true);

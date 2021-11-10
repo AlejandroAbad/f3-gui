@@ -2,6 +2,7 @@ import { Alert, AlertTitle, Avatar, Backdrop, Box, Chip, CircularProgress, Conta
 import { makeStyles } from "@mui/styles";
 import ContextoAplicacion from "contexto/contexto";
 import { format, fromUnixTime } from "date-fns";
+import useTema from "hooks/useTema";
 import TituloPantalla from "navegacion/TituloPantalla";
 import { useContext } from "react";
 import ReactJson from "react-json-view";
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function CartaDatosUsuario() {
-
+	useTema('Datos del usuario');
 	const classes = useStyles();
 	const { getUsuario } = useContext(ContextoAplicacion);
 

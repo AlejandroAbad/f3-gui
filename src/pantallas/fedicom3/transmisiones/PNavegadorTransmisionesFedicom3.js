@@ -12,6 +12,7 @@ import ResumenFiltrosActivos from "componentes/fedicom3/pedidos/controlNavegacio
 import ControlNavegacionPedidos from "componentes/fedicom3/pedidos/controlNavegacion/ControlNavegacion";
 import PantallaVisorTransmisionesFedicom3 from "./PVisorTransmisionesFedicom3";
 import LineaNavegadorTransmision from "componentes/transmision/LineaNavegadorTransmision";
+import useTema from "hooks/useTema";
 const PROYECCION = { sap: 0, 'conexion.solicitud': 0, 'conexion.respuesta': 0 }
 
 function reducer(state, action) {
@@ -34,6 +35,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function PantallaNavegadorTransmisionesFedicom3(props) {
+
+	useTema('Navegador de transmisiones Fedicom v3', 'transmisiones');
 
 	const [consulta, cambiaConsulta] = useReducer(reducer, {
 		filtro: {},
@@ -109,7 +112,7 @@ export default function PantallaNavegadorTransmisionesFedicom3(props) {
 			onClose={() => setTxIdSeleccionada(null)}
 			TransitionComponent={Transition}
 		>
-			<AppBar sx={{ position: 'fixed' }} color="secondary">
+			<AppBar sx={{ position: 'fixed' }} color="barraSuperior">
 				<Toolbar>
 					<IconButton edge="start" color="inherit" onClick={() => setTxIdSeleccionada(null)} >
 						<ArrowBackIcon />

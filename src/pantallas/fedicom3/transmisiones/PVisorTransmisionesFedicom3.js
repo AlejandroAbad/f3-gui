@@ -9,10 +9,12 @@ import { useCallback, useEffect } from "react";
 import BannerError from "common/BannerError";
 import BannerCargando from "common/BannerCargando";
 import PaperTransmisionCrudo from "componentes/transmision/contenedores/PaperTransmisionCrudo";
+import useTema from "hooks/useTema";
 
 
 export default function PantallaVisorTransmisionesFedicom3({ ...props }) {
 
+	useTema('Navegador de transmisiones Fedicom v3', 'transmisiones');
 	let idTransmision = props?.idTransmision || props?.match?.params?.idTransmision;
 
 	const { consultaTransmision } = useApiFedicom();

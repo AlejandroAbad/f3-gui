@@ -6,7 +6,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { makeStyles } from '@mui/styles';
 import Container from '@mui/material/Container';
-import { Box, Collapse, IconButton, Alert, AlertTitle  } from '@mui/material';
+import { Box, Collapse, IconButton, Alert, AlertTitle } from '@mui/material';
 
 import ContextoAplicacion from 'contexto/contexto';
 import BarraProgresoSuperior from '../navegacion/BarraProgresoSuperior';
@@ -14,6 +14,7 @@ import FediCommons from 'common/FediCommons';
 import CloseIcon from '@mui/icons-material/Close';
 import useApiFedicom from '../hooks/useApiFedicom';
 import useEstadoCarga from 'hooks/useEstadoCarga';
+import useTema from 'hooks/useTema';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +72,7 @@ const LoginTextField = function ({ ...props }) {
 
 
 export default function PantallaLogin() {
-
+	useTema();
 	const classes = useStyles();
 	const { setJwt } = useContext(ContextoAplicacion);
 
@@ -104,7 +105,7 @@ export default function PantallaLogin() {
 	}, [setCargando, setDatos, setError, setJwt, refUsuario, refPasword, getToken]);
 
 	const solicitarTokenObservador = useCallback(async function () {
-		
+
 		setCargando(true);
 		try {
 			let respuesta = await getTokenObservador()

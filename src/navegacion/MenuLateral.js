@@ -99,15 +99,22 @@ const BOTONES = [
 
 	{ texto: "Dashboard", icono: Dashboard, link: '/' },
 
-	{ texto: "Pedidos", esTitulo: true },
-	{ texto: "Fedicom 3", icono: Looks3, link: '/fedicom3/pedidos' },
-	{ texto: "Proyman / Fedicom 2", icono: Filter2, link: '/' },
+	{ texto: "Fedicom 3", esTitulo: true },
+	{ texto: "Pedidos", icono: Looks3, link: '/fedicom3/pedidos' },
+	{ texto: "Transmisiones", icono: NearMe, link: '/fedicom3/transmisiones' },
+
 	{
 		texto: "Informes", icono: Assessment, subMenu: [
 			{ texto: "Pedidos por almacén", icono: Business, link: '/' },
 			{ texto: "Pedidos por servidor SAP", icono: Storage, link: '/' },
 		]
 	},
+
+	/*
+	{ texto: "Proyman / Fedicom 2", esTitulo: true },
+	{ texto: "Pedidos", icono: Looks3, link: '/fedicom2/pedidos' },
+	*/
+
 
 
 	{ texto: "Monitorización", esTitulo: true },
@@ -138,7 +145,7 @@ const BOTONES = [
 ]
 
 
-export default function DrawerLateral({ open, onClose, onOpen }) {
+export default function MenuLateral({ open, onClose, onOpen }) {
 
 	const { getUsuario } = useContext(ContextoAplicacion);
 	const classes = useStyles();

@@ -4,10 +4,11 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { makeStyles } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MenuSuperior from 'navegacion/MenuSuperior';
-import DrawerLateral from 'navegacion/DrawerLateral';
+import MenuLateral from 'navegacion/MenuLateral';
 import Pantallas from 'pantallas/Pantallas';
 
 import { ContextoAplicacion } from 'contexto/contexto';
+import useTema from 'hooks/useTema';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
 
+	
 
 	const classes = useStyles();
 	const [drawerOpen, _setDrawerOpen] = React.useState(false);
@@ -41,6 +43,7 @@ function App() {
 	}, [drawerOpen, _setDrawerOpen]);
 
 
+
 	return (
 		<Router>
 			<div className={classes.root}>
@@ -48,7 +51,7 @@ function App() {
 				<CssBaseline />
 
 				<MenuSuperior onMenuClicked={handleDrawerSwitch} />
-				{jwt && <DrawerLateral open={drawerOpen} onClose={() => handleDrawerSwitch(false)} onOpen={() => handleDrawerSwitch(true)} />}
+				{jwt && <MenuLateral open={drawerOpen} onClose={() => handleDrawerSwitch(false)} onOpen={() => handleDrawerSwitch(true)} />}
 
 				<main className={classes.content}>
 					{!jwt ? <Pantallas.Login /> :
@@ -58,6 +61,7 @@ function App() {
 							<Route path="/monitor/mongodb" render={(props) => <Pantallas.Monitor.MongoDB {...props} />} />
 
 							<Route path="/usuario" render={(props) => <Pantallas.Usuario {...props} />} />
+
 							<Route path="/fedicom3/pedidos/:idPedido" render={(props) => <Pantallas.Fedicom3.Pedidos.Visor {...props} />} />
 							<Route path="/fedicom3/pedidos" render={(props) => <Pantallas.Fedicom3.Pedidos.Navegador {...props} />} />
 
@@ -65,7 +69,7 @@ function App() {
 							<Route path="/fedicom3/transmisiones" render={(props) => <Pantallas.Fedicom3.Transmisiones.Navegador {...props} />} />
 
 							<Route path="/herramientas/tokens" render={(props) => <Pantallas.Herramientas.Tokens {...props} />} />
-							
+
 							{/*<Route path="/utilidades/visorTramasFedicom2" render={(props) => <Pantallas.VisorTramasFedicom2 {...props} />} /> */}
 							<Route path="/" render={(props) => <Pantallas.Principal {...props} />} />
 						</Switch>

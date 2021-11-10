@@ -6,11 +6,13 @@ import useEstadoCarga from "hooks/useEstadoCarga";
 import useTickTack from "hooks/useTickTack";
 import TituloPantalla from "navegacion/TituloPantalla";
 import FediCommons from "common/FediCommons";
+import useTema from "hooks/useTema";
 
 
 
 function PantallaMonitorInstancias() {
 
+	useTema('Estado de instancias Fedicom v3');
 	let { getEstadoInstancias } = useApiFedicom();
 	let { datos, error, cargando, setDatos, setError, setCargando } = useEstadoCarga();
 

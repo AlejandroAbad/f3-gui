@@ -5,13 +5,14 @@ import useEstadoCarga from "hooks/useEstadoCarga";
 import useTickTack from "hooks/useTickTack";
 import TituloPantalla from "navegacion/TituloPantalla";
 import FediCommons from "common/FediCommons";
+import useTema from "hooks/useTema";
 
 
 
 function PantallaMonitorMongoDB() {
-
+	useTema('Estado de la Base de Datos');
 	let { getEstadoInstancias } = useApiFedicom();
-	let { datos, error, cargando, setDatos, setError, setCargando } = useEstadoCarga();
+	let { /*datos, error,*/ cargando, setDatos, setError, setCargando } = useEstadoCarga();
 
 	let cargaEstadoInstancias = useCallback(async () => {
 		setCargando();
@@ -36,7 +37,7 @@ function PantallaMonitorMongoDB() {
 				value={cargando ? null : Math.min(100, tiempoParaRefrescar + 5)}
 				color={cargando ? "secondary" : "primary"}
 			/>
-			
+
 		</Container>
 	)
 }

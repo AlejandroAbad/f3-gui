@@ -47,7 +47,7 @@ export default function InfoAlmacen() {
 
 	if (almacenesDeRebote?.length > 0) {
 		eleAlmacenesDeRebote = <Typography component="div" variant="body1">
-			Rebote por: <Stack divider=", " sx={{ display: 'inline', ml: 1 }}>
+			Rebote por: <Stack divider={<>,</>} direction="row" spacing={0.5} sx={{ display: 'inline', ml:0.3 }}>
 				{almacenesDeRebote.map(almacenRebote =>
 					<Typography key={almacenRebote} variant="caption" component="span" sx={{ fontWeight: 'bold', fontSize: '16px' }}>
 						{almacenRebote}

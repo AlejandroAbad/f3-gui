@@ -8,11 +8,12 @@ import useEstadoCarga from "hooks/useEstadoCarga";
 import BannerCargando from 'common/BannerCargando';
 import BannerError from 'common/BannerError';
 import { Box } from "@mui/system";
+import useTema from "hooks/useTema";
 
 
 
 function PantallaTokens() {
-
+	useTema('Diversión con Tokens');
 	let refUsuario = useRef();
 	let refDominio = useRef();
 

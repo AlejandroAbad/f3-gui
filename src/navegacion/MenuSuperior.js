@@ -20,12 +20,7 @@ import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { Close } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
-	menuButton: {
-		marginRight: theme.spacing(2),
-	},
-	title: {
-		flexGrow: 1,
-	},
+
 	appBar: {
 		transition: theme.transitions.create(['margin', 'width'], {
 			easing: theme.transitions.easing.sharp,
@@ -37,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MenuSuperior({ onMenuClicked, ...props }) {
 
 	const classes = useStyles();
-	const { getJwt, setJwt } = useContext(ContextoAplicacion);
+	const { getJwt, setJwt, tituloPantalla } = useContext(ContextoAplicacion);
 
 	const jwt = getJwt();
 
@@ -61,17 +56,17 @@ export default function MenuSuperior({ onMenuClicked, ...props }) {
 	}
 
 	return (
-		<AppBar position="fixed" className={classes.appBar} {...props}  >
+		<AppBar position="fixed" className={classes.appBar} color="barraSuperior" sx={{ color: 'barraSuperior.contrastText'}} {...props}  >
 			<Toolbar>
 				{jwt && (
-					<IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={onMenuClicked}>
+					<IconButton edge="start" sx={{ mr: 4 }} color="inherit" aria-label="menu" onClick={onMenuClicked}>
 						<MenuIcon />
 					</IconButton>
 				)}
 
 
-				<Typography variant="h6" className={classes.title}>
-					Big Brother <small>is watching you</small>
+				<Typography variant="h6" sx={{ flexGrow: 1 }}>
+					{tituloPantalla}
 				</Typography>
 
 

@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 
 
 
-export default function useEstadoCarga() {
+function useEstadoCarga() {
 
 	let [estado, setEstado] = useState({
 		cargando: false,
@@ -22,6 +22,6 @@ export default function useEstadoCarga() {
 		error: estado.error,
 		datos: estado.datos
 	}
-
-
 }
+
+export default useEstadoCarga;

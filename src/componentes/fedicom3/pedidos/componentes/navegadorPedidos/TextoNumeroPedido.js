@@ -1,19 +1,17 @@
 import { Typography } from "@mui/material";
+import Link from '@mui/material/Link';
 import BoxTexto from "./BoxTexto";
 
 
 
-export default function TextoNumeroPedido({ crc, numeroPedidoOrigen }) {
+export default function TextoNumeroPedido({ crc, onMostrarDetalle, numeroPedidoOrigen }) {
 
 
 	return <>
 		{crc && <BoxTexto titulo="Crc:">
-			<Typography component="div" variant="body1" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-				{crc?.toUpperCase().substr(0,8)}
-				<Typography component="span" variant="body1" sx={{ fontWeight: 'bold', color: 'text.primary'}}>
-					{crc?.toUpperCase().substr(8)}
-				</Typography>
-			</Typography>
+			<Link component="button" variant="body1" sx={{ fontWeight: 'bold', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }} onClick={() => onMostrarDetalle(crc)}>
+				{crc?.toUpperCase()}
+			</Link>
 		</BoxTexto>}
 		{numeroPedidoOrigen && <BoxTexto titulo="Pedido Origen:">
 			<Typography component="div" variant="body1" sx={{ fontWeight: 'bold', color: 'text.secondary' }} >{numeroPedidoOrigen}</Typography>

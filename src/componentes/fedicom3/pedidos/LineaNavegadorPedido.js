@@ -32,7 +32,7 @@ export default function LineaNavegadorPedido({ pedido, vista, mostrarDetalle }) 
 	//let enlace = (p.crc) ? '/fedicom3/pedidos/' + p.crc : '/fedicom3/transmisiones/' + id
 
 	return (
-		<ListItem button sx={estilo} onClick={() => { mostrarDetalle?.(p.crc); }}>
+		<ListItem sx={estilo} >
 			<Grid container>
 				<Grid item xs={3}>
 					<Grid container>
@@ -48,7 +48,11 @@ export default function LineaNavegadorPedido({ pedido, vista, mostrarDetalle }) 
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<TextoNumeroPedido crc={p.crc} numeroPedidoOrigen={p.numeroPedidoOrigen} />
+							<TextoNumeroPedido 
+								crc={p.crc} 
+								onMostrarDetalle={mostrarDetalle}
+								numeroPedidoOrigen={p.numeroPedidoOrigen}
+							/>
 						</Grid>
 					</Grid>
 				</Grid>

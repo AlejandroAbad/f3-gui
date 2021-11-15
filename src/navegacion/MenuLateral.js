@@ -1,5 +1,5 @@
 import { Avatar, Box, Collapse, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader, SwipeableDrawer, Typography } from "@mui/material";
-import { VpnKey, Assessment, Business, CallSplit, Input, ChevronLeft, Dashboard, ExpandLess, ExpandMore, Filter2, Looks3, NearMe, Speed, Storage, Security, FindInPage } from "@mui/icons-material";
+import { VpnKey, Assessment, Business, CallSplit, Input, ChevronLeft, Dashboard, ExpandLess, ExpandMore, Looks3, NearMe, Speed, Storage, Security, FindInPage } from "@mui/icons-material";
 import ContextoAplicacion from "contexto/contexto";
 import { useCallback, useContext, useState } from "react";
 import { Link } from "react-router-dom";

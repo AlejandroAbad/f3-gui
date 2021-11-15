@@ -22,7 +22,7 @@ export default function LineaNavegadorTransmision({ tx, vista, mostrarDetalle })
 	};
 
 	return (
-		<ListItem button sx={estilo} onClick={() => { mostrarDetalle?.(id); }}>
+		<ListItem sx={estilo}>
 			<Grid container>
 				<Grid item xs={3}>
 					<Grid container>
@@ -30,7 +30,7 @@ export default function LineaNavegadorTransmision({ tx, vista, mostrarDetalle })
 							<TextoFechaCreacion fechaCreacion={fechaCreacion} />
 						</Grid>
 						<Grid item xs={12}>
-							<TextoId id={id} />
+							<TextoId id={id} onMostrarDetalle={mostrarDetalle} />
 						</Grid>
 					</Grid>
 				</Grid>

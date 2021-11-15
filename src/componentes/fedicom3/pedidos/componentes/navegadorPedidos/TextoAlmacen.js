@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CircularProgress, Divider, Stack, Typography } from "@mui/material";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import ErrorIcon from '@mui/icons-material/Error';
 import ContextoMaestros from 'contexto/contextoMaestros';
 

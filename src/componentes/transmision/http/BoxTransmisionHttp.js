@@ -77,14 +77,7 @@ const Metadatos = ({ metadatos }) => {
 }
 
 
-const getUrlPath = (u) => {
-	if (u.startsWith('/')) u = 'http://dummy' + u;
-	const url = new URL(u);
-	const searchParams = url.searchParams.toString();
-	return url.pathname
-		+ (searchParams ? '?' + searchParams : '')
-		+ (url.hash ? url.hash : '')
-}
+
 
 const VisorJson = (props) => {
 	return <ReactJson
@@ -102,6 +95,46 @@ const VisorJson = (props) => {
 	/>
 }
 
+const UrlBase = ({ url }) => {
+	if (url.startsWith('/')) url = 'http://dummy' + url;
+	url = new URL(url);
+
+	let eleParametros = null;
+	let numeroParametros = Array.from(url.searchParams).length;
+	if (numeroParametros) {
+		eleParametros = <Typography component="span" sx={{ ml: 0.7, color: 'secondary.main', fontStyle: 'italic', fontWeight: 'bold' }}>
+			? &lt;{numeroParametros} parámetro{numeroParametros === 1 ? '' : 's'}&gt;
+		</Typography>
+	}
+	return <Typography component="span">{url.pathname}{eleParametros}</Typography>
+
+	// + (searchParams ? '?' + searchParams : '')
+	// + (url.hash ? url.hash : '')
+}
+
+const ParametrosUrl = ({ url }) => {
+	if (url.startsWith('/')) url = 'http://dummy' + url;
+	url = new URL(url);
+
+	const parametros = {};
+
+	for (let entry of url.searchParams.entries()) {
+		if (!parametros[entry[0]]) {
+			parametros[entry[0]] = entry[1];
+		} else if (!Array.isArray(parametros[entry[0]])) {
+			parametros[entry[0]] = [parametros[entry[0]], entry[1]]
+		} else {
+			parametros[entry[0]].push(entry[1])
+		}
+	}
+
+	return <ListItem >
+		<VisorJson src={parametros} name="parametros" collapsed={0} />
+	</ListItem>
+}
+
+
+
 const Solicitud = ({ solicitud }) => {
 	if (!solicitud) return null;
 
@@ -118,10 +151,11 @@ const Solicitud = ({ solicitud }) => {
 				<ListItemText
 					primary={<>
 						<Chip label={metodo} sx={{ mr: 1 }} />
-						<Typography component="span">{getUrlPath(url)}</Typography>
+						<UrlBase url={url} />
 					</>}
 				/>
 			</ListItem>
+			<ParametrosUrl url={url} />
 			<ListItem >
 				<VisorJson src={headers} name="cabeceras" collapsed />
 			</ListItem>

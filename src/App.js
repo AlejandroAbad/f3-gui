@@ -8,7 +8,6 @@ import MenuLateral from 'navegacion/MenuLateral';
 import Pantallas from 'pantallas/Pantallas';
 
 import { ContextoAplicacion } from 'contexto/contexto';
-import useTema from 'hooks/useTema';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
 
-	
+
 
 	const classes = useStyles();
 	const [drawerOpen, _setDrawerOpen] = React.useState(false);

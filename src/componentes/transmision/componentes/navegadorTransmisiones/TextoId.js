@@ -1,15 +1,15 @@
-import { Typography } from "@mui/material";
+import Link from '@mui/material/Link';
 import BoxTexto from "./BoxTexto";
 
 
 
-export default function TextoId({ id }) {
+export default function TextoId({ id, onMostrarDetalle }) {
 
 	if (!id) return null;
 	return <BoxTexto titulo="ID de transmisión:">
-		<Typography component="div" variant="body1" sx={{ fontWeight: 'bold' }}>
-			{id.toUpperCase()}
-		</Typography>
+		<Link component="button" variant="body1" sx={{ fontWeight: 'bold', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }} onClick={() => onMostrarDetalle(id)}>
+			{id?.toUpperCase()}
+		</Link>
 	</BoxTexto>
 
 

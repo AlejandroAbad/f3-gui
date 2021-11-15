@@ -8,8 +8,8 @@ import BannerError from "common/BannerError";
 import BannerVacio from "common/BannerVacio";
 import { EJSON } from "bson";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ResumenFiltrosActivos from "componentes/fedicom3/pedidos/controlNavegacion/ResumenFiltrosActivos";
-import ControlNavegacionPedidos from "componentes/fedicom3/pedidos/controlNavegacion/ControlNavegacion";
+import ResumenFiltrosActivos from "componentes/transmision/controlNavegacion/ResumenFiltrosActivos";
+import ControlNavegacionTransmisiones from "componentes/transmision/controlNavegacion/ControlNavegacion";
 import PantallaVisorTransmisionesFedicom3 from "./PVisorTransmisionesFedicom3";
 import LineaNavegadorTransmision from "componentes/transmision/LineaNavegadorTransmision";
 import useTema from "hooks/useTema";
@@ -79,13 +79,13 @@ export default function PantallaNavegadorTransmisionesFedicom3(props) {
 		contenido = <BannerError errores={error} onRecargar={refrescarListadoTransmisiones} />
 	} else if (!datos?.resultados?.length) {
 		contenido = <Box>
-			<ControlNavegacionPedidos consulta={consulta} cambiaConsulta={cambiaConsulta} totalResultados={0} />
+			<ControlNavegacionTransmisiones consulta={consulta} cambiaConsulta={cambiaConsulta} totalResultados={0} />
 			{eleResumenFiltros}
 			<BannerVacio titulo="No se han encontrado transmisiones" onRecargar={refrescarListadoTransmisiones} />
 		</Box>
 	} else {
 		contenido = <Box>
-			<ControlNavegacionPedidos consulta={consulta} cambiaConsulta={cambiaConsulta} totalResultados={datos.totalResultados} />
+			<ControlNavegacionTransmisiones consulta={consulta} cambiaConsulta={cambiaConsulta} totalResultados={datos.totalResultados} />
 			<Box sx={{ position: 'sticky', top: '190px' }}>
 
 				{eleResumenFiltros}

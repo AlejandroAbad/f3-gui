@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from "react";
-import { Container, Box, List, Dialog, Slide, AppBar, Toolbar, IconButton, Typography } from "@mui/material";
+import { Container, Box, List, Dialog, AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import useApiFedicom from "hooks/useApiFedicom";
 import useEstadoCarga from "hooks/useEstadoCarga";
 import FediCommons from "common/FediCommons";
@@ -30,12 +30,12 @@ function reducer(state, action) {
 			throw new Error();
 	}
 }
-
+/*
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="left" ref={ref} {...props} />;
-});
+});*/
 
-export default function PantallaNavegadorPedidosFedicom3(props) {
+export default function PantallaNavegadorPedidosFedicom3({ history, /*location,*/ match }) {
 
 	useTema('Navegación de Pedidos Fedicom v3');
 	const [consulta, cambiaConsulta] = useReducer(reducer, {
@@ -47,12 +47,12 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 		vista: 'extendido'
 	})
 	const { filtro, /*proyeccion, orden,*/ skip, limite, vista } = consulta;
-	const [idPedidoSeleccionado, setIdPedidoSeleccionado] = React.useState(null);
+	const [idPedidoSeleccionado, _setIdPedidoSeleccionado] = React.useState(match?.params?.idPedido);
 
 	// Llamada API
 	const { listadoPedidos } = useApiFedicom();
 
-	
+
 	const { cargando, datos, error, setCargando, setDatos, setError } = useEstadoCarga();
 	const refrescarListadoPedidos = useCallback(async () => {
 		setCargando(true);
@@ -73,6 +73,45 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 	useEffect(refrescarListadoPedidos, [refrescarListadoPedidos]);
 
 
+	let mostrarDetallePedido = useCallback((e, txid) => {
+		if (txid) {
+			history.push('/fedicom3/pedidos/' + txid);
+		} else {
+			history.push('/fedicom3/pedidos');
+		}
+		_setIdPedidoSeleccionado(txid);
+		e?.preventDefault?.();
+	}, [history, _setIdPedidoSeleccionado])
+
+	useEffect(() => {
+		const unlisten = history.listen((loc, action) => {
+			if (loc.pathname.startsWith('/fedicom3/pedidos/')) {
+				let idPedido = loc.pathname.split('/')[3];
+				_setIdPedidoSeleccionado(idPedido);
+			} else {
+				_setIdPedidoSeleccionado(null);
+			}
+		});
+		return unlisten;
+	}, [history, _setIdPedidoSeleccionado])
+
+	useEffect(() => {
+		let teclaPresionada = (e) => {
+			if (e.keyCode === 114) { // F3 presionado
+				if (history.location.pathname.startsWith('/fedicom3/pedidos/')) {
+					let idPedido = history.location.pathname.split('/')[3];
+					if (idPedido) {
+						mostrarDetallePedido(e, null);
+					}
+				}
+			}
+		}
+		document.addEventListener("keydown", teclaPresionada, false);
+		return () => {
+			document.removeEventListener("keydown", teclaPresionada, false);
+		}
+	}, [history, mostrarDetallePedido])
+
 	let contenido = null;
 	let eleResumenFiltros = <ResumenFiltrosActivos filtros={filtro} />
 	if (cargando) {
@@ -92,7 +131,7 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 
 				{eleResumenFiltros}
 				<List sx={{ mt: 2 }} >
-					{datos.resultados.map(pedido => <LineaNavegadorPedido key={pedido._id} pedido={pedido} vista={vista} mostrarDetalle={setIdPedidoSeleccionado} />)}
+					{datos.resultados.map(pedido => <LineaNavegadorPedido key={pedido._id} pedido={pedido} vista={vista} mostrarDetalle={mostrarDetallePedido} />)}
 				</List>
 			</Box>
 
@@ -109,12 +148,12 @@ export default function PantallaNavegadorPedidosFedicom3(props) {
 			fullScreen
 			scroll='body'
 			open={Boolean(idPedidoSeleccionado)}
-			onClose={() => setIdPedidoSeleccionado(null)}
-			TransitionComponent={Transition}
+			onClose={(e) => mostrarDetallePedido(e, null)}
+		//TransitionComponent={Transition}
 		>
 			<AppBar sx={{ position: 'fixed' }}>
 				<Toolbar>
-					<IconButton edge="start" color="inherit" onClick={() => setIdPedidoSeleccionado(null)} >
+					<IconButton edge="start" color="inherit" onClick={(e) => mostrarDetallePedido(e, null)} >
 						<ArrowBackIcon />
 					</IconButton>
 					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">

@@ -27,7 +27,7 @@ export default function InfoTipo({ codigoTipo}) {
 	}
 
 	if (maestroTipos.datos) {
-		let datosTipo = maestroTipos.datos.find(e => e.codigo === codigoTipo);
+		let datosTipo = maestroTipos.datos.find(e => e.id === codigoTipo);
 		if (datosTipo) {
 			eleTipo = <Chip
 				color={datosTipo.color}

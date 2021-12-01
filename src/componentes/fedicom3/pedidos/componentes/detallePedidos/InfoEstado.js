@@ -31,7 +31,7 @@ export default function InfoEstado() {
 	}
 
 	if (maestroEstados.datos) {
-		let datosEstado = maestroEstados.datos.find(e => e.codigo === codigoEstado);
+		let datosEstado = maestroEstados.datos.find(e => e.id === codigoEstado);
 		if (datosEstado) {
 			eleEstado = <Chip
 				color={datosEstado.color}

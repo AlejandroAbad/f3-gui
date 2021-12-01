@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from "react";
-import { Container, Box, List, Dialog, Slide, AppBar, Toolbar, IconButton, Typography } from "@mui/material";
+import { Container, Box, List, Dialog, AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import useApiFedicom from "hooks/useApiFedicom";
 import useEstadoCarga from "hooks/useEstadoCarga";
 import FediCommons from "common/FediCommons";
@@ -29,14 +29,16 @@ function reducer(state, action) {
 			throw new Error();
 	}
 }
-
+/*
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="left" ref={ref} {...props} />;
 });
+*/
 
-export default function PantallaNavegadorTransmisionesFedicom3(props) {
+export default function PantallaNavegadorTransmisionesFedicom3({ history, /*location,*/ match }) {
 
 	useTema('Navegador de transmisiones Fedicom v3', 'transmisiones');
+
 
 	const [consulta, cambiaConsulta] = useReducer(reducer, {
 		filtro: {},
@@ -47,7 +49,7 @@ export default function PantallaNavegadorTransmisionesFedicom3(props) {
 		vista: 'extendido'
 	})
 	const { filtro, /*proyeccion, orden,*/ skip, limite, vista } = consulta;
-	const [txIdSeleccionada, setTxIdSeleccionada] = React.useState(null);
+	const [txIdSeleccionada, _setTxIdSeleccionada] = React.useState(match?.params?.txId);
 
 	// Llamada API
 	const { listadoTransmisiones } = useApiFedicom();
@@ -70,6 +72,48 @@ export default function PantallaNavegadorTransmisionesFedicom3(props) {
 	}, [listadoTransmisiones, setCargando, setDatos, setError, filtro, skip, limite]);
 	useEffect(refrescarListadoTransmisiones, [refrescarListadoTransmisiones]);
 
+	let mostrarDetalleTransmision = useCallback((e, txid) => {
+		console.log('GOING TO', txid);
+		if (txid) {
+			history.push('/fedicom3/transmisiones/' + txid);
+		} else {
+
+			history.push('/fedicom3/transmisiones');
+		}
+		_setTxIdSeleccionada(txid);
+		e?.preventDefault();
+	}, [history, _setTxIdSeleccionada])
+
+	useEffect(() => {
+		const unlisten = history.listen((loc, action) => {
+			if (loc.pathname.startsWith('/fedicom3/transmisiones/')) {
+				let txId = loc.pathname.split('/')[3];
+				_setTxIdSeleccionada(txId);
+			} else {
+				_setTxIdSeleccionada(null);
+			}
+		});
+		return unlisten;
+	}, [history, _setTxIdSeleccionada])
+
+
+	useEffect(() => {
+		let teclaPresionada = (e) => {
+			if (e.keyCode === 114) { // F3 presionado
+				if (history.location.pathname.startsWith('/fedicom3/transmisiones/')) {
+					let idPedido = history.location.pathname.split('/')[3];
+					if (idPedido) {
+						mostrarDetalleTransmision(e, null);
+					}
+				}
+			}
+		}
+		document.addEventListener("keydown", teclaPresionada, false);
+		return () => {
+			document.removeEventListener("keydown", teclaPresionada, false);
+		}
+	}, [history, mostrarDetalleTransmision])
+
 
 	let contenido = null;
 	let eleResumenFiltros = <ResumenFiltrosActivos filtros={filtro} />
@@ -91,7 +135,7 @@ export default function PantallaNavegadorTransmisionesFedicom3(props) {
 				{eleResumenFiltros}
 				<List sx={{ mt: 2 }} >
 					{datos.resultados.map(tx =>
-						<LineaNavegadorTransmision key={tx._id} tx={tx} vista={vista} mostrarDetalle={setTxIdSeleccionada} />
+						<LineaNavegadorTransmision key={tx._id} tx={tx} vista={vista} mostrarDetalle={mostrarDetalleTransmision} />
 					)}
 				</List>
 			</Box>
@@ -105,16 +149,17 @@ export default function PantallaNavegadorTransmisionesFedicom3(props) {
 		<Container fixed maxWidth="xl">
 			{contenido}
 		</Container>
+
 		<Dialog
 			fullScreen
 			scroll='body'
 			open={Boolean(txIdSeleccionada)}
-			onClose={() => setTxIdSeleccionada(null)}
-			TransitionComponent={Transition}
+			onClose={(e) => mostrarDetalleTransmision(e, null)}
+		// TransitionComponent={Transition}
 		>
 			<AppBar sx={{ position: 'fixed' }} color="barraSuperior">
 				<Toolbar>
-					<IconButton edge="start" color="inherit" onClick={() => setTxIdSeleccionada(null)} >
+					<IconButton edge="start" color="inherit" onClick={(e) => mostrarDetalleTransmision(e, null)} >
 						<ArrowBackIcon />
 					</IconButton>
 					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">

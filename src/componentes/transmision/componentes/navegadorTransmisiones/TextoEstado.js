@@ -38,7 +38,7 @@ export default function TextoEstado({ codigoEstado }) {
 
 	if (maestroEstados.datos) {
 
-		let datosEstado = maestroEstados.datos.find(e => e.codigo === codigoEstado);
+		let datosEstado = maestroEstados.datos.find(e => e.id === codigoEstado);
 		if (datosEstado) {
 			componenteEstado = <Chip
 				size="small"

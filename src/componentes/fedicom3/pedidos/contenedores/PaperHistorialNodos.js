@@ -78,8 +78,8 @@ const NodoTimeline = ({ nodo }) => {
 
 		if (codigoEstado === null || codigoEstado === undefined) return;
 		try {
-			let resultado = maestroEstados.datos.find(e => e.codigo === codigoEstado);
-			if (resultado?.codigo)
+			let resultado = maestroEstados.datos.find(e => e.id === codigoEstado);
+			if (resultado?.id)
 				setInfoEstado(resultado);
 		} catch (error) {
 		}

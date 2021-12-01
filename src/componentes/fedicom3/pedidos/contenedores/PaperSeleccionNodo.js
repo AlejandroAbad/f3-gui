@@ -31,7 +31,7 @@ const PaperSeleccionNodo = ({ idNodoSeleccionado, setIdNodoSeleccionado }) => {
 
 	let opcionesMenu = pedido.nodos.map((nodo, i) => {
 
-		let infoEstado = maestroEstados.datos?.find(e => e.codigo === nodo.estado) || { color: 'primary', nombre: nodo.estado };
+		let infoEstado = maestroEstados.datos?.find(e => e.id === nodo.estado) || { color: 'primary', nombre: nodo.estado };
 		let iconoPrevio = null;
 		if (nodo.es.vigente) {
 			iconoPrevio = <Typography component="span" sx={{ mr: 1 }}>★</Typography>
@@ -47,7 +47,7 @@ const PaperSeleccionNodo = ({ idNodoSeleccionado, setIdNodoSeleccionado }) => {
 	});
 
 	let nodoSeleccionado = pedido.nodos.find(n => n.id === idNodoSeleccionado);
-	let infoEstado = maestroEstados.datos?.find(e => e.codigo === nodoSeleccionado.estado) || { color: 'primary', nombre: nodoSeleccionado.estado };
+	let infoEstado = maestroEstados.datos?.find(e => e.id === nodoSeleccionado.estado) || { color: 'primary', nombre: nodoSeleccionado.estado };
 	let iconoPrevio = null;
 	if (nodoSeleccionado.es.vigente) {
 		iconoPrevio = <Typography component="span" sx={{ mr: 1 }}>★</Typography>

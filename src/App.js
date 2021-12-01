@@ -61,11 +61,8 @@ function App() {
 
 							<Route path="/usuario" render={(props) => <Pantallas.Usuario {...props} />} />
 
-							<Route path="/fedicom3/pedidos/:idPedido" render={(props) => <Pantallas.Fedicom3.Pedidos.Visor {...props} />} />
-							<Route path="/fedicom3/pedidos" render={(props) => <Pantallas.Fedicom3.Pedidos.Navegador {...props} />} />
-
-							<Route path="/fedicom3/transmisiones/:txId" render={(props) => <Pantallas.Fedicom3.Transmisiones.Visor {...props} />} />
-							<Route path="/fedicom3/transmisiones" render={(props) => <Pantallas.Fedicom3.Transmisiones.Navegador {...props} />} />
+							<Route path="/fedicom3/pedidos/:idPedido?" render={(props) => <Pantallas.Fedicom3.Pedidos.Navegador {...props} />} />
+							<Route path="/fedicom3/transmisiones/:txId?" render={(props) => <Pantallas.Fedicom3.Transmisiones.Navegador {...props} />} />
 
 							<Route path="/herramientas/tokens" render={(props) => <Pantallas.Herramientas.Tokens {...props} />} />
 

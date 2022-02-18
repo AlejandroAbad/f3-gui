@@ -11,7 +11,7 @@ const OPCIONES_POR_DEFECTO = [];
 
 OPCIONES_POR_DEFECTO[5] = 'Mostrar 5 por página';
 OPCIONES_POR_DEFECTO[10] = 'Mostrar 10 por página';
-OPCIONES_POR_DEFECTO[25] = 'Mostrar 25 por página';
+OPCIONES_POR_DEFECTO[20] = 'Mostrar 20 por página';
 OPCIONES_POR_DEFECTO[50] = 'Mostrar 50 por página';
 
 

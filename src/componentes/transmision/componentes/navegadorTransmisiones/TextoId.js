@@ -10,7 +10,7 @@ export default function TextoId({ id, onMostrarDetalle }) {
 	return <BoxTexto titulo="ID de transmisión:">
 		<Link variant="body1"
 			sx={{ fontWeight: 'bold', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
-			href={generatePath('/fedicom3/transmisiones/:txId', { txId: id })}
+			href={generatePath('/#/fedicom3/transmisiones/:txId', { txId: id })}
 			onClick={(e) => onMostrarDetalle(e, id)}>
 			{id?.toUpperCase()}
 		</Link>

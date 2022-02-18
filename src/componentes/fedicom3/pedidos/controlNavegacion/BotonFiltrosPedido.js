@@ -51,7 +51,7 @@ export default function BotonFiltrosPedido({ filtro, setFiltro }) {
 						Filtros de pedido
 					</Typography>
 					<Button sx={{ mr: 3 }} color="inherit" onClick={resetearFormulario}>
-						resetear
+						Resetear
 					</Button>
 					<Button autoFocus variant="outlined" color="inherit" onClick={aplicarCambiosYCerrarDialogo}>
 						Aplicar

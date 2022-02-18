@@ -10,13 +10,7 @@ class ModeloPedido {
 		this.nodos = nodos;
 		this.nodoVigente = this.nodos.find(nodo => nodo.es.vigente);
 		this.nodoInformado = this.nodos.find(nodo => nodo.es.informado) || this.nodoVigente;
-
-		this.ultimoNodoCliente = this.nodoInformado;
-		for (let i = 0; i > this.nodos.length; i++) {
-			if (this.nodos[i].es.externa) {
-				this.ultimoNodoCliente = this.nodos[i];
-			}
-		}
+		this.ultimoNodoCliente = this.nodos.find(n => n.es.ultimoNodoCliente);
 	}
 
 	get estado() {
@@ -109,6 +103,59 @@ class ModeloPedido {
 
 	get transmisionSap() {
 		return this.nodoInformado.sap;
+	}
+
+	get incidenciasCliente() {
+		let body = this.ultimoNodoCliente.transmision?.respuesta?.body;
+
+		if (body) {
+			if (Array.isArray(body)) {
+				return body;
+			} else {
+				if (Array.isArray(body.incidencias)) {
+					return body.incidencias;
+				}
+			}
+		}
+		return null;
+
+	}
+
+
+	get flags() {
+		let flags = {}
+		let nodo;
+
+		/* #region  EN CUALQUIER NODO */
+		this.nodos.forEach(nodo => {
+			if (nodo.errorComprobacionDuplicado) flags.errorComprobacionDuplicado = true;
+			if (nodo.porRazonDesconocida) flags.porRazonDesconocida = true;
+			if (nodo.clienteBloqueadoSap) flags.clienteBloqueadoSap = true;
+			if (nodo.esPedidoDuplicadoSap) flags.esPedidoDuplicadoSap = true;
+		})
+		/* #endregion */
+
+		/* #region  SOLO EN EL PRIMER NODO */
+		nodo = this.nodos[0];
+		if (nodo.esReejecucion) flags.esReejecucion = true;
+		if (nodo.opcionesDeReejecucion) flags.opcionesDeReejecucion = nodo.opcionesDeReejecucion;
+		/* #endregion */
+
+		/* #region  EN EL NODO INFORMADO */
+		nodo = this.nodoInformado;
+		if (nodo.noEnviaFaltas) flags.noEnviaFaltas = true;
+		if (nodo.retransmisionCliente) flags.retransmisionCliente = true;
+		if (nodo.erroresOcultados) flags.erroresOcultados = nodo.erroresOcultados;
+		/* #endregion */
+
+		/* #region  EN EL NODO VIGENTE */
+		nodo = this.nodoVigente;
+		if (nodo.servicioDemorado) flags.servicioDemorado = true;
+		if (nodo.estupefaciente) flags.estupefaciente = true;
+		if (nodo.esTransfer) flags.esTransfer = true;
+		/* #endregion */
+
+		return flags;
 	}
 
 }

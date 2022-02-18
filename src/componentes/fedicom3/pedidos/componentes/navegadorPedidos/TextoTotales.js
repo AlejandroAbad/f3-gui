@@ -4,9 +4,17 @@ import BoxTexto from "./BoxTexto";
 
 
 
-export default function TextoTotales({ totales }) {
+export default function TextoTotales({ totales, compacto }) {
 
 	if (!totales?.cantidad) return null;
+	if (compacto) {
+		return <Box>
+			<Typography component="span" sx={{ fontFamily: 'monospace' }}>{totales.lineas - totales.lineasIncidencias}</Typography>
+			{totales.lineasIncidencias > 0 && 
+				<Typography sx={{ fontFamily: 'monospace' }} component="span" color={totales.lineasIncidencias ? 'error' : 'success'}>/{totales.lineasIncidencias}</Typography>
+				}
+		</Box>
+	}
 
 	return <BoxTexto titulo="Totales:">
 		<Box>

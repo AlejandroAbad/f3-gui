@@ -3,9 +3,13 @@ import BoxTexto from "./BoxTexto";
 
 
 
-export default function TextoIp({ ip }) {
+export default function TextoIp({ ip, compacto }) {
 
 	if (!ip) return null;
+
+	if (compacto) {
+		return <Typography component="span" sx={{ fontFamily: 'monospace' }}>{ip}</Typography>
+	}
 
 	let contenido;
 	if (ip === 'no-aplica') {

@@ -8,10 +8,11 @@ import BannerError from "common/BannerError";
 import BannerVacio from "common/BannerVacio";
 import { EJSON } from "bson";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ResumenFiltrosActivos from "componentes/transmision/controlNavegacion/ResumenFiltrosActivos";
 import ControlNavegacionTransmisiones from "componentes/transmision/controlNavegacion/ControlNavegacion";
-import PantallaVisorTransmisionesFedicom3 from "./PVisorTransmisionesFedicom3";
 import LineaNavegadorTransmision from "componentes/transmision/LineaNavegadorTransmision";
+import PantallaVisorTransmisionesFedicom3 from "./PVisorTransmisionesFedicom3";
+import ResumenFiltrosActivos from "componentes/transmision/controlNavegacion/ResumenFiltrosActivos";
+
 import useTema from "hooks/useTema";
 const PROYECCION = { sap: 0, 'conexion.solicitud': 0, 'conexion.respuesta': 0 }
 
@@ -38,7 +39,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PantallaNavegadorTransmisionesFedicom3({ history, /*location,*/ match }) {
 
 	useTema('Navegador de transmisiones Fedicom v3', 'transmisiones');
-
 
 	const [consulta, cambiaConsulta] = useReducer(reducer, {
 		filtro: {},
@@ -73,7 +73,6 @@ export default function PantallaNavegadorTransmisionesFedicom3({ history, /*loca
 	useEffect(refrescarListadoTransmisiones, [refrescarListadoTransmisiones]);
 
 	let mostrarDetalleTransmision = useCallback((e, txid) => {
-		console.log('GOING TO', txid);
 		if (txid) {
 			history.push('/fedicom3/transmisiones/' + txid);
 		} else {
@@ -81,7 +80,7 @@ export default function PantallaNavegadorTransmisionesFedicom3({ history, /*loca
 			history.push('/fedicom3/transmisiones');
 		}
 		_setTxIdSeleccionada(txid);
-		e?.preventDefault();
+		e?.preventDefault?.();
 	}, [history, _setTxIdSeleccionada])
 
 	useEffect(() => {
@@ -96,13 +95,14 @@ export default function PantallaNavegadorTransmisionesFedicom3({ history, /*loca
 		return unlisten;
 	}, [history, _setTxIdSeleccionada])
 
-
+	/* #region  Usar la tecla F3 para volver atrás, como hace SAP */
+	/*
 	useEffect(() => {
 		let teclaPresionada = (e) => {
 			if (e.keyCode === 114) { // F3 presionado
 				if (history.location.pathname.startsWith('/fedicom3/transmisiones/')) {
-					let idPedido = history.location.pathname.split('/')[3];
-					if (idPedido) {
+					let idTransmision = history.location.pathname.split('/')[3];
+					if (idTransmision) {
 						mostrarDetalleTransmision(e, null);
 					}
 				}
@@ -113,6 +113,8 @@ export default function PantallaNavegadorTransmisionesFedicom3({ history, /*loca
 			document.removeEventListener("keydown", teclaPresionada, false);
 		}
 	}, [history, mostrarDetalleTransmision])
+	*/
+	/* #endregion */
 
 
 	let contenido = null;

@@ -35,8 +35,8 @@ export default function InfoProgramaFarmacia({ idPrograma }) {
 		if (maestroProgramas.datos) {
 			let datosPrograma = maestroProgramas.datos.find(e => e.id === idPrograma);
 			componentePrograma = <>
-				<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{datosPrograma.nombre ?? 'Desconocido'}</Typography>
-				<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datosPrograma.id ?? idPrograma})</Typography>
+				<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{datosPrograma?.nombre ?? 'Desconocido'}</Typography>
+				<Typography component="span" variant="caption" sx={{ ml: 0.5 }}>({datosPrograma?.id ?? idPrograma})</Typography>
 			</>
 		}
 	}

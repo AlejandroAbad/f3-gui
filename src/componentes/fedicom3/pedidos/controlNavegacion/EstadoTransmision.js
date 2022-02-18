@@ -52,8 +52,6 @@ const BotonEstado = ({ estados, seleccionActual, setSeleccionActual, color, chil
 
 export const EstadoTransmision = ({ refFiltro }) => {
 
-
-
 	const { maestroEstados } = useContext(ContextoMaestros);
 	let estadosRelevantes = maestroEstados?.datos?.filter?.(estado => {
 		return !estado.ambito || estado.ambito === "PEDIDO"
@@ -61,6 +59,7 @@ export const EstadoTransmision = ({ refFiltro }) => {
 
 
 	const nodo = refFiltro?.current?.[RUTA_NODO];
+	
 	let modoFiltroActual = MODOS[0].id;
 	let estadosSeleccionados = [];
 	if (nodo) {
@@ -72,6 +71,7 @@ export const EstadoTransmision = ({ refFiltro }) => {
 			})
 		}
 	}
+
 	const [seleccionActual, setSeleccionActual] = useState(estadosSeleccionados);
 	const [modoFiltro, setModoFiltro] = useState(modoFiltroActual);
 	useEffect(() => {
@@ -82,6 +82,7 @@ export const EstadoTransmision = ({ refFiltro }) => {
 		} else {
 			delete refFiltro.current[RUTA_NODO];
 		}
+		console.log('NUEVOS ESTADOS', nodo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [seleccionActual, modoFiltro])
 
@@ -96,7 +97,7 @@ export const EstadoTransmision = ({ refFiltro }) => {
 	let propiedadesBotones = { seleccionActual, setSeleccionActual };
 	for (let grupo in gruposEstados) {
 		let color = gruposEstados[grupo][0].color;
-		let codigosDeEstado = gruposEstados[grupo].map(e => e.codigo);
+		let codigosDeEstado = gruposEstados[grupo].map(e => e.id);
 		botonesEstado.push(<BotonEstado key={grupo} estados={codigosDeEstado} {...propiedadesBotones} color={color}>{grupo}</BotonEstado>)
 	}
 

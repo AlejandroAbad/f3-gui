@@ -3,13 +3,17 @@ import BoxTexto from "./BoxTexto";
 
 
 const padear = (numero) => {
-	return ('00' + numero).substr(-3);
+	return numero.toString().padStart(3, '0');
 }
 
 
-export default function TextoTipoPedido({ tipoPedido, tipoPedidoSap, motivoPedidoSap }) {
+export default function TextoTipoPedido({ tipoPedido, tipoPedidoSap, motivoPedidoSap, compacto }) {
 
 	if (!tipoPedido) return null;
+
+	if (compacto) {
+		return <Typography component="span" sx={{ fontFamily: 'monospace' }}>{padear(tipoPedido)}</Typography>
+	}
 
 	return <BoxTexto titulo="Tipo de pedido:">
 		<Typography component="span" variant="subtitle1" sx={{ fontWeight: 'bold' }}>{padear(tipoPedido)}</Typography>

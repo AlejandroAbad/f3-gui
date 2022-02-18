@@ -5,7 +5,7 @@ import ContextoMaestros from "contexto/contextoMaestros";
 
 
 
-export default function TextoCliente({ cliente, usuario, dominio, solicitante }) {
+export default function TextoCliente({ cliente, usuario, dominio, solicitante, compacto }) {
 
 
 	let { maestroLaboratorios } = useContext(ContextoMaestros);
@@ -19,8 +19,8 @@ export default function TextoCliente({ cliente, usuario, dominio, solicitante })
 
 		if (usuario.search(/^T[RGP]/) !== -1) {
 			try {
-				let laboratorio = maestroLaboratorios.datos.find( l => l.id === parseInt(usuario.substr(2)) );
-				
+				let laboratorio = maestroLaboratorios.datos.find(l => l.id === parseInt(usuario.substr(2)));
+
 				if (laboratorio?.nombre)
 					setNombreUsuario(laboratorio.nombre);
 			} catch (error) {
@@ -31,6 +31,12 @@ export default function TextoCliente({ cliente, usuario, dominio, solicitante })
 
 	useEffect(cargarDatosLaboratorio, [cargarDatosLaboratorio])
 
+	if (compacto) {
+		if (cliente)
+			return <Typography component="span" sx={{ fontFamily: 'monospace' }}>{cliente}</Typography>
+		else
+			return <Typography component="span" sx={{ fontFamily: 'monospace', color: 'secondary.main' }}>-</Typography>
+	}
 
 	let infoCliente = null;
 	let infoAutenticacion = null;

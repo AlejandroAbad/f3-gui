@@ -4,9 +4,14 @@ import { memo } from "react"
 
 
 
-const BannerCargando = ({ texto }) => {
-	return <Box sx={{textAlign: 'center'}}>
-		<Typography sx={{marginY: 2}} variant="h5" component="div">{texto}</Typography>
+const BannerCargando = ({ texto, ...props }) => {
+	if (!props.sx) {
+		props.sx = { textAlign: 'center' }
+	} else if (!props.sx.textAlign) {
+		props.sx.textAlign = 'center'
+	}
+	return <Box {...props}>
+		<Typography sx={{ my: 2 }} variant="h5" component="div">{texto}</Typography>
 		<LinearProgress variant="query" color="secondary"	/>
 	</Box>
 }

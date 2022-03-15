@@ -82,7 +82,6 @@ export const EstadoTransmision = ({ refFiltro }) => {
 		} else {
 			delete refFiltro.current[RUTA_NODO];
 		}
-		console.log('NUEVOS ESTADOS', nodo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [seleccionActual, modoFiltro])
 

@@ -16,9 +16,8 @@ const MODOS = [
 const RUTA_NODO = 'estado';
 
 const nombreEstado = (maestro, codigoEstado) => {
-	let estado = maestro?.datos?.find(e => e.codigo === codigoEstado);
+	let estado = maestro?.datos?.find(e => e.id === codigoEstado);
 	if (!estado) return '' + codigoEstado;
-
 
 	if (estado.ambito) {
 		return `${estado.ambito} - ${estado.nombre}`
@@ -34,10 +33,9 @@ const codigoEstado = (maestro, nombreEstado) => {
 		ambito = null;
 	}
 
-
 	let estado = maestro?.datos?.find(e => (e.ambito === ambito && e.nombre === nombre));
 	if (!estado) return 0;
-	return estado.codigo;
+	return estado.id;
 }
 
 
@@ -45,9 +43,15 @@ export const EstadoTransmision = ({ refFiltro }) => {
 
 
 	const { maestroEstados } = useContext(ContextoMaestros);
-	let nombresEstadosRelevantes = maestroEstados?.datos?.map(estado => nombreEstado(maestroEstados, estado.codigo)) || [];
+	console.log(maestroEstados);
+
+	let nombresEstadosRelevantes = maestroEstados?.datos?.map(estado => nombreEstado(maestroEstados, estado.id)) || [];
+
+	console.log('nombresEstadosRelevantes', nombresEstadosRelevantes)
 
 	const nodo = refFiltro?.current?.[RUTA_NODO];
+
+	console.log('nodo', nodo)
 
 	let modoFiltroActual = MODOS[0].id;
 	let seleccionInicial = [];
@@ -57,8 +61,13 @@ export const EstadoTransmision = ({ refFiltro }) => {
 		seleccionInicial = Object.values(nodo)?.[0].map(codigoEstado => nombreEstado(maestroEstados, codigoEstado)) || []
 	}
 
+	console.log('seleccionInicial', seleccionInicial)
+
 	const [estadosSeleccionados, _setEstadosSeleccionados] = useState(seleccionInicial);
 	const [modoFiltro, _setModoFiltro] = useState(modoFiltroActual);
+
+	console.log('estadosSeleccionados', estadosSeleccionados)
+
 	useEffect(() => {
 		if (estadosSeleccionados.length && modoFiltro) {
 			refFiltro.current[RUTA_NODO] = {
@@ -69,6 +78,8 @@ export const EstadoTransmision = ({ refFiltro }) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [estadosSeleccionados, modoFiltro])
+
+
 
 
 

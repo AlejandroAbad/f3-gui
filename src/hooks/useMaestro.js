@@ -26,9 +26,6 @@ export default function useMaestro(tipoMaestro) {
 			}
 			else {
 				setDatos(resultado);
-				console.group(`Cargado maestro ${tipoMaestro}`)
-				console.log(resultado);
-				console.groupEnd()
 				return;
 			}
 		} catch (error) {

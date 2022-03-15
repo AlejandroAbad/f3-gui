@@ -11,6 +11,10 @@ class ModeloPedido {
 		this.nodoVigente = this.nodos.find(nodo => nodo.es.vigente);
 		this.nodoInformado = this.nodos.find(nodo => nodo.es.informado) || this.nodoVigente;
 		this.ultimoNodoCliente = this.nodos.find(n => n.es.ultimoNodoCliente);
+
+		if (!this.ultimoNodoCliente) {
+			this.ultimoNodoCliente = this.nodoVigente;
+		}
 	}
 
 	get estado() {
@@ -44,10 +48,10 @@ class ModeloPedido {
 
 	get datosConexion() {
 		return {
-			ip: this.ultimoNodoCliente.ip,
-			autenticacion: this.ultimoNodoCliente.autenticacion,
-			programa: this.ultimoNodoCliente.programa,
-			ssl: this.ultimoNodoCliente.ssl,
+			ip: this.ultimoNodoCliente?.ip,
+			autenticacion: this.ultimoNodoCliente?.autenticacion,
+			programa: this.ultimoNodoCliente?.programa,
+			ssl: this.ultimoNodoCliente?.ssl,
 			balanceador: this.ultimoNodoCliente.balanceador,
 			concentrador: this.ultimoNodoCliente.concentrador,
 		}
@@ -106,7 +110,7 @@ class ModeloPedido {
 	}
 
 	get incidenciasCliente() {
-		let body = this.ultimoNodoCliente.transmision?.respuesta?.body;
+		let body = this.ultimoNodoCliente?.transmision?.respuesta?.body;
 
 		if (body) {
 			if (Array.isArray(body)) {

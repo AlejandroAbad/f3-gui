@@ -20,7 +20,6 @@ const BannerError = ({ titulo, errores, mostrarCodigosError, onRecargar, ...prop
 		if (!props.sx.textAlign) props.sx.textAlign = 'center'
 	}
 
-	console.log(props)
 	return <Box {...props} >
 		<Avatar sx={{ width: 120, height: 120, bgcolor: 'error.main', margin: 'auto' }} >
 			<CloudOffIcon sx={{ width: 80, height: 80, marginBottom: 1 }} />

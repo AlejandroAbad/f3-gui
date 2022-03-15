@@ -1,4 +1,4 @@
-import { Alert, Paper } from "@mui/material";
+import { Alert, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { memo, useContext } from "react"
 import ContextoPedido from "../ContextoPedido";
@@ -24,6 +24,7 @@ const PaperIncidenciasPedido = () => {
 
 	return <Box>
 		<Paper elevation={10} sx={{ px: 4, py: 2 }}>
+			<Typography variant='h5' component="h2" sx={{ mb: 2 }}>Incidencias en cabecera:</Typography>
 			{eleIncidencias}
 		</Paper>
 	</Box>

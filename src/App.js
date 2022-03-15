@@ -3,6 +3,9 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import { makeStyles } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import MenuSuperior from 'navegacion/MenuSuperior';
 import MenuLateral from 'navegacion/MenuLateral';
 import Pantallas from 'pantallas/Pantallas';
@@ -48,6 +51,17 @@ function App() {
 			<div className={classes.root}>
 
 				<CssBaseline />
+				<ToastContainer
+					position="bottom-left"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick={false}
+					rtl={false}
+					pauseOnFocusLoss={false}
+					draggable
+					pauseOnHover
+				/>
 
 				<MenuSuperior onMenuClicked={handleDrawerSwitch} />
 				{jwt && <MenuLateral open={drawerOpen} onClose={() => handleDrawerSwitch(false)} onOpen={() => handleDrawerSwitch(true)} />}

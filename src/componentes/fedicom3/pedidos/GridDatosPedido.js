@@ -13,7 +13,7 @@ import PaperSeleccionNodo from "./contenedores/PaperSeleccionNodo";
 import PaperLogTransmision from "componentes/transmision/contenedores/PaperLogTransmision";
 import PaperHttpTransmision from "componentes/transmision/contenedores/PaperHttpTransmision";
 import PaperIncidenciasPedido from "./contenedores/PaperIncidenciasPedido";
-import ReactJson from "react-json-view";
+import PaperDetallesPedido from "./contenedores/PaperDetallesPedido";
 
 
 
@@ -39,7 +39,7 @@ const GridDatosPedido = ({ p }) => {
 						<PaperCabeceraPedido />
 					</Grid>
 					<Grid item xs={12}>
-						<ReactJson src={pedido.flags} />
+						<PaperDetallesPedido />
 						<PaperIncidenciasPedido />
 					</Grid>
 					<Grid item xs={12}>

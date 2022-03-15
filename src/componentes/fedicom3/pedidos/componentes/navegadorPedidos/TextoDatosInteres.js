@@ -1,50 +1,52 @@
 import { Chip, Stack } from "@mui/material";
 import BoxTexto from "./BoxTexto";
+import { useTheme } from '@mui/styles';
+import React from "react";
 
 import { MdMoneyOff, MdOutlineAirplanemodeActive, MdOutlineControlPointDuplicate, MdOutlineSignalWifiOff, MdScheduleSend } from "react-icons/md"
 import { GoGitBranch, GoGitMerge } from "react-icons/go"
 import { GiShieldReflect } from "react-icons/gi"
 import { FaSadTear, FaPills, FaUserLock } from "react-icons/fa"
 
-const propiedadesChip = (compacto) => {
+
+const Elemento = ({ compacto, icono, texto, color }) => {
+
+	const theme = useTheme();
+
+	
+
 	if (compacto) {
-		return {
-			size: 'small'
-		}
+		return React.createElement(
+			icono,
+			{
+				size: 18,
+				style: { marginTop: '4px' },
+				color: theme.palette?.[color]?.main,
+				title: texto
+			},
+			null
+		);
+	} else {
+		return <Chip size="small" variant="outlined" label={texto} color={color} />
 	}
-	return {
-		size: 'small',
-		variant: 'outlined'
-	}
+
 }
 
-
-const propiedadesIcono = (compacto) => {
-	if (compacto) {
-		return {
-			size: 20,
-			style: { marginTop: '4px' }
-		}
-	}
-	return {
-		size: 20
-	}
-}
 
 const generaElemento = (tipo, compacto) => {
 
 	switch (tipo) {
-		case 'noEnviaFaltas': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < MdOutlineSignalWifiOff {...propiedadesIcono(compacto)} /> : "NO FALTAS"} color="error" />
-		case 'retransmisionCliente': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < MdMoneyOff {...propiedadesIcono(compacto)} /> : "REINTENTO"} color="info" />
+		case 'noEnviaFaltas': return <Elemento key={tipo} compacto={compacto} texto={"NO FALTAS"} icono={MdOutlineSignalWifiOff} color="error" />
+		case 'retransmisionCliente': return <Elemento key={tipo} compacto={compacto} texto={"REINTENTO"} icono={MdMoneyOff} color="info" />
+		case 'reboteFaltas': return <Elemento key={tipo} compacto={compacto} texto={"REBOTE FALTAS"} icono={GiShieldReflect} color="info" />
 		// case 'errorComprobacionDuplicado': return <Chip {...propiedadesChip(compacto)} key={tipo} label="ERR" color="error" />
-		case 'reboteFaltas': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < GiShieldReflect {...propiedadesIcono(compacto)} /> : "REBOTE FALTAS"} color="info" />
-		case 'porRazonDesconocida': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < FaSadTear {...propiedadesIcono(compacto)} /> : "RAZON DESCONOCIDA"} color="error" />
-		case 'servicioDemorado': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < MdScheduleSend {...propiedadesIcono(compacto)} /> : "DEMORADO"} color="primary" />
-		case 'estupefaciente': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < FaPills {...propiedadesIcono(compacto)} /> : "ESTUPES"} color="success" />
-		case 'clienteBloqueadoSap': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < FaUserLock {...propiedadesIcono(compacto)} /> : "CLIENTE BLOQUEADO"} color="warning" />
-		case 'esPedidoDuplicadoSap': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < MdOutlineControlPointDuplicate {...propiedadesIcono(compacto)} /> : "DUPLICADO SAP"} color="warning" />
-		case 'esTransfer': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < MdOutlineAirplanemodeActive {...propiedadesIcono(compacto)} /> : "TRANSFER"} color="success" />
-		case 'esReejecucion': return <Chip {...propiedadesChip(compacto)} key={tipo} label={compacto ? < GoGitMerge {...propiedadesIcono(compacto)} /> : "REEJECUCION"} color="info" />
+		case 'porRazonDesconocida': return <Elemento key={tipo} compacto={compacto} texto={"RAZON DESCONOCIDA"} icono={FaSadTear} color="error" />
+		case 'servicioDemorado': return <Elemento key={tipo} compacto={compacto} texto={"DEMORADO"} icono={MdScheduleSend} color="info" />
+		case 'estupefaciente': return <Elemento key={tipo} compacto={compacto} texto={"ESTUPES"} icono={FaPills} color="success" />
+		case 'clienteBloqueadoSap': return <Elemento key={tipo} compacto={compacto} texto={"CLIENTE BLOQUEADO"} icono={FaUserLock} color="warning" />
+		case 'esPedidoDuplicadoSap': return <Elemento key={tipo} compacto={compacto} texto={"DUPLICADO SAP"} icono={MdOutlineControlPointDuplicate} color="warning" />
+		case 'esTransfer': return <Elemento key={tipo} compacto={compacto} texto={"TRANSFER"} icono={MdOutlineAirplanemodeActive} color="success" />
+		case 'esReejecucion': return <Elemento key={tipo} compacto={compacto} texto={"REEJECUCION"} icono={GoGitMerge} color="info" />
 		default: return null;
 	}
 
@@ -55,7 +57,6 @@ const generaElemento = (tipo, compacto) => {
 
 export default function TextoDatosInteres({ datos, compacto }) {
 
-	console.log(datos)
 	if (!datos) return null;
 
 	let esUnClon = (datos.opcionesDeReejecucion?.clonado);
@@ -64,9 +65,9 @@ export default function TextoDatosInteres({ datos, compacto }) {
 	let componentes = Object.keys(datos).map(c => generaElemento(c, compacto)).filter(c => c !== null);
 
 	if (faltaTotal)
-		componentes.push(<Chip {...propiedadesChip(compacto)} key="faltaTotal" label={compacto ? < MdMoneyOff {...propiedadesIcono(compacto)} /> : "FALTA TOTAL"}  />)
+		componentes.push(<Elemento key="faltaTotal" compacto={compacto} texto={"FALTA TOTAL"} icono={MdMoneyOff} color="secondary"/>);
 	if (esUnClon)
-		componentes.push(<Chip {...propiedadesChip(compacto)} key="esClon" label={compacto ? < GoGitBranch {...propiedadesIcono(compacto)} /> : "CLONADO"} color="secondary" />)
+		componentes.push(<Elemento key="esClon" compacto={compacto} texto={"CLONADO"} icono={GoGitBranch} color="secondary"/>);
 
 
 
